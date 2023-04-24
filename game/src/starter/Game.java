@@ -16,6 +16,8 @@ import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
 import ecs.entities.Entity;
 import ecs.entities.Hero;
+import ecs.entities.Trap;
+import ecs.entities.Lever;
 import ecs.systems.*;
 import graphic.DungeonCamera;
 import graphic.Painter;
@@ -73,6 +75,10 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     private static PauseMenu<Actor> pauseMenu;
     private static Entity hero;
     private Logger gameLogger;
+    private int levelCount;
+
+    private Trap trap;
+    private Lever lever;
 
     public static void main(String[] args) {
         // start the game
@@ -103,6 +109,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     /** Called once at the beginning of the game. */
     protected void setup() {
+        levelCount = 0;
         doSetup = false;
         controller = new ArrayList<>();
         setupCameras();
@@ -131,9 +138,26 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     @Override
     public void onLevelLoad() {
+        levelCount++;
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
         getHero().ifPresent(this::placeOnLevelStart);
+        spawnTraps();
+    }
+
+    /**Spawns traps based on the levelCount, if a trap is deactivatable it will spawn a lever and connect it to the trap*/
+    public void spawnTraps() {
+        for(int i = 0; i < levelCount*2; i++){
+            if(Math.random()<0.3){
+                trap = new Trap(levelCount);
+                entities.add(trap);
+                if(trap.isDeactivatable()){
+                    lever = new Lever(trap);
+                    entities.add(lever);
+                }
+            }
+
+        }
     }
 
     private void manageEntitiesSets() {

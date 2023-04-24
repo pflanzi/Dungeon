@@ -18,11 +18,16 @@ public class Hero extends Entity {
     private final float xSpeed = 0.3f;
     private final float ySpeed = 0.3f;
 
+    private int health = 20;
+
     private final String pathToIdleLeft = "knight/idleLeft";
     private final String pathToIdleRight = "knight/idleRight";
     private final String pathToRunLeft = "knight/runLeft";
     private final String pathToRunRight = "knight/runRight";
+    private final String pathToHitRight = "knight/hit";
     private Skill firstSkill;
+
+    private  Animation hitRight;
 
     /** Entity with Components */
     public Hero() {
@@ -31,6 +36,7 @@ public class Hero extends Entity {
         setupVelocityComponent();
         setupAnimationComponent();
         setupHitboxComponent();
+        setupHealthComponent();
         PlayableComponent pc = new PlayableComponent(this);
         setupFireballSkill();
         pc.setSkillSlot1(firstSkill);
@@ -45,6 +51,9 @@ public class Hero extends Entity {
     private void setupAnimationComponent() {
         Animation idleRight = AnimationBuilder.buildAnimation(pathToIdleRight);
         Animation idleLeft = AnimationBuilder.buildAnimation(pathToIdleLeft);
+
+        hitRight = AnimationBuilder.buildAnimation(pathToHitRight);
+
         new AnimationComponent(this, idleLeft, idleRight);
     }
 
@@ -59,5 +68,9 @@ public class Hero extends Entity {
                 this,
                 (you, other, direction) -> System.out.println("heroCollisionEnter"),
                 (you, other, direction) -> System.out.println("heroCollisionLeave"));
+    }
+
+    private void setupHealthComponent() {
+        new HealthComponent(this,health,null,hitRight,hitRight);
     }
 }
