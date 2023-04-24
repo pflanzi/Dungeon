@@ -34,25 +34,33 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
     private final String pathToRunRight = "monster/demon/runRight";
 
     /** Entity with Components */
-    public Monster() {
+    public Monster(
+        int healthpoints,
+        int dmg,
+        float xSpeed,
+        float ySpeed,
+        String pathToIdleLeft,
+        String pathToIdleRight,
+        String pathToRunLeft,
+        String pathToRunRight,
+        float posX,
+        float posY) {
         super();
-        new PositionComponent(this);
-        setupVelocityComponent();
-        setupAnimationComponent();
+        setupVelocityComponent(xSpeed, ySpeed, pathToRunRight, pathToRunLeft  );
+        setupAnimationComponent(pathToIdleRight,pathToRunLeft);
         setupHitboxComponent();
-
         setupPositionComponent();
         setupAIComponent();
     }
 
 
-    private void setupVelocityComponent() {
+    private void setupVelocityComponent(float xSpeed, float ySpeed, String pathToRunRight, String pathToRunLeft,) {
         Animation moveRight = AnimationBuilder.buildAnimation(pathToRunRight);
         Animation moveLeft = AnimationBuilder.buildAnimation(pathToRunLeft);
         new VelocityComponent(this, xSpeed, ySpeed, moveLeft, moveRight);
     }
 
-    private void setupAnimationComponent() {
+    private void setupAnimationComponent(String pathToIdleRight, String pathToIdleLeft) {
         Animation idleRight = AnimationBuilder.buildAnimation(pathToIdleRight);
         Animation idleLeft = AnimationBuilder.buildAnimation(pathToIdleLeft);
         new AnimationComponent(this, idleLeft, idleRight);
