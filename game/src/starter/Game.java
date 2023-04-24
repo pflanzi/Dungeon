@@ -14,8 +14,7 @@ import controller.AbstractController;
 import controller.SystemController;
 import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
-import ecs.entities.Entity;
-import ecs.entities.Hero;
+import ecs.entities.*;
 import ecs.systems.*;
 import graphic.DungeonCamera;
 import graphic.Painter;
@@ -33,6 +32,7 @@ import level.generator.randomwalk.RandomWalkGenerator;
 import level.tools.LevelSize;
 import tools.Constants;
 import tools.Point;
+
 
 /** The heart of the framework. From here all strings are pulled. */
 public class Game extends ScreenAdapter implements IOnLevelLoader {
@@ -119,6 +119,8 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         levelAPI = new LevelAPI(batch, painter, new WallGenerator(new RandomWalkGenerator()), this);
         levelAPI.loadLevel(LEVELSIZE);
         createSystems();
+        //monster = new Monster();
+
     }
 
     /** Called at the beginning of each frame. Before the controllers call <code>update</code>. */
@@ -133,7 +135,20 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     public void onLevelLoad() {
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
+        int amountMonster = calculateMonstersToSpawn(1);
+        addEntity(new Necromancer());
+        //addEntity(new Ogre());
+        //addEntity(new Demon());
+        addEntity(new Monster() {
+        });
+
         getHero().ifPresent(this::placeOnLevelStart);
+    }
+
+    public int calculateMonstersToSpawn(int level)
+    {
+        int amount_of_monster = 1 + ((level - 1) % 2);
+        return amount_of_monster;
     }
 
     private void manageEntitiesSets() {

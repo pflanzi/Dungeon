@@ -12,29 +12,39 @@ import graphic.Animation;
  * The Hero is the player character. It's entity in the ECS. This class helps to setup the hero with
  * all its components and attributes .
  */
-public class Hero extends Entity {
+abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse, davon soll kein objekt erstellt werden können
 
-    private final int fireballCoolDown = 1;
+    private final int healthpoints = 3;
+
+
     private final float xSpeed = 0.3f;
     private final float ySpeed = 0.3f;
 
-    private final String pathToIdleLeft = "knight/idleLeft";
-    private final String pathToIdleRight = "knight/idleRight";
-    private final String pathToRunLeft = "knight/runLeft";
-    private final String pathToRunRight = "knight/runRight";
-    private Skill firstSkill;
+    private final int dmg = 1;
+
+
+    /*private final String pathToIdleLeft = "monster/chort/idleLeft";
+    private final String pathToIdleRight = "monster/chort/idleRight";
+    private final String pathToRunLeft = "monster/chort/runLeft";
+    private final String pathToRunRight = "monster/chort/runRight";*/
+
+    private final String pathToIdleLeft = "monster/demon/idleLeft";
+    private final String pathToIdleRight = "monster/demon/idleRight";
+    private final String pathToRunLeft = "monster/demon/runLeft";
+    private final String pathToRunRight = "monster/demon/runRight";
 
     /** Entity with Components */
-    public Hero() {
+    public Monster() {
         super();
         new PositionComponent(this);
         setupVelocityComponent();
         setupAnimationComponent();
         setupHitboxComponent();
-        PlayableComponent pc = new PlayableComponent(this);
-        setupFireballSkill();
-        pc.setSkillSlot1(firstSkill);
+
+        setupPositionComponent();
+        setupAIComponent();
     }
+
 
     private void setupVelocityComponent() {
         Animation moveRight = AnimationBuilder.buildAnimation(pathToRunRight);
@@ -48,16 +58,27 @@ public class Hero extends Entity {
         new AnimationComponent(this, idleLeft, idleRight);
     }
 
-    private void setupFireballSkill() {
-        firstSkill =
-                new Skill(
-                        new FireballSkill(SkillTools::getCursorPositionAsPoint), fireballCoolDown);
-    }
 
     private void setupHitboxComponent() {
         new HitboxComponent(
-                this,
-                (you, other, direction) -> System.out.println("heroCollisionEnter"),
-                (you, other, direction) -> System.out.println("heroCollisionLeave"));
+            this,
+            (you, other, direction) -> System.out.println("heroCollisionEnter"),
+            (you, other, direction) -> System.out.println("heroCollisionLeave"));
     }
+
+    private void setupPositionComponent() {
+
+        new PositionComponent(this);
+
+    }
+
+    private void setupAIComponent() {
+
+
+
+
+    }
+
+
+
 }
