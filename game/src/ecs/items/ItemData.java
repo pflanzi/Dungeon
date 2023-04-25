@@ -180,6 +180,8 @@ public class ItemData {
         return itemType;
     }
 
+    public String getItemCategory() { return itemCategory.getItemCategory(); }
+
     public Animation getInventoryTexture() {
         return inventoryTexture;
     }
