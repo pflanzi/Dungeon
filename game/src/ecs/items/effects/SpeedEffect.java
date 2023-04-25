@@ -8,7 +8,7 @@ import ecs.items.ItemData;
 import java.util.Random;
 
 public class SpeedEffect implements IOnUse {
-    private Random random = new Random();;
+    private Random random = new Random();
 
     @Override
     public void onUse(Entity e, ItemData item) {

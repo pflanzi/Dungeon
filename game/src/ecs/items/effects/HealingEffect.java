@@ -11,7 +11,7 @@ import java.util.Random;
 public class HealingEffect implements IOnUse {
 
     private int healthPoints;
-    private Random random = new Random();;
+    private Random random = new Random();
 
     @Override
     public void onUse(Entity e, ItemData item) {
@@ -35,7 +35,7 @@ public class HealingEffect implements IOnUse {
                                 ((InventoryComponent) ic).removeItem(item);
                             });
 
-                        System.out.printf("%s hat %d HP regeneriert!\n", e.id, finalHP);;
+                        System.out.printf("%s hat %d HP regeneriert!\n", e.id, finalHP);
                     } else {
                         System.out.println("Trank konnte nicht verwendet werden.");
                     }
