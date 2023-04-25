@@ -4,30 +4,21 @@ import ecs.components.PositionComponent;
 
 public class Necromancer extends RangedMonster {
 
-    private final int healthpoints = 7;
-    private final float xSpeed = 0.2f;
-    private final float ySpeed = 0.2f;
-    private final int dmg = 5;
-    private final String pathToIdleLeft = "monster/demon/idleLeft";
-    private final String pathToIdleRight = "monster/demon/idleRight";
-    private final String pathToRunLeft = "monster/demon/runLeft";
-    private final String pathToRunRight = "monster/demon/runRight";
+    private final static int healthpoints = 7;
+    private final static float xSpeed = 0.075f;
+    private final static float ySpeed = 0.075f;
+    private final static int dmg = 5;
+    private final static String pathToIdleLeft = "monster/necromancer/idleLeft";
+    private final static String pathToIdleRight = "monster/necromancer/idleRight";
+    private final static String pathToRunLeft = "monster/necromancer/runLeft";
+    private final static String pathToRunRight = "monster/necromancer/runRight";
 
 
 
 
 
-    public Necromancer(float posX, float posY) {
-        super(healthpoints,
-            dmg,
-            xSpeed,
-            ySpeed,
-            pathToIdleLeft,
-            pathToIdleRight,
-            pathToRunLeft,
-            pathToRunRight,
-            posX,
-            posY);
+    public Necromancer() {
+        super(healthpoints, dmg, xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight);
 
 
     }

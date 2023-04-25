@@ -137,10 +137,9 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         entities.clear();
         int amountMonster = calculateMonstersToSpawn(1);
         addEntity(new Necromancer());
-        //addEntity(new Ogre());
-        //addEntity(new Demon());
-        addEntity(new Monster() {
-        });
+        addEntity(new Ogre());
+        addEntity(new Demon());
+        //addEntity(new Monster() {});
 
         getHero().ifPresent(this::placeOnLevelStart);
     }

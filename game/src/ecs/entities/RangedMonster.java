@@ -10,10 +10,8 @@ abstract public class RangedMonster extends Monster {
         String pathToIdleLeft,
         String pathToIdleRight,
         String pathToRunLeft,
-        String pathToRunRight,
-        float posX,
-        float posY
-    ) {
+        String pathToRunRight)
+    {
         super(
             healthpoints,
             dmg,
@@ -22,8 +20,6 @@ abstract public class RangedMonster extends Monster {
             pathToIdleLeft,
             pathToIdleRight,
             pathToRunLeft,
-            pathToRunRight,
-            posX,
-            posY);
+            pathToRunRight);
     }
 }

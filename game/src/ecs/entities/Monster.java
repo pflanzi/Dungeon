@@ -5,6 +5,7 @@ import ecs.components.*;
 import ecs.components.AnimationComponent;
 import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
+import ecs.components.ai.AIComponent;
 import ecs.components.skill.*;
 import graphic.Animation;
 
@@ -13,14 +14,6 @@ import graphic.Animation;
  * all its components and attributes .
  */
 abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse, davon soll kein objekt erstellt werden können
-
-    private final int healthpoints = 3;
-
-
-    private final float xSpeed = 0.3f;
-    private final float ySpeed = 0.3f;
-
-    private final int dmg = 1;
 
 
     /*private final String pathToIdleLeft = "monster/chort/idleLeft";
@@ -42,9 +35,8 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         String pathToIdleLeft,
         String pathToIdleRight,
         String pathToRunLeft,
-        String pathToRunRight,
-        float posX,
-        float posY) {
+        String pathToRunRight)
+    {
         super();
         setupVelocityComponent(xSpeed, ySpeed, pathToRunRight, pathToRunLeft  );
         setupAnimationComponent(pathToIdleRight,pathToRunLeft);
@@ -54,7 +46,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
     }
 
 
-    private void setupVelocityComponent(float xSpeed, float ySpeed, String pathToRunRight, String pathToRunLeft,) {
+    private void setupVelocityComponent(float xSpeed, float ySpeed, String pathToRunRight, String pathToRunLeft) {
         Animation moveRight = AnimationBuilder.buildAnimation(pathToRunRight);
         Animation moveLeft = AnimationBuilder.buildAnimation(pathToRunLeft);
         new VelocityComponent(this, xSpeed, ySpeed, moveLeft, moveRight);
@@ -82,6 +74,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
 
     private void setupAIComponent() {
 
+        new AIComponent(this);
 
 
 
