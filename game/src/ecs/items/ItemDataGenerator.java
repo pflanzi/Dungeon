@@ -44,7 +44,7 @@ public class ItemDataGenerator {
                             new Animation(Collections.singleton("items/potions/healthPotion/potion_heal.png"), 1),
                             new Animation(Collections.singleton("items/potions/healthPotion/potion_heal.png"), 1),
                             "Elixier der Wut",
-                            "Ein besonderer Trank, der beim Trinken zwar Schaden verursacht, dafür aber die Geschwindigkeit erhöht.",
+                            "Ein besonderer Trank, der beim Trinken Schaden verursacht.",
                             new DamageEffect()),
                     new ItemData(
                             ItemType.Basic,
