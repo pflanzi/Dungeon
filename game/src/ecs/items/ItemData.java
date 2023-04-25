@@ -16,6 +16,7 @@ import tools.Point;
 /** A Class which contains the Information of a specific Item. */
 public class ItemData {
     private ItemType itemType;
+    private ItemCategory itemCategory;
     private Animation inventoryTexture;
     private Animation worldTexture;
     private String itemName;
@@ -64,33 +65,6 @@ public class ItemData {
     }
 
     /**
-     * creates a new item data object with an onUse effect
-     *
-     * @param itemType
-     * @param inventoryTexture
-     * @param worldTexture
-     * @param itemName
-     * @param description
-     * @param onUse
-     */
-    public ItemData(
-            ItemType itemType,
-            Animation inventoryTexture,
-            Animation worldTexture,
-            String itemName,
-            String description,
-            IOnUse onUse) {
-        this.itemType = itemType;
-        this.inventoryTexture = inventoryTexture;
-        this.worldTexture = worldTexture;
-        this.itemName = itemName;
-        this.description = description;
-        this.onCollect = ItemData::defaultCollect;
-        this.onDrop = ItemData::defaultDrop;
-        this.onUse = onUse;
-    }
-
-    /**
      * creates a new item data object. With a basic handling of collecting and dropping
      *
      * @param itemType
@@ -124,6 +98,53 @@ public class ItemData {
                 new Animation(List.of(ItemConfig.TEXTURE.get()), 1),
                 ItemConfig.NAME.get(),
                 ItemConfig.DESCRIPTION.get());
+    }
+
+    /**
+     * creates a new item data object with an onUse effect
+     *
+     * @param itemType
+     * @param inventoryTexture
+     * @param worldTexture
+     * @param itemName
+     * @param description
+     * @param onUse
+     */
+    public ItemData(
+        ItemType itemType,
+        ItemCategory itemCategory,
+        Animation inventoryTexture,
+        Animation worldTexture,
+        String itemName,
+        String description,
+        IOnUse onUse) {
+        this.itemType = itemType;
+        this.itemCategory = itemCategory;
+        this.inventoryTexture = inventoryTexture;
+        this.worldTexture = worldTexture;
+        this.itemName = itemName;
+        this.description = description;
+        this.onCollect = ItemData::defaultCollect;
+        this.onDrop = ItemData::defaultDrop;
+        this.onUse = onUse;
+    }
+
+    public ItemData(
+        ItemType itemType,
+        ItemCategory itemCategory,
+        Animation inventoryTexture,
+        Animation worldTexture,
+        String itemName,
+        String description) {
+        this.itemType = itemType;
+        this.itemCategory = itemCategory;
+        this.inventoryTexture = inventoryTexture;
+        this.worldTexture = worldTexture;
+        this.itemName = itemName;
+        this.description = description;
+        this.onCollect = ItemData::defaultCollect;
+        this.onDrop = ItemData::defaultDrop;
+        this.onUse = ItemData::defaultUseCallback;
     }
 
     /**

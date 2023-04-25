@@ -34,6 +34,7 @@ public class ItemDataGenerator {
                             "Ein Namensschild wo der Name nicht mehr lesbar ist.."),
                     new ItemData(
                             ItemType.Active,
+                            ItemCategory.POTION,
                             new Animation(Collections.singleton("items/potions/healthPotion/potion_heal.png"), 1),
                             new Animation(Collections.singleton("items/potions/healthPotion/potion_heal.png"), 1),
                             "Trank der Heilung",
@@ -41,6 +42,7 @@ public class ItemDataGenerator {
                             new HealingEffect()),
                     new ItemData(
                             ItemType.Active,
+                            ItemCategory.POTION,
                             new Animation(Collections.singleton("items/potions/healthPotion/potion_heal.png"), 1),
                             new Animation(Collections.singleton("items/potions/healthPotion/potion_heal.png"), 1),
                             "Elixier der Wut",
@@ -48,6 +50,7 @@ public class ItemDataGenerator {
                             new DamageEffect()),
                     new ItemData(
                             ItemType.Basic,
+                            ItemCategory.WEAPON,
                             new Animation(Collections.singleton("items/weapons/sword/sword_anim_l_f0.png"), 1),
                             new Animation(Collections.singleton("items/weapons/sword/sword_anim_l_f0.png"), 1),
                             "Schwert",
