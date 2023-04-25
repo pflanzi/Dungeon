@@ -63,6 +63,23 @@ public class ItemData {
         this.damageModifier = damageModifier;
     }
 
+    public ItemData(
+            ItemType itemType,
+            Animation inventoryTexture,
+            Animation worldTexture,
+            String itemName,
+            String description,
+            IOnUse onUse) {
+        this.itemType = itemType;
+        this.inventoryTexture = inventoryTexture;
+        this.worldTexture = worldTexture;
+        this.itemName = itemName;
+        this.description = description;
+        this.onCollect = ItemData::defaultCollect;
+        this.onDrop = ItemData::defaultDrop;
+        this.onUse = onUse;
+    }
+
     /**
      * creates a new item data object. With a basic handling of collecting and dropping
      *

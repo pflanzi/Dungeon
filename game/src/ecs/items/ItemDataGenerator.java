@@ -1,6 +1,9 @@
 package ecs.items;
 
+import ecs.items.effects.HealingEffect;
 import graphic.Animation;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -27,7 +30,15 @@ public class ItemDataGenerator {
                             new Animation(missingTexture, 1),
                             new Animation(missingTexture, 1),
                             "Namensschild",
-                            "Ein Namensschild wo der Name nicht mehr lesbar ist.."));
+                            "Ein Namensschild wo der Name nicht mehr lesbar ist.."),
+                    new ItemData(
+                            ItemType.Active,
+                            new Animation(Collections.singleton("items/potions/healthPotion/potion_heal.png"), 1),
+                            new Animation(Collections.singleton("items/potions/healthPotion/potion_heal.png"), 1),
+                            "Heiltrank",
+                            "Ein besonderer Trank, der eine zufällige Anzahl Lebenspunkte regeneriert.",
+                            new HealingEffect())
+            );
     private Random rand = new Random();
 
     /**
