@@ -63,6 +63,16 @@ public class ItemData {
         this.damageModifier = damageModifier;
     }
 
+    /**
+     * creates a new item data object with an onUse effect
+     *
+     * @param itemType
+     * @param inventoryTexture
+     * @param worldTexture
+     * @param itemName
+     * @param description
+     * @param onUse
+     */
     public ItemData(
             ItemType itemType,
             Animation inventoryTexture,

@@ -1,5 +1,6 @@
 package ecs.items;
 
+import ecs.items.effects.DamageEffect;
 import ecs.items.effects.HealingEffect;
 import graphic.Animation;
 
@@ -35,9 +36,27 @@ public class ItemDataGenerator {
                             ItemType.Active,
                             new Animation(Collections.singleton("items/potions/healthPotion/potion_heal.png"), 1),
                             new Animation(Collections.singleton("items/potions/healthPotion/potion_heal.png"), 1),
-                            "Heiltrank",
-                            "Ein besonderer Trank, der eine zufällige Anzahl Lebenspunkte regeneriert.",
-                            new HealingEffect())
+                            "Trank der Heilung",
+                            "Ein besonderer Trank, der beim Trinken eine zufällige Anzahl Lebenspunkte regeneriert.",
+                            new HealingEffect()),
+                    new ItemData( // TODO: add speed effect
+                            ItemType.Active,
+                            new Animation(Collections.singleton("items/potions/healthPotion/potion_heal.png"), 1),
+                            new Animation(Collections.singleton("items/potions/healthPotion/potion_heal.png"), 1),
+                            "Elixier der Wut",
+                            "Ein besonderer Trank, der beim Trinken zwar Schaden verursacht, dafür aber die Geschwindigkeit erhöht.",
+                            new DamageEffect()),
+                    new ItemData(
+                            ItemType.Basic,
+                            new Animation(Collections.singleton("items/weapons/sword/sword_anim_l_f0.png"), 1),
+                            new Animation(Collections.singleton("items/weapons/sword/sword_anim_l_f0.png"), 1),
+                            "Schwert",
+                            "Ein einfaches Schwert."
+                        /*
+                        TODO: check if hero has / needs a stats component
+                        TODO: add damage modifier if needed
+                         */
+                    )
             );
     private Random rand = new Random();
 
