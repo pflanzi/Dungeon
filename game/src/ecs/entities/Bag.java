@@ -32,16 +32,7 @@ public class Bag extends Entity {
             itemDescription
         ));
         new InventoryComponent(this, inventorySize);
-    }
-
-    public Bag(
-        ItemComponent itemComponent,
-        InventoryComponent inventoryComponent,
-        ItemCategory itemCategory) {
-        this.itemComponent = itemComponent;
-        this.inventoryComponent = inventoryComponent;
-        this.itemCategory = itemCategory;
-        this.inventorySize = generateBagSize();
+        this.itemCategory = ItemCategory.values()[new Random().nextInt(ItemCategory.values().length)];
     }
 
     private int generateBagSize() {
