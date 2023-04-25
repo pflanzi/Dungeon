@@ -1,23 +1,28 @@
 package ecs.components;
 
+import ecs.entities.Bag;
 import ecs.entities.Entity;
+import ecs.items.ItemCategory;
 import ecs.items.ItemData;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
+import ecs.items.ItemType;
 import logging.CustomLogLevel;
 
 /** Allows an Entity to carry Items */
 public class InventoryComponent extends Component {
 
     private List<ItemData> inventory;
+    private List<Bag> bagInventory;
     private int maxSize;
     private final Logger inventoryLogger = Logger.getLogger(this.getClass().getName());
 
     /**
      * creates a new InventoryComponent
      *
-     * @param entity the Entity where this Component should be added to
+     * @param entity  the Entity where this Component should be added to
      * @param maxSize the maximal size of the inventory
      */
     public InventoryComponent(Entity entity, int maxSize) {
@@ -36,12 +41,12 @@ public class InventoryComponent extends Component {
     public boolean addItem(ItemData itemData) {
         if (inventory.size() >= maxSize) return false;
         inventoryLogger.log(
-                CustomLogLevel.DEBUG,
-                "Item '"
-                        + this.getClass().getSimpleName()
-                        + "' was added to the inventory of entity '"
-                        + entity.getClass().getSimpleName()
-                        + "'.");
+            CustomLogLevel.DEBUG,
+            "Item '"
+                + this.getClass().getSimpleName()
+                + "' was added to the inventory of entity '"
+                + entity.getClass().getSimpleName()
+                + "'.");
         return inventory.add(itemData);
     }
 
@@ -53,12 +58,12 @@ public class InventoryComponent extends Component {
      */
     public boolean removeItem(ItemData itemData) {
         inventoryLogger.log(
-                CustomLogLevel.DEBUG,
-                "Removing item '"
-                        + this.getClass().getSimpleName()
-                        + "' from inventory of entity '"
-                        + entity.getClass().getSimpleName()
-                        + "'.");
+            CustomLogLevel.DEBUG,
+            "Removing item '"
+                + this.getClass().getSimpleName()
+                + "' from inventory of entity '"
+                + entity.getClass().getSimpleName()
+                + "'.");
         return inventory.remove(itemData);
     }
 
@@ -88,5 +93,15 @@ public class InventoryComponent extends Component {
      */
     public List<ItemData> getItems() {
         return new ArrayList<>(inventory);
+    }
+
+    public void printInventory(int nb) {
+        if (nb < 0 || nb > inventory.size()) {
+            for (int i = 0; i < inventory.size(); i++) {
+                System.out.println(i + ":\n" + inventory.get(i).getItemName() + "\n" + inventory.get(i).getDescription() + "\n");
+            }
+        } else {
+            System.out.println(nb + ":\n" + inventory.get(nb).getItemName() + "\n" + inventory.get(nb).getDescription() + "\n");
+        }
     }
 }

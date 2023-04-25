@@ -1,5 +1,7 @@
 package ecs.items;
 
+import ecs.components.stats.DamageModifier;
+import ecs.damage.DamageType;
 import ecs.items.effects.DamageEffect;
 import ecs.items.effects.HealingEffect;
 import graphic.Animation;
@@ -14,24 +16,6 @@ public class ItemDataGenerator {
 
     private List<ItemData> templates =
             List.of(
-                    new ItemData(
-                            ItemType.Basic,
-                            new Animation(missingTexture, 1),
-                            new Animation(missingTexture, 1),
-                            "Buch",
-                            "Ein sehr lehrreiches Buch."),
-                    new ItemData(
-                            ItemType.Basic,
-                            new Animation(missingTexture, 1),
-                            new Animation(missingTexture, 1),
-                            "Tuch",
-                            "Ein sauberes Tuch.."),
-                    new ItemData(
-                            ItemType.Basic,
-                            new Animation(missingTexture, 1),
-                            new Animation(missingTexture, 1),
-                            "Namensschild",
-                            "Ein Namensschild wo der Name nicht mehr lesbar ist.."),
                     new ItemData(
                             ItemType.Active,
                             ItemCategory.POTION,
@@ -54,7 +38,9 @@ public class ItemDataGenerator {
                             new Animation(Collections.singleton("items/weapons/sword/sword_anim_l_f0.png"), 1),
                             new Animation(Collections.singleton("items/weapons/sword/sword_anim_l_f0.png"), 1),
                             "Schwert",
-                            "Ein einfaches Schwert.")
+                            "Ein einfaches Schwert.",
+                            createDamageModifier(DamageType.PHYSICAL,1.1f)
+                        )
             );
     private Random rand = new Random();
 
@@ -63,5 +49,17 @@ public class ItemDataGenerator {
      */
     public ItemData generateItemData() {
         return templates.get(rand.nextInt(templates.size()));
+    }
+
+    /**
+     * Creates a new damagemodifier
+     * @param type type of damage
+     * @param value modifier value
+     * @return DamageModifier object
+     */
+    private DamageModifier createDamageModifier(DamageType type, float value){
+        DamageModifier dmg = new DamageModifier();
+        dmg.setMultiplier(type, value);
+        return dmg;
     }
 }
