@@ -13,7 +13,7 @@ import java.util.Random;
 public class DamageEffect implements IOnUse {
 
     private int damagePoints;
-    private Random random;
+    private Random random = new Random();
 
     @Override
     public void onUse(Entity e, ItemData item) {

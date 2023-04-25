@@ -8,9 +8,7 @@ import ecs.items.ItemData;
 import java.util.Random;
 
 public class SpeedEffect implements IOnUse {
-
-    private float speedPoints;
-    private Random random;
+    private Random random = new Random();;
 
     @Override
     public void onUse(Entity e, ItemData item) {
@@ -22,7 +20,7 @@ public class SpeedEffect implements IOnUse {
                 float min = maxXSpeed / 4;
                 float max = maxXSpeed / 2;
 
-                float velocityBoost = random.nextFloat(max) + min;
+                float velocityBoost = random.nextFloat(max + 0.01f) + min;
 
                 ((VelocityComponent) vc).setCurrentXVelocity(maxXSpeed + velocityBoost);
                 ((VelocityComponent) vc).setCurrentYVelocity(maxYSpeed + velocityBoost);

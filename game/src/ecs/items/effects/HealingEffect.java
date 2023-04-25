@@ -11,7 +11,7 @@ import java.util.Random;
 public class HealingEffect implements IOnUse {
 
     private int healthPoints;
-    private Random random;
+    private Random random = new Random();;
 
     @Override
     public void onUse(Entity e, ItemData item) {
