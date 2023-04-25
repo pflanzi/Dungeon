@@ -28,6 +28,7 @@ public class Hero extends Entity {
     public Hero() {
         super();
         new PositionComponent(this);
+        new InventoryComponent(this, 10);
         setupVelocityComponent();
         setupAnimationComponent();
         setupHitboxComponent();
