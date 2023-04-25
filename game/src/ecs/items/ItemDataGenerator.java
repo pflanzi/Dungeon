@@ -39,7 +39,7 @@ public class ItemDataGenerator {
                             "Trank der Heilung",
                             "Ein besonderer Trank, der beim Trinken eine zufällige Anzahl Lebenspunkte regeneriert.",
                             new HealingEffect()),
-                    new ItemData( // TODO: add speed effect
+                    new ItemData(
                             ItemType.Active,
                             new Animation(Collections.singleton("items/potions/healthPotion/potion_heal.png"), 1),
                             new Animation(Collections.singleton("items/potions/healthPotion/potion_heal.png"), 1),
@@ -51,12 +51,7 @@ public class ItemDataGenerator {
                             new Animation(Collections.singleton("items/weapons/sword/sword_anim_l_f0.png"), 1),
                             new Animation(Collections.singleton("items/weapons/sword/sword_anim_l_f0.png"), 1),
                             "Schwert",
-                            "Ein einfaches Schwert."
-                        /*
-                        TODO: check if hero has / needs a stats component
-                        TODO: add damage modifier if needed
-                         */
-                    )
+                            "Ein einfaches Schwert.")
             );
     private Random rand = new Random();
 
