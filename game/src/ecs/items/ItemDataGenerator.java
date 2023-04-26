@@ -33,14 +33,22 @@ public class ItemDataGenerator {
                             "Ein besonderer Trank, der beim Trinken Schaden verursacht.",
                             new DamageEffect()),
                     new ItemData(
-                            ItemType.Basic,
+                            ItemType.Active,
                             ItemCategory.WEAPON,
                             new Animation(Collections.singleton("items/weapons/sword/sword_anim_l_f0.png"), 1),
                             new Animation(Collections.singleton("items/weapons/sword/sword_anim_l_f0.png"), 1),
                             "Schwert",
                             "Ein einfaches Schwert.",
-                            createDamageModifier(DamageType.PHYSICAL,1.1f)
-                        )
+                            createDamageModifier(DamageType.PHYSICAL,1.1f)),
+                    new ItemData(
+                            ItemType.Basic,
+                            ItemCategory.BAG,
+                            new Animation(Collections.singleton("items/other/bag_small.png"), 1),
+                            new Animation(Collections.singleton("items/other/bag_small.png"), 1),
+                            "kleine Trank-Tasche",
+                            "Eine kleine Tasche, in der bis zu 5 Gegenstände Tränke aufbewahrt werden können",
+                            5
+                    )
             );
     private Random rand = new Random();
 

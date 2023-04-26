@@ -34,7 +34,11 @@ public class ItemData {
     // passive
     private DamageModifier damageModifier;
 
+    /**Size of the inventory, initialized at 0 so only Bags get an inventory*/
     private int inventorySize = 0;
+
+    /**Slot of the bag in bagInventory, initialized at -1 to signal it hasn't been picked up yet*/
+    private int inventorySlot = -1;
 
     /**
      * creates a new item data object.
@@ -204,6 +208,25 @@ public class ItemData {
         this.damageModifier = damageModifier;
     }
 
+    public ItemData(
+        ItemType itemType,
+        ItemCategory itemCategory,
+        Animation inventoryTexture,
+        Animation worldTexture,
+        String itemName,
+        String description,
+        int inventorySize) {
+        this.itemType = itemType;
+        this.itemCategory = itemCategory;
+        this.inventoryTexture = inventoryTexture;
+        this.worldTexture = worldTexture;
+        this.itemName = itemName;
+        this.description = description;
+        this.onCollect = ItemData::defaultCollect;
+        this.onDrop = ItemData::defaultDrop;
+        this.onUse = ItemData::defaultUseCallback;
+        this.inventorySize = inventorySize;
+    }
     /**
      * what should happen when an Entity interacts with the Item while it is lying in the World.
      *
@@ -237,8 +260,8 @@ public class ItemData {
         return itemType;
     }
 
-    public String getItemCategory() {
-        return itemCategory.getItemCategory();
+    public ItemCategory getItemCategory() {
+        return itemCategory;
     }
 
     public Animation getInventoryTexture() {
@@ -302,6 +325,7 @@ public class ItemData {
                                                         ::cast)
                                                 .get()
                                                 .getItemData()))
+                                        //Todo Doesn't do anything
                                         Game.removeEntity(worldItem);
                                 });
                     }
@@ -334,5 +358,13 @@ public class ItemData {
 
     public int getInventorySize() {
         return inventorySize;
+    }
+
+    public int getInventorySlot() {
+        return inventorySlot;
+    }
+
+    public void setInventorySlot(int inventorySlot) {
+        this.inventorySlot = inventorySlot;
     }
 }
