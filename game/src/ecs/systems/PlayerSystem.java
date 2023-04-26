@@ -154,10 +154,9 @@ public class PlayerSystem extends ECS_System {
         e.getComponent(InventoryComponent.class)
             .ifPresent(ic -> {
                 if (((InventoryComponent) ic).getItems().get(slot).getItemType() == ItemType.Active) {
-                    System.out.println("Hey");
                     ((InventoryComponent) ic).getItems().get(slot).triggerUse(e);
                 } else if (((InventoryComponent) ic).getItems().get(slot).getItemCategory() == ItemCategory.BAG) {
-                    System.out.println("he");
+                    System.out.println("Bag opened:\n");
                     int bagSlot = ((InventoryComponent) ic).getItems().get(slot).getInventorySlot();
                     if (((InventoryComponent) ic).getBagItems(bagSlot).size() > 0) {
                         bagOpen = true;
@@ -175,7 +174,6 @@ public class PlayerSystem extends ECS_System {
      * @param slot
      */
     private void accessInventoryDropItem(Entity entity, int slot) {
-        //Todo check if item exists before dropping
         entity.getComponent(InventoryComponent.class)
             .ifPresent(ic -> {
                 if (slot >= 0 && slot < ((InventoryComponent) ic).filledSlots()) {

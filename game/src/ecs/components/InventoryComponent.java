@@ -53,12 +53,11 @@ public class InventoryComponent extends Component {
      * @return true if the item was added, otherwise false
      */
     public boolean addItem(ItemData itemData) {
-        System.out.println(maxSize + " " + inventory.size() + " " + bagInventory.size() + " " + itemData.getItemName());
         if (inventory.size() >= maxSize && bagInventory.size() != 0) {
             for (int i = 0; i < bagInventory.size(); i++) {
                 if (filledBagSlots(i) < bagSize.get(i)) {
                     if (bagType.get(i).getItemCategory() == itemData.getItemCategory().getItemCategory()){
-                        System.out.println("Item: " + itemData.getItemName() + " placed in bag" + bagType.get(i).getItemCategory() + " " + i);
+                        System.out.println("Item: " + itemData.getItemName() + " placed in bag" + i+1);
                         return bagInventory.get(i).add(itemData);
                     }
                 }
