@@ -6,6 +6,14 @@ import ecs.components.AnimationComponent;
 import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
 import ecs.components.ai.AIComponent;
+import ecs.components.ai.fight.CollideAI;
+import ecs.components.ai.fight.IFightAI;
+import ecs.components.ai.fight.MeleeAI;
+import ecs.components.ai.idle.IIdleAI;
+import ecs.components.ai.idle.RadiusWalk;
+import ecs.components.ai.transition.ITransition;
+import ecs.components.ai.transition.RangeTransition;
+import ecs.components.ai.transition.SelfDefendTransition;
 import ecs.components.skill.*;
 import graphic.Animation;
 
@@ -45,6 +53,26 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         setupAIComponent();
     }
 
+    /** Entity with Components with custom IdleAI*/
+    public Monster(
+        int healthpoints,
+        int dmg,
+        float xSpeed,
+        float ySpeed,
+        String pathToIdleLeft,
+        String pathToIdleRight,
+        String pathToRunLeft,
+        String pathToRunRight,
+        IIdleAI IdleAI)
+    {
+        super();
+        setupVelocityComponent(xSpeed, ySpeed, pathToRunRight, pathToRunLeft  );
+        setupAnimationComponent(pathToIdleRight,pathToRunLeft);
+        setupHitboxComponent();
+        setupPositionComponent();
+        setupAIComponent(IdleAI);
+    }
+
 
     private void setupVelocityComponent(float xSpeed, float ySpeed, String pathToRunRight, String pathToRunLeft) {
         Animation moveRight = AnimationBuilder.buildAnimation(pathToRunRight);
@@ -67,19 +95,17 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
     }
 
     private void setupPositionComponent() {
-
         new PositionComponent(this);
-
     }
 
     private void setupAIComponent() {
-
         new AIComponent(this);
-
-
-
     }
 
-
+    private void setupAIComponent(IIdleAI idleAI) {
+        ITransition transitionAI = new RangeTransition(5f);
+        IFightAI fightAI = new CollideAI(2f);
+        new AIComponent(this, fightAI, idleAI, transitionAI);
+    }
 
 }

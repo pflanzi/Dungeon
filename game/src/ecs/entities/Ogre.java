@@ -1,5 +1,7 @@
 package ecs.entities;
 
+import ecs.components.ai.idle.heroChaseWalk;
+
 public class Ogre extends MeleeMonster {
 
     private final static int healthpoints = 12;
@@ -15,7 +17,7 @@ public class Ogre extends MeleeMonster {
 
 
     public Ogre() {
-        super(healthpoints, dmg, xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight);
+        super(healthpoints, dmg, xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight, new heroChaseWalk());
     }
 
 
