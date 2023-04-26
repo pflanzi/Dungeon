@@ -22,8 +22,8 @@ public class SpeedEffect implements IOnUse {
 
                 float velocityBoost = random.nextFloat(max + 0.01f) + min;
 
-                ((VelocityComponent) vc).setCurrentXVelocity(maxXSpeed + velocityBoost);
-                ((VelocityComponent) vc).setCurrentYVelocity(maxYSpeed + velocityBoost);
+                ((VelocityComponent) vc).setXVelocity(maxXSpeed + velocityBoost);
+                ((VelocityComponent) vc).setYVelocity(maxYSpeed + velocityBoost);
 
                 System.out.printf("Deine Geschwindigkeit wurde um %f erhöht", velocityBoost);
             });
