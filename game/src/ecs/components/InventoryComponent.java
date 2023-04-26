@@ -7,6 +7,7 @@ import ecs.items.ItemData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import ecs.items.ItemType;
@@ -23,6 +24,7 @@ public class InventoryComponent extends Component {
      */
     private List<List<ItemData>> bagInventory;
     private List<ItemCategory> bagType;
+    private List<Integer> bagSize;
     private int maxSize;
     private final Logger inventoryLogger = Logger.getLogger(this.getClass().getName());
 
@@ -35,9 +37,10 @@ public class InventoryComponent extends Component {
     public InventoryComponent(Entity entity, int maxSize) {
         super(entity);
         inventory = new ArrayList<>(maxSize);
-        this.maxSize = maxSize;
+        this.maxSize = maxSize - 1;
         bagInventory = new ArrayList<>();
         bagType = new ArrayList<>();
+        bagSize = new ArrayList<>();
     }
 
     /**
@@ -50,12 +53,17 @@ public class InventoryComponent extends Component {
      * @return true if the item was added, otherwise false
      */
     public boolean addItem(ItemData itemData) {
+        System.out.println(maxSize + " " + inventory.size() + " " + bagInventory.size() + " " + itemData.getItemName());
         if (inventory.size() >= maxSize && bagInventory.size() != 0) {
-            for (int i = 0; i < bagInventory.size() - 1; i++) {
-                if (filledBagSlots(i) < bagInventory.get(i).size() && bagType.get(i).getItemCategory().equals(itemData.getItemCategory())) {
-                    return bagInventory.get(i).add(itemData);
+            for (int i = 0; i < bagInventory.size(); i++) {
+                if (filledBagSlots(i) < bagSize.get(i)) {
+                    if (bagType.get(i).getItemCategory() == itemData.getItemCategory().getItemCategory()){
+                        System.out.println("Item: " + itemData.getItemName() + " placed in bag" + bagType.get(i).getItemCategory() + " " + i);
+                        return bagInventory.get(i).add(itemData);
+                    }
                 }
             }
+            System.out.println("Kein Platz\n");
             return false;
         }
         inventoryLogger.log(
@@ -69,7 +77,10 @@ public class InventoryComponent extends Component {
             if (itemData.getInventorySize() > 0) {
                 bagInventory.add(new ArrayList<>(itemData.getInventorySize()));
                 itemData.setInventorySlot(bagInventory.size() - 1);
-                bagType.add(itemData.getItemCategory());
+                ItemCategory category = getRandomItemCategory();
+                bagType.add(category);
+                bagSize.add(itemData.getInventorySize());
+                itemData.setDescription(itemData.getDescription()+"\nKategorie: "+category.getItemCategory());
             }
         }
         return inventory.add(itemData);
@@ -154,20 +165,33 @@ public class InventoryComponent extends Component {
     public void printInventory(int invSlot) {
         if (invSlot < 0 || invSlot > inventory.size()) {
             for (int i = 0; i < inventory.size(); i++) {
-                System.out.println(i + ":\n" + inventory.get(i).getItemName() + "\n" + inventory.get(i).getDescription() + "\n");
+                System.out.println(i+1 + ":\n" + inventory.get(i).getItemName() + "\n" + inventory.get(i).getDescription() + "\n");
             }
         } else {
-            System.out.println(invSlot + ":\n" + inventory.get(invSlot).getItemName() + "\n" + inventory.get(invSlot).getDescription() + "\n");
+            System.out.println(invSlot+1 + ":\n" + inventory.get(invSlot).getItemName() + "\n" + inventory.get(invSlot).getDescription() + "\n");
         }
     }
 
     public void printBagInventory(int bagSlot, int invSlot) {
-        if (invSlot < 0 || invSlot > bagInventory.get(bagSlot).size()) {
-            for (int i = 0; i < bagInventory.get(bagSlot).size(); i++) {
-                System.out.println(i + ":\n" + bagInventory.get(bagSlot).get(i).getItemName() + "\n" + bagInventory.get(bagSlot).get(i).getDescription() + "\n");
+        int bagNB = inventory.get(bagSlot).getInventorySlot();
+        if (invSlot < 0 || invSlot >= bagInventory.get(bagNB).size()) {
+            for (int i = 0; i < bagInventory.get(bagNB).size(); i++) {
+                System.out.println(i+1 + ":\n" + bagInventory.get(bagNB).get(i).getItemName() + "\n" + bagInventory.get(bagNB).get(i).getDescription() + "\n");
             }
         } else {
-            System.out.println(invSlot + ":\n" + bagInventory.get(bagSlot).get(invSlot).getItemName() + "\n" + bagInventory.get(bagSlot).get(invSlot).getDescription() + "\n");
+            System.out.println(invSlot + ":\n" + bagInventory.get(bagNB).get(invSlot).getItemName() + "\n" + bagInventory.get(bagNB).get(invSlot).getDescription() + "\n");
         }
     }
+
+    public ItemCategory getRandomItemCategory(){
+        Random rnd = new Random();
+        int category = rnd.nextInt(3)+1;
+        switch (category){
+            case 1: return ItemCategory.POTION;
+            case 2: return ItemCategory.WEAPON;
+            case 3: return ItemCategory.OTHER;
+        }
+        return null;
+    }
+
 }
