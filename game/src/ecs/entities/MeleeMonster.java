@@ -7,6 +7,7 @@ abstract public class MeleeMonster extends Monster {
     public MeleeMonster(
         int healthpoints,
         int dmg,
+        int scaling,
         float xSpeed,
         float ySpeed,
         String pathToIdleLeft,
@@ -17,6 +18,7 @@ abstract public class MeleeMonster extends Monster {
         super(
             healthpoints,
             dmg,
+            scaling,
             xSpeed,
             ySpeed,
             pathToIdleLeft,
@@ -28,6 +30,7 @@ abstract public class MeleeMonster extends Monster {
     public MeleeMonster(
         int healthpoints,
         int dmg,
+        int scaling,
         float xSpeed,
         float ySpeed,
         String pathToIdleLeft,
@@ -37,6 +40,7 @@ abstract public class MeleeMonster extends Monster {
         IIdleAI IdleAI) {
         super(healthpoints,
             dmg,
+            scaling,
             xSpeed,
             ySpeed,
             pathToIdleLeft,

@@ -16,8 +16,8 @@ public class Ogre extends MeleeMonster {
 
 
 
-    public Ogre() {
-        super(healthpoints, dmg, xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight, new heroChaseWalk());
+    public Ogre(int scaling) {
+        super(healthpoints, dmg, scaling ,xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight, new heroChaseWalk());
     }
 
 

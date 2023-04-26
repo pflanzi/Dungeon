@@ -17,8 +17,8 @@ public class Necromancer extends RangedMonster {
 
 
 
-    public Necromancer() {
-        super(healthpoints, dmg, xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight);
+    public Necromancer(int scaling) {
+        super(healthpoints, dmg, scaling ,xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight);
 
 
     }

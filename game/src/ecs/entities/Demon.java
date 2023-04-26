@@ -12,8 +12,8 @@ public class Demon extends MeleeMonster {
     private final static String pathToRunLeft = "monster/demon/runLeft";
     private final static String pathToRunRight = "monster/demon/runRight";
 
-    public Demon() {
-        super(healthpoints, dmg, xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight);
+    public Demon(int scaling) {
+        super(healthpoints, dmg, scaling, xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight);
 
     }
 

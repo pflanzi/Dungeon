@@ -73,6 +73,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     private static PauseMenu<Actor> pauseMenu;
     private static Entity hero;
     private Logger gameLogger;
+    private int levelCount;
 
     public static void main(String[] args) {
         // start the game
@@ -103,6 +104,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     /** Called once at the beginning of the game. */
     protected void setup() {
+        levelCount=0;
         doSetup = false;
         controller = new ArrayList<>();
         setupCameras();
@@ -135,19 +137,32 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     public void onLevelLoad() {
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
-        int amountMonster = calculateMonstersToSpawn(1);
-        addEntity(new Necromancer());
-        addEntity(new Ogre());
-        addEntity(new Demon());
-        //addEntity(new Monster() {});
+
+        spawnMonster();
 
         getHero().ifPresent(this::placeOnLevelStart);
     }
 
     public int calculateMonstersToSpawn(int level)
     {
-        int amount_of_monster = 1 + ((level - 1) % 2);
-        return amount_of_monster;
+        return (int) ((Math.random()*level)+1);
+    }
+
+    private void spawnMonster(){
+        int monsters=calculateMonstersToSpawn(levelCount);
+        for (int i = 0;i<monsters;i++){
+            switch ((i*2)%3){
+                case 0:
+                    addEntity(new Ogre(levelCount+1));
+                    break;
+                case 1:
+                    addEntity(new Demon(levelCount+1));
+                    break;
+                case 2:
+                    addEntity(new Necromancer(levelCount+1));
+                    break;
+            }
+        }
     }
 
     private void manageEntitiesSets() {
@@ -194,6 +209,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     }
 
     private void placeOnLevelStart(Entity hero) {
+        levelCount++;
         entities.add(hero);
         PositionComponent pc =
                 (PositionComponent)

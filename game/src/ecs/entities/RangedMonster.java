@@ -5,6 +5,7 @@ abstract public class RangedMonster extends Monster {
     public RangedMonster(
         int healthpoints,
         int dmg,
+        int scaling,
         float xSpeed,
         float ySpeed,
         String pathToIdleLeft,
@@ -15,6 +16,7 @@ abstract public class RangedMonster extends Monster {
         super(
             healthpoints,
             dmg,
+            scaling,
             xSpeed,
             ySpeed,
             pathToIdleLeft,

@@ -17,6 +17,8 @@ import ecs.components.ai.transition.SelfDefendTransition;
 import ecs.components.skill.*;
 import graphic.Animation;
 
+import java.util.Collections;
+
 /**
  * The Hero is the player character. It's entity in the ECS. This class helps to setup the hero with
  * all its components and attributes .
@@ -38,6 +40,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
     public Monster(
         int healthpoints,
         int dmg,
+        int scaling,
         float xSpeed,
         float ySpeed,
         String pathToIdleLeft,
@@ -51,12 +54,14 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         setupHitboxComponent();
         setupPositionComponent();
         setupAIComponent();
+        new HealthComponent(this, healthpoints * scaling, null, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
     }
 
     /** Entity with Components with custom IdleAI*/
     public Monster(
         int healthpoints,
         int dmg,
+        int scaling,
         float xSpeed,
         float ySpeed,
         String pathToIdleLeft,
@@ -71,6 +76,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         setupHitboxComponent();
         setupPositionComponent();
         setupAIComponent(IdleAI);
+        new HealthComponent(this, healthpoints * scaling, null, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
     }
 
 
