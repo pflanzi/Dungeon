@@ -31,7 +31,6 @@ public class HealingEffect implements IOnUse {
 
                         e.getComponent(InventoryComponent.class)
                             .ifPresent(ic -> {
-                                InventoryComponent inventoryComponent = (InventoryComponent) ic;
                                 ((InventoryComponent) ic).removeItem(item);
                             });
 
