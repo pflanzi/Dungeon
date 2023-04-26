@@ -97,7 +97,7 @@ public class Chest extends Entity {
      * @param radian of the current Item
      * @return a Point in a unit Vector around the Chest
      */
-    private static Point calculateDropPosition(PositionComponent positionComponent, double radian) {
+    public static Point calculateDropPosition(PositionComponent positionComponent, double radian) {
         return new Point(
                 (float) Math.cos(radian * Math.PI) + positionComponent.getPosition().x,
                 (float) Math.sin(radian * Math.PI) + positionComponent.getPosition().y);

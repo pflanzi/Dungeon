@@ -95,13 +95,18 @@ public class InventoryComponent extends Component {
         return new ArrayList<>(inventory);
     }
 
-    public void printInventory(int nb) {
-        if (nb < 0 || nb > inventory.size()) {
+    /**
+     * prints name and description of one item from the inventory,
+     * if the given slot is not valid, the whole inventory is printed
+     * @param invSlot slot of the item to print
+     */
+    public void printInventory(int invSlot) {
+        if (invSlot < 0 || invSlot > inventory.size()) {
             for (int i = 0; i < inventory.size(); i++) {
                 System.out.println(i + ":\n" + inventory.get(i).getItemName() + "\n" + inventory.get(i).getDescription() + "\n");
             }
         } else {
-            System.out.println(nb + ":\n" + inventory.get(nb).getItemName() + "\n" + inventory.get(nb).getDescription() + "\n");
+            System.out.println(invSlot + ":\n" + inventory.get(invSlot).getItemName() + "\n" + inventory.get(invSlot).getDescription() + "\n");
         }
     }
 }

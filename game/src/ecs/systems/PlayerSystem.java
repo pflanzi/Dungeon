@@ -5,11 +5,17 @@ import configuration.KeyboardConfig;
 import ecs.components.*;
 import ecs.entities.Bag;
 import ecs.entities.Entity;
+import ecs.entities.Hero;
 import ecs.items.ItemData;
 import ecs.items.ItemType;
 import ecs.items.WorldItemBuilder;
 import ecs.tools.interaction.InteractionTool;
 import starter.Game;
+
+import java.util.List;
+import java.util.stream.IntStream;
+
+import static ecs.entities.Chest.calculateDropPosition;
 
 /**
  * Used to control the player
@@ -150,18 +156,40 @@ public class PlayerSystem extends ECS_System {
             });
     }
 
-    private void accessInventoryDropItem(Entity e, int slot) {
-        e.getComponent(InventoryComponent.class)
+    private void accessInventoryDropItem(Entity entity, int slot) {
+        entity.getComponent(InventoryComponent.class)
             .ifPresent(ic -> {
                 if (slot >= 0 && slot < ((InventoryComponent) ic).filledSlots()) {
                     ((InventoryComponent) ic).removeItem(((InventoryComponent) ic).getItems().get(slot));
-                    /*((InventoryComponent) ic).getItems().get(slot).triggerDrop(
-                        ksd.e,
-                        ((Hero)ksd.e).getComponent()
-                        ));*/
+
+                    InventoryComponent inventoryComponent =
+                        entity.getComponent(InventoryComponent.class)
+                            .map(InventoryComponent.class::cast)
+                            .orElseThrow(
+                                () ->
+                                    missingVC());
+                    PositionComponent positionComponent =
+                        entity.getComponent(PositionComponent.class)
+                            .map(PositionComponent.class::cast)
+                            .orElseThrow(
+                                () ->
+                                    missingVC());
+                    List<ItemData> itemData = inventoryComponent.getItems();
+                    double count = itemData.size();
+
+                    IntStream.range(0, itemData.size())
+                        .forEach(
+                            index ->
+                                itemData.get(index)
+                                    .triggerDrop(
+                                        entity,
+                                        calculateDropPosition(
+                                            positionComponent, index / count)));
                     System.out.println("Item at " + slot + " removed");
                 }
             });
     }
+
+
 
 }
