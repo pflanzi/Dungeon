@@ -136,7 +136,7 @@ public class ItemData {
         this.description = description;
         this.onCollect = ItemData::defaultCollect;
         this.onDrop = ItemData::defaultDrop;
-        this.onUse = onUse;
+        this.setOnUse(onUse);
     }
 
     /**
@@ -254,6 +254,12 @@ public class ItemData {
     public void triggerUse(Entity entity) {
         if (getOnUse() == null) return;
         getOnUse().onUse(entity, this);
+        entity.getComponent(InventoryComponent.class)
+            .ifPresent(
+                component -> {
+                    InventoryComponent invComp = (InventoryComponent) component;
+                    invComp.removeItem(this);
+                });
     }
 
     public ItemType getItemType() {
