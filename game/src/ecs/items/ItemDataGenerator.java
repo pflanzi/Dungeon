@@ -45,8 +45,8 @@ public class ItemDataGenerator {
                             ItemCategory.BAG,
                             new Animation(Collections.singleton("items/other/bag_small.png"), 1),
                             new Animation(Collections.singleton("items/other/bag_small.png"), 1),
-                            "kleine Trank-Tasche",
-                            "Eine kleine Tasche, in der bis zu 5 Gegenstände Tränke aufbewahrt werden können",
+                            "kleine Tasche",
+                            "Eine kleine Tasche, in der bis zu 5 Gegenstände aufbewahrt werden können",
                             5
                     )
             );
