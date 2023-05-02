@@ -20,6 +20,7 @@ import ecs.entities.Chest;
 import ecs.entities.Entity;
 import ecs.entities.Hero;
 import ecs.items.*;
+import ecs.entities.*;
 import ecs.systems.*;
 import graphic.Animation;
 import graphic.DungeonCamera;
@@ -38,6 +39,7 @@ import level.generator.randomwalk.RandomWalkGenerator;
 import level.tools.LevelSize;
 import tools.Constants;
 import tools.Point;
+
 
 /** The heart of the framework. From here all strings are pulled. */
 public class Game extends ScreenAdapter implements IOnLevelLoader {
@@ -78,6 +80,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     private static PauseMenu<Actor> pauseMenu;
     private static Entity hero;
     private Logger gameLogger;
+    private int levelCount;
 
     public static void main(String[] args) {
         // start the game
@@ -108,6 +111,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     /** Called once at the beginning of the game. */
     protected void setup() {
+        levelCount=0;
         doSetup = false;
         controller = new ArrayList<>();
         setupCameras();
@@ -124,6 +128,8 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         levelAPI = new LevelAPI(batch, painter, new WallGenerator(new RandomWalkGenerator()), this);
         levelAPI.loadLevel(LEVELSIZE);
         createSystems();
+        //monster = new Monster();
+
     }
 
     /** Called at the beginning of each frame. Before the controllers call <code>update</code>. */
@@ -138,6 +144,9 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     public void onLevelLoad() {
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
+
+        spawnMonster();
+
         getHero().ifPresent(this::placeOnLevelStart);
 
         /**Quickfix for chests to spawn a chest to demonstrate items and inventory mechanics*/
@@ -164,6 +173,28 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
                     5
                 ));
             });
+    }
+
+    public int calculateMonstersToSpawn(int level)
+    {
+        return (int) ((Math.random()*level)+1);
+    }
+
+    private void spawnMonster(){
+        int monsters=calculateMonstersToSpawn(levelCount);
+        for (int i = 0;i<monsters;i++){
+            switch ((i*2)%3){
+                case 0:
+                    addEntity(new Ogre(levelCount+1));
+                    break;
+                case 1:
+                    addEntity(new Demon(levelCount+1));
+                    break;
+                case 2:
+                    addEntity(new Necromancer(levelCount+1));
+                    break;
+            }
+        }
     }
 
     private void manageEntitiesSets() {
@@ -210,6 +241,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     }
 
     private void placeOnLevelStart(Entity hero) {
+        levelCount++;
         entities.add(hero);
         PositionComponent pc =
                 (PositionComponent)
