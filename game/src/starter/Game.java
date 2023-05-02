@@ -12,10 +12,17 @@ import configuration.Configuration;
 import configuration.KeyboardConfig;
 import controller.AbstractController;
 import controller.SystemController;
+import ecs.components.Component;
+import ecs.components.InventoryComponent;
 import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
+import ecs.entities.Chest;
+import ecs.entities.Entity;
+import ecs.entities.Hero;
+import ecs.items.*;
 import ecs.entities.*;
 import ecs.systems.*;
+import graphic.Animation;
 import graphic.DungeonCamera;
 import graphic.Painter;
 import graphic.hud.PauseMenu;
@@ -141,6 +148,31 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         spawnMonster();
 
         getHero().ifPresent(this::placeOnLevelStart);
+
+        /**Quickfix for chests to spawn a chest to demonstrate items and inventory mechanics*/
+        Chest newChest = Chest.createNewChest();
+        Optional<Component> ic = newChest.getComponent(InventoryComponent.class);
+        ((InventoryComponent) ic.get()).getItems().forEach(inventoryComponent -> inventoryComponent.setOnCollect((WorldItemEntity, whoCollides) -> {
+            hero.getComponent(InventoryComponent.class)
+                .ifPresent(ice->{
+                    ((InventoryComponent) ice).addItem(inventoryComponent);
+                });
+
+        }));
+        entities.add(newChest);
+
+        hero.getComponent(InventoryComponent.class)
+            .ifPresent(icb->{
+                ((InventoryComponent) icb).addItem(new ItemData(
+                    ItemType.Basic,
+                    ItemCategory.BAG,
+                    new Animation(Collections.singleton("items/other/bag_small.png"), 1),
+                    new Animation(Collections.singleton("items/other/bag_small.png"), 1),
+                    "kleine Tasche",
+                    "Eine kleine Tasche, in der bis zu 5 Gegenstände einer Kategorie aufbewahrt werden können",
+                    5
+                ));
+            });
     }
 
     public int calculateMonstersToSpawn(int level)
