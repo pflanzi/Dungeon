@@ -19,6 +19,8 @@ import ecs.components.PositionComponent;
 import ecs.entities.Chest;
 import ecs.entities.Entity;
 import ecs.entities.Hero;
+import ecs.entities.Trap;
+import ecs.entities.Lever;
 import ecs.items.*;
 import ecs.entities.*;
 import ecs.systems.*;
@@ -81,6 +83,8 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     private static Entity hero;
     private Logger gameLogger;
     private int levelCount;
+    private Trap trap;
+    private Lever lever;
 
     public static void main(String[] args) {
         // start the game
@@ -111,7 +115,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     /** Called once at the beginning of the game. */
     protected void setup() {
-        levelCount=0;
+        levelCount = 0;
         doSetup = false;
         controller = new ArrayList<>();
         setupCameras();
@@ -142,12 +146,14 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     @Override
     public void onLevelLoad() {
+        levelCount++;
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
 
         spawnMonster();
 
         getHero().ifPresent(this::placeOnLevelStart);
+        spawnTraps();
 
         /**Quickfix for chests to spawn a chest to demonstrate items and inventory mechanics*/
         Chest newChest = Chest.createNewChest();
@@ -175,8 +181,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
             });
     }
 
-    public int calculateMonstersToSpawn(int level)
-    {
+    public int calculateMonstersToSpawn(int level) {
         return (int) ((Math.random()*level)+1);
     }
 
@@ -193,6 +198,20 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
                 case 2:
                     addEntity(new Necromancer(levelCount+1));
                     break;
+            }
+        }
+    }
+
+    /**Spawns traps based on the levelCount, if a trap is deactivatable it will spawn a lever and connect it to the trap*/
+    public void spawnTraps() {
+        for(int i = 0; i < levelCount*2; i++){
+            if(Math.random()<0.3){
+                trap = new Trap(levelCount);
+                entities.add(trap);
+                if(trap.isDeactivatable()){
+                    lever = new Lever(trap);
+                    entities.add(lever);
+                }
             }
         }
     }
