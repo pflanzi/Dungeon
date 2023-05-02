@@ -12,13 +12,19 @@ import configuration.Configuration;
 import configuration.KeyboardConfig;
 import controller.AbstractController;
 import controller.SystemController;
+import ecs.components.Component;
+import ecs.components.InventoryComponent;
 import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
+import ecs.entities.Chest;
 import ecs.entities.Entity;
 import ecs.entities.Hero;
 import ecs.entities.Trap;
 import ecs.entities.Lever;
+import ecs.items.*;
+import ecs.entities.*;
 import ecs.systems.*;
+import graphic.Animation;
 import graphic.DungeonCamera;
 import graphic.Painter;
 import graphic.hud.PauseMenu;
@@ -35,6 +41,7 @@ import level.generator.randomwalk.RandomWalkGenerator;
 import level.tools.LevelSize;
 import tools.Constants;
 import tools.Point;
+
 
 /** The heart of the framework. From here all strings are pulled. */
 public class Game extends ScreenAdapter implements IOnLevelLoader {
@@ -76,7 +83,6 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     private static Entity hero;
     private Logger gameLogger;
     private int levelCount;
-
     private Trap trap;
     private Lever lever;
 
@@ -126,6 +132,8 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         levelAPI = new LevelAPI(batch, painter, new WallGenerator(new RandomWalkGenerator()), this);
         levelAPI.loadLevel(LEVELSIZE);
         createSystems();
+        //monster = new Monster();
+
     }
 
     /** Called at the beginning of each frame. Before the controllers call <code>update</code>. */
@@ -141,8 +149,57 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         levelCount++;
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
+
+        spawnMonster();
+
         getHero().ifPresent(this::placeOnLevelStart);
         spawnTraps();
+
+        /**Quickfix for chests to spawn a chest to demonstrate items and inventory mechanics*/
+        Chest newChest = Chest.createNewChest();
+        Optional<Component> ic = newChest.getComponent(InventoryComponent.class);
+        ((InventoryComponent) ic.get()).getItems().forEach(inventoryComponent -> inventoryComponent.setOnCollect((WorldItemEntity, whoCollides) -> {
+            hero.getComponent(InventoryComponent.class)
+                .ifPresent(ice->{
+                    ((InventoryComponent) ice).addItem(inventoryComponent);
+                });
+
+        }));
+        entities.add(newChest);
+
+        hero.getComponent(InventoryComponent.class)
+            .ifPresent(icb->{
+                ((InventoryComponent) icb).addItem(new ItemData(
+                    ItemType.Basic,
+                    ItemCategory.BAG,
+                    new Animation(Collections.singleton("items/other/bag_small.png"), 1),
+                    new Animation(Collections.singleton("items/other/bag_small.png"), 1),
+                    "kleine Tasche",
+                    "Eine kleine Tasche, in der bis zu 5 Gegenstände einer Kategorie aufbewahrt werden können",
+                    5
+                ));
+            });
+    }
+
+    public int calculateMonstersToSpawn(int level) {
+        return (int) ((Math.random()*level)+1);
+    }
+
+    private void spawnMonster(){
+        int monsters=calculateMonstersToSpawn(levelCount);
+        for (int i = 0;i<monsters;i++){
+            switch ((i*2)%3){
+                case 0:
+                    addEntity(new Ogre(levelCount+1));
+                    break;
+                case 1:
+                    addEntity(new Demon(levelCount+1));
+                    break;
+                case 2:
+                    addEntity(new Necromancer(levelCount+1));
+                    break;
+            }
+        }
     }
 
     /**Spawns traps based on the levelCount, if a trap is deactivatable it will spawn a lever and connect it to the trap*/
@@ -156,7 +213,6 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
                     entities.add(lever);
                 }
             }
-
         }
     }
 
@@ -204,6 +260,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     }
 
     private void placeOnLevelStart(Entity hero) {
+        levelCount++;
         entities.add(hero);
         PositionComponent pc =
                 (PositionComponent)
