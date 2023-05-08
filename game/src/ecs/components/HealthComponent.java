@@ -27,6 +27,7 @@ public class HealthComponent extends Component {
     private @DSLTypeMember(name = "get_hit_animation") Animation getHitAnimation;
     private @DSLTypeMember(name = "die_animation") Animation dieAnimation;
     private final Logger healthLogger = Logger.getLogger(this.getClass().getName());
+    private boolean isImmortal = false;
 
     /**
      * Creates a new HealthComponent
@@ -73,8 +74,10 @@ public class HealthComponent extends Component {
      * @param damage Damage that should be inflicted
      */
     public void receiveHit(Damage damage) {
-        damageToGet.add(damage);
-        this.lastCause = damage.cause() != null ? damage.cause() : this.lastCause;
+        if(!isImmortal){
+            damageToGet.add(damage);
+            this.lastCause = damage.cause() != null ? damage.cause() : this.lastCause;
+        }
     }
 
     /** Triggers the onDeath Function */
@@ -195,5 +198,13 @@ public class HealthComponent extends Component {
 
     public boolean isDead() {
         return currentHealthpoints <= 0;
+    }
+
+    public boolean isImmortal() {
+        return isImmortal;
+    }
+
+    public void setImmortal(boolean immortal) {
+        isImmortal = immortal;
     }
 }
