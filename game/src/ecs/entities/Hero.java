@@ -26,6 +26,7 @@ public class Hero extends Entity {
     private final String pathToRunRight = "knight/runRight";
     private final String pathToHitRight = "knight/hit";
     private Skill firstSkill;
+    private Skill secondSkill;
 
     private  Animation hitRight;
 
@@ -39,8 +40,15 @@ public class Hero extends Entity {
         setupHitboxComponent();
         setupHealthComponent();
         PlayableComponent pc = new PlayableComponent(this);
-        setupFireballSkill();
+        setupMindcontrollSkill();
+        //setupFireballSkill();
+        setupGodmodeSkill();
+        SkillComponent skillComponent = new SkillComponent(this);
+        skillComponent.addSkill(firstSkill);
+        skillComponent.addSkill(secondSkill);
+
         pc.setSkillSlot1(firstSkill);
+        pc.setSkillSlot2(secondSkill);
     }
 
     private void setupVelocityComponent() {
@@ -63,12 +71,21 @@ public class Hero extends Entity {
                 new Skill(
                         new FireballSkill(SkillTools::getCursorPositionAsPoint), fireballCoolDown);
     }
+    private void setupMindcontrollSkill(){
+        firstSkill =
+                new Skill(
+                    new MindcontrollSkill(), 25);
+    }
+
+    private void setupGodmodeSkill(){
+        secondSkill =
+                new Skill(
+                    new GodmodeSkill(), 15, 10);
+    }
 
     private void setupHitboxComponent() {
         new HitboxComponent(
-                this,
-                (you, other, direction) -> System.out.println("heroCollisionEnter"),
-                (you, other, direction) -> System.out.println("heroCollisionLeave"));
+                this,null,null);
     }
 
     private void setupHealthComponent() {
