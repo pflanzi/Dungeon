@@ -36,6 +36,11 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
     private final String pathToRunLeft = "monster/demon/runLeft";
     private final String pathToRunRight = "monster/demon/runRight";
 
+    private AIComponent aiComponent;
+
+    private IIdleAI defaultIdle;
+    private IFightAI defaultFight;
+
     /** Entity with Components */
     public Monster(
         int healthpoints,
@@ -54,7 +59,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         setupHitboxComponent();
         setupPositionComponent();
         setupAIComponent();
-        new HealthComponent(this, healthpoints * scaling, null, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
+        new HealthComponent(this, healthpoints * scaling, lf->{System.out.println("Mob died\n");}, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
     }
 
     /** Entity with Components with custom IdleAI*/
@@ -76,7 +81,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         setupHitboxComponent();
         setupPositionComponent();
         setupAIComponent(IdleAI);
-        new HealthComponent(this, healthpoints * scaling, null, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
+        new HealthComponent(this, healthpoints * scaling, lf->{System.out.println("Mob died\n");}, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
     }
 
 
@@ -111,7 +116,13 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
     private void setupAIComponent(IIdleAI idleAI) {
         ITransition transitionAI = new RangeTransition(5f);
         IFightAI fightAI = new CollideAI(2f);
-        new AIComponent(this, fightAI, idleAI, transitionAI);
+        aiComponent = new AIComponent(this, fightAI, idleAI, transitionAI);
+    }
+
+    public void setStrategy(IIdleAI idle, IFightAI fight){
+
+        aiComponent.setIdleAI(idle);
+        aiComponent.setFightAI(fight);
     }
 
 }

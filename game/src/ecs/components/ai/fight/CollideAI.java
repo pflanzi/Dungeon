@@ -7,7 +7,7 @@ import level.elements.tile.Tile;
 import tools.Constants;
 
 public class CollideAI implements IFightAI {
-    private final float rushRange;
+    protected final float rushRange;
     private final int delay = Constants.FRAME_RATE;
     private int timeSinceLastUpdate = delay;
     private GraphPath<Tile> path;

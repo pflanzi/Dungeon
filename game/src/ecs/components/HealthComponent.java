@@ -77,6 +77,8 @@ public class HealthComponent extends Component {
         if(!isImmortal){
             damageToGet.add(damage);
             this.lastCause = damage.cause() != null ? damage.cause() : this.lastCause;
+        }else{
+            System.out.println("Immortal\n");
         }
     }
 
