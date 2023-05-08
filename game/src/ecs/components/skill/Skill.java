@@ -42,8 +42,16 @@ public class Skill {
         currentCoolDownInFrames = coolDownInFrames;
     }
 
-    /** reduces the current cool down by frame */
+    /** reduces the current cool down by frame
+     *  if the ability is timebased, it checks if the time gone by
+     *  since activation is equal to the duration and deactivates if it is
+     * */
     public void reduceCoolDown() {
         currentCoolDownInFrames = Math.max(0, --currentCoolDownInFrames);
+        if(skillFunction.getClass().isAssignableFrom(TimeBasedSkill.class)){
+            if(((TimeBasedSkill)skillFunction).durationInSeconds == (coolDownInFrames*Constants.FRAME_RATE - currentCoolDownInFrames*Constants.FRAME_RATE)){
+                ((TimeBasedSkill)skillFunction).deactivate();
+            }
+        }
     }
 }
