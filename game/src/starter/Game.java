@@ -27,6 +27,7 @@ import ecs.systems.*;
 import graphic.Animation;
 import graphic.DungeonCamera;
 import graphic.Painter;
+import graphic.hud.GameOverScreen;
 import graphic.hud.PauseMenu;
 import graphic.textures.TextureHandler;
 import java.io.IOException;
@@ -84,6 +85,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     public static ILevel currentLevel;
     private static PauseMenu<Actor> pauseMenu;
+    private static GameOverScreen<Actor> gameOverScreen;
     private static Entity hero;
     private Logger gameLogger;
     private int levelCount;
@@ -150,6 +152,8 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         controller.add(systems);
         pauseMenu = new PauseMenu<>();
         controller.add(pauseMenu);
+        gameOverScreen = new GameOverScreen<>();
+        controller.add(gameOverScreen);
         hero = new Hero();
         levelAPI = new LevelAPI(batch, painter, new WallGenerator(new RandomWalkGenerator()), this);
         levelAPI.loadLevel(LEVELSIZE);
@@ -164,6 +168,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         manageEntitiesSets();
         getHero().ifPresent(this::loadNextLevelIfEntityIsOnEndTile);
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) togglePause();
+        if (getHero().isEmpty()) showGameOverScreen();
     }
 
     @Override
@@ -306,6 +311,10 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
             if (paused) pauseMenu.showMenu();
             else pauseMenu.hideMenu();
         }
+    }
+
+    public static void showGameOverScreen() {
+        gameOverScreen.showMenu();
     }
 
     /**
