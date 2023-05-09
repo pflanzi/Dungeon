@@ -312,6 +312,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         }
     }
 
+    // TODO: maybe move this elsewhere
     public static void showGameOverScreen() {
         gameOverScreen.showMenu();
     }
