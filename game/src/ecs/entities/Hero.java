@@ -7,6 +7,7 @@ import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
 import ecs.components.skill.*;
 import graphic.Animation;
+import starter.Game;
 
 /**
  * The Hero is the player character. It's entity in the ECS. This class helps to setup the hero with
@@ -72,6 +73,11 @@ public class Hero extends Entity {
     }
 
     private void setupHealthComponent() {
-        new HealthComponent(this,health,null,hitRight,hitRight);
+        new HealthComponent(this, health, new IOnDeathFunction() {
+            @Override
+            public void onDeath(Entity entity) {
+                Game.showGameOverScreen();
+            }
+        }, hitRight, hitRight);
     }
 }
