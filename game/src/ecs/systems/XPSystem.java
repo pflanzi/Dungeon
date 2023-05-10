@@ -27,9 +27,18 @@ public class XPSystem extends ECS_System {
      * @param comp XPComponent of entity
      * @param xpLeft XP left to level up (can be negative if greater the needed amount)
      */
+
     private void performLevelUp(XPComponent comp, int xpLeft) {
         comp.setCurrentLevel(comp.getCurrentLevel() + 1);
         comp.setCurrentXP(xpLeft * -1);
         comp.levelUp(comp.getCurrentLevel());
+
+
+
     }
+
+
 }
+
+
+

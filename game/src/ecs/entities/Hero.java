@@ -21,6 +21,7 @@ public class Hero extends Entity {
     private final float ySpeed = 0.3f;
 
     private int health = 20;
+    private int dmg = 1;
 
     private final String pathToIdleLeft = "knight/idleLeft";
     private final String pathToIdleRight = "knight/idleRight";
@@ -31,6 +32,8 @@ public class Hero extends Entity {
     private Skill secondSkill;
 
     private  Animation hitRight;
+    private PlayableComponent pc;
+    private SkillComponent skillComponent;
 
     /** Entity with Components */
     public Hero() {
@@ -41,14 +44,24 @@ public class Hero extends Entity {
         setupAnimationComponent();
         setupHitboxComponent();
         setupHealthComponent();
-        PlayableComponent pc = new PlayableComponent(this);
-        setupMindcontrollSkill();
+        this.pc = new PlayableComponent(this);
+        this.skillComponent = new SkillComponent(this);
+        setupFireballSkill();
+        setupXPComponent();
+
         setupFireballSkill();
         setupGodmodeSkill();
-        pc.setSkillSlot1(firstSkill);
-        pc.setSkillSlot2(secondSkill);
-        setupXPComponent();
-        setupSkillComponent();
+    }
+
+    public void onLevelUp(int level){
+        this.health += 2;
+        this.dmg += 1;
+        if(level == 5){
+            this.setupMindcontrollSkill();
+        }
+        if(level == 10){
+            this.setupGodmodeSkill();
+        }
     }
 
     private void setupVelocityComponent() {
@@ -68,24 +81,30 @@ public class Hero extends Entity {
 
     private void setupFireballSkill() {
         firstSkill =
-                new Skill(
-                        new FireballSkill(SkillTools::getCursorPositionAsPoint), fireballCoolDown);
+            new Skill(
+                new FireballSkill(this.dmg, SkillTools::getCursorPositionAsPoint), fireballCoolDown);
+        this.pc.setSkillSlot1(firstSkill);
+        this.skillComponent.addSkill(firstSkill);
     }
+
     private void setupMindcontrollSkill(){
         firstSkill =
-                new Skill(
-                    new MindcontrollSkill(), 25);
+            new Skill(
+                new MindcontrollSkill(), 25);
+        this.pc.setSkillSlot1(firstSkill);
     }
 
     private void setupGodmodeSkill(){
         secondSkill =
-                new Skill(
-                    new GodmodeSkill(), 15, 10);
+            new Skill(
+                new GodmodeSkill(), 15, 10);
+        this.pc.setSkillSlot2(secondSkill);
+        skillComponent.addSkill(secondSkill);
     }
 
     private void setupHitboxComponent() {
         new HitboxComponent(
-                this,null,null);
+            this,null,null);
     }
 
     private void setupXPComponent() {
