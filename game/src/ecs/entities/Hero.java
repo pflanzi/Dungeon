@@ -6,6 +6,8 @@ import ecs.components.AnimationComponent;
 import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
 import ecs.components.skill.*;
+import ecs.components.xp.ILevelUp;
+import ecs.components.xp.XPComponent;
 import graphic.Animation;
 
 /**
@@ -41,14 +43,12 @@ public class Hero extends Entity {
         setupHealthComponent();
         PlayableComponent pc = new PlayableComponent(this);
         setupMindcontrollSkill();
-        //setupFireballSkill();
+        setupFireballSkill();
         setupGodmodeSkill();
-        SkillComponent skillComponent = new SkillComponent(this);
-        skillComponent.addSkill(firstSkill);
-        skillComponent.addSkill(secondSkill);
-
         pc.setSkillSlot1(firstSkill);
         pc.setSkillSlot2(secondSkill);
+        setupXPComponent();
+        setupSkillComponent();
     }
 
     private void setupVelocityComponent() {
@@ -88,7 +88,20 @@ public class Hero extends Entity {
                 this,null,null);
     }
 
+    private void setupXPComponent() {
+        XPComponent xpcomponent = new XPComponent(this);
+        xpcomponent.setCurrentLevel(1);
+    }
+
+    private void setupSkillComponent() {
+        SkillComponent skillComponent = new SkillComponent(this);
+        skillComponent.addSkill(firstSkill);
+        skillComponent.addSkill(secondSkill);
+    }
+
+
     private void setupHealthComponent() {
         new HealthComponent(this,health,null,hitRight,hitRight);
     }
 }
+

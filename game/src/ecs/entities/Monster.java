@@ -15,6 +15,7 @@ import ecs.components.ai.transition.ITransition;
 import ecs.components.ai.transition.RangeTransition;
 import ecs.components.ai.transition.SelfDefendTransition;
 import ecs.components.skill.*;
+import ecs.components.xp.XPComponent;
 import graphic.Animation;
 
 import java.util.Collections;
@@ -73,7 +74,8 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         String pathToIdleRight,
         String pathToRunLeft,
         String pathToRunRight,
-        IIdleAI IdleAI)
+        IIdleAI IdleAI,
+        long lootAmount)
     {
         super();
         setupVelocityComponent(xSpeed, ySpeed, pathToRunRight, pathToRunLeft  );
@@ -82,6 +84,8 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         setupPositionComponent();
         setupAIComponent(IdleAI);
         new HealthComponent(this, healthpoints * scaling, lf->{System.out.println("Mob died\n");}, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
+        setupXPComponent(lootAmount);
+
     }
 
 
@@ -123,6 +127,11 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
 
         aiComponent.setIdleAI(idle);
         aiComponent.setFightAI(fight);
+    }
+
+    private void setupXPComponent(long lootAmount) {
+        XPComponent xpcomponent = new XPComponent(this);
+        xpcomponent.setLootXP(lootAmount);
     }
 
 }
