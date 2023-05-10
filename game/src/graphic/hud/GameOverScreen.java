@@ -1,18 +1,19 @@
 package graphic.hud;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import controller.ScreenController;
+import starter.Game;
 import tools.Constants;
 import tools.Point;
 
 public class GameOverScreen <T extends Actor> extends ScreenController<T>  {
 
-    public GameOverScreen() { this(new SpriteBatch()); }
+    public GameOverScreen() { this(new SpriteBatch(), new Game()); }
 
     /**
      * Creates a Screencontroller with a ScalingViewport which stretches the ScreenElements on
@@ -20,7 +21,7 @@ public class GameOverScreen <T extends Actor> extends ScreenController<T>  {
      *
      * @param batch the batch which should be used to draw with
      */
-    public GameOverScreen(SpriteBatch batch) {
+    public GameOverScreen(SpriteBatch batch, Game game) {
         super(batch);
 
         ScreenText screenText =
@@ -46,18 +47,18 @@ public class GameOverScreen <T extends Actor> extends ScreenController<T>  {
                 new TextButtonListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        // TODO: add functionality here
-                        System.out.println("restart game");
+                        game.reset();
                     }
                 }
             );
 
-        // TODO: fix positioning
         restartButton.setPosition(
-            (Constants.WINDOW_WIDTH) / 2f - screenText.getWidth(),
-            (Constants.WINDOW_HEIGHT) / 1.5f + screenText.getHeight(),
-            Align.right | Align.bottom
+            (Constants.WINDOW_WIDTH) / 3.0f,
+            (Constants.WINDOW_HEIGHT) / 2.0f + screenText.getHeight(),
+            Align.left | Align.bottom
         );
+
+        restartButton.getLabel().setFontScale(1.25f);
 
         ScreenButton quitButton =
             new ScreenButton(
@@ -66,18 +67,18 @@ public class GameOverScreen <T extends Actor> extends ScreenController<T>  {
                 new TextButtonListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        // TODO: add functionality here
-                        System.out.println("quit game");
+                        Gdx.app.exit();
                     }
                 }
             );
 
-        // TODO: fix positioning
         quitButton.setPosition(
-            (Constants.WINDOW_WIDTH) / 2f - screenText.getWidth(),
-            (Constants.WINDOW_HEIGHT) / 1.5f + screenText.getHeight(),
-            Align.left | Align.bottom
+            (Constants.WINDOW_WIDTH) - ((Constants.WINDOW_WIDTH) / 3.0f),
+            (Constants.WINDOW_HEIGHT) / 2.0f + screenText.getHeight(),
+            Align.right | Align.bottom
         );
+
+        quitButton.getLabel().setFontScale(1.25f);
 
         add((T) screenText);
         add((T) restartButton);

@@ -162,6 +162,16 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     }
 
+
+    public void reset() {
+        hideGameOverScreen();
+        System.out.println("This is a test!!");
+        entities.clear();
+        systems.clear();
+
+        if (doSetup) setup();
+    }
+
     /** Called at the beginning of each frame. Before the controllers call <code>update</code>. */
     protected void frame() {
         setCameraFocus();
@@ -312,10 +322,11 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         }
     }
 
-    // TODO: maybe move this elsewhere
     public static void showGameOverScreen() {
         gameOverScreen.showMenu();
     }
+
+    public static void hideGameOverScreen() { gameOverScreen.hideMenu();}
 
     /**
      * Given entity will be added to the game in the next frame
