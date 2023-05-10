@@ -56,7 +56,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         String pathToIdleRight,
         String pathToRunLeft,
         String pathToRunRight,
-        long lootAmount)
+        long XPonDeath)
     {
         super();
         setupVelocityComponent(xSpeed, ySpeed, pathToRunRight, pathToRunLeft  );
@@ -65,11 +65,10 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         setupPositionComponent();
         setupAIComponent();
         new HealthComponent(this, healthpoints * scaling, lf->{System.out.println("Mob died\n");}, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
-        setupXPComponent(lootAmount);
+        setupXPComponent(XPonDeath);
     }
 
-    /** Entity with Components with custom IdleAI
-      */
+    /** Entity with Components with custom IdleAI */
     public Monster(
         int healthpoints,
         int dmg,
@@ -81,7 +80,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         String pathToRunLeft,
         String pathToRunRight,
         IIdleAI IdleAI,
-        long lootAmount)
+        long XPonDeath)
     {
         super();
         setupVelocityComponent(xSpeed, ySpeed, pathToRunRight, pathToRunLeft  );
@@ -90,7 +89,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         setupPositionComponent();
         setupAIComponent(IdleAI);
         new HealthComponent(this, healthpoints * scaling, lf->{System.out.println("Mob died\n");}, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
-        setupXPComponent(lootAmount);
+        setupXPComponent(XPonDeath);
 
     }
 
@@ -130,14 +129,13 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
     }
 
     public void setStrategy(IIdleAI idle, IFightAI fight){
-
         aiComponent.setIdleAI(idle);
         aiComponent.setFightAI(fight);
     }
 
-    private void setupXPComponent(long lootAmount) {
+    private void setupXPComponent(long XPonDeath) {
         XPComponent xpcomponent = new XPComponent(this);
-        xpcomponent.setLootXP(lootAmount);
+        xpcomponent.setLootXP(50000);
     }
 
 }

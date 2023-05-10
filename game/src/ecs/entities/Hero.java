@@ -14,7 +14,7 @@ import graphic.Animation;
  * The Hero is the player character. It's entity in the ECS. This class helps to setup the hero with
  * all its components and attributes .
  */
-public class Hero extends Entity {
+public class Hero extends Entity implements ILevelUp{
 
     private final int fireballCoolDown = 1;
     private final float xSpeed = 0.3f;
@@ -48,20 +48,6 @@ public class Hero extends Entity {
         this.skillComponent = new SkillComponent(this);
         setupFireballSkill();
         setupXPComponent();
-
-        setupFireballSkill();
-        setupGodmodeSkill();
-    }
-
-    public void onLevelUp(int level){
-        this.health += 2;
-        this.dmg += 1;
-        if(level == 5){
-            this.setupMindcontrollSkill();
-        }
-        if(level == 10){
-            this.setupGodmodeSkill();
-        }
     }
 
     private void setupVelocityComponent() {
@@ -90,8 +76,9 @@ public class Hero extends Entity {
     private void setupMindcontrollSkill(){
         firstSkill =
             new Skill(
-                new MindcontrollSkill(), 25);
+                new MindcontrollSkill(), 25, 5);
         this.pc.setSkillSlot1(firstSkill);
+        skillComponent.addSkill(firstSkill);
     }
 
     private void setupGodmodeSkill(){
@@ -108,19 +95,32 @@ public class Hero extends Entity {
     }
 
     private void setupXPComponent() {
-        XPComponent xpcomponent = new XPComponent(this);
+        XPComponent xpcomponent = new XPComponent(this, this::onLevelUp);
         xpcomponent.setCurrentLevel(1);
-    }
-
-    private void setupSkillComponent() {
-        SkillComponent skillComponent = new SkillComponent(this);
-        skillComponent.addSkill(firstSkill);
-        skillComponent.addSkill(secondSkill);
     }
 
 
     private void setupHealthComponent() {
         new HealthComponent(this,health,null,hitRight,hitRight);
+    }
+
+    /**
+     * Determins what to do on levelup
+     * @param nexLevel is the new level of the entity
+     */
+    @Override
+    public void onLevelUp(long nexLevel) {
+        this.health += 2;
+        this.dmg += 1;
+        System.out.println("Hero gained +2 health and +1 damage\n");
+        if(nexLevel == 5){
+            this.setupMindcontrollSkill();
+            System.out.println("Hero gained the skill Mindcontroll, to use it, press q\n");
+        }
+        if(nexLevel == 10){
+            this.setupGodmodeSkill();
+            System.out.println("Hero gained the skill Godmode, to use it, press r\n");
+        }
     }
 }
 
