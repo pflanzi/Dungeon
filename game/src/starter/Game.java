@@ -162,14 +162,15 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     }
 
-
     public void reset() {
         hideGameOverScreen();
-        System.out.println("This is a test!!");
+
         entities.clear();
+        entitiesToAdd.clear();
+        entitiesToRemove.clear();
         systems.clear();
 
-        if (doSetup) setup();
+        // TODO: reload game / level
     }
 
     /** Called at the beginning of each frame. Before the controllers call <code>update</code>. */
