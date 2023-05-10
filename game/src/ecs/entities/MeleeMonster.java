@@ -13,7 +13,8 @@ abstract public class MeleeMonster extends Monster {
         String pathToIdleLeft,
         String pathToIdleRight,
         String pathToRunLeft,
-        String pathToRunRight)
+        String pathToRunRight,
+        long lootAmount)
     {
         super(
             healthpoints,
@@ -24,7 +25,8 @@ abstract public class MeleeMonster extends Monster {
             pathToIdleLeft,
             pathToIdleRight,
             pathToRunLeft,
-            pathToRunRight);
+            pathToRunRight,
+            lootAmount);
     }
 
     public MeleeMonster(
@@ -37,7 +39,10 @@ abstract public class MeleeMonster extends Monster {
         String pathToIdleRight,
         String pathToRunLeft,
         String pathToRunRight,
-        IIdleAI IdleAI) {
+        IIdleAI IdleAI,
+        long lootAmount)
+
+    {
         super(healthpoints,
             dmg,
             scaling,
@@ -47,6 +52,7 @@ abstract public class MeleeMonster extends Monster {
             pathToIdleRight,
             pathToRunLeft,
             pathToRunRight,
-            IdleAI);
+            IdleAI,
+            lootAmount);
     }
 }

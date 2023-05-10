@@ -8,6 +8,7 @@ public class Ogre extends MeleeMonster {
     private final static int dmg = 6;
     private final static float xSpeed = 0.05f;
     private final static float ySpeed = 0.05f;
+    private final static long lootAmount = 10;
 
     private final static String pathToIdleLeft = "monster/ogre/idleLeft";
     private final static String pathToIdleRight = "monster/ogre/idleRight";
@@ -17,7 +18,7 @@ public class Ogre extends MeleeMonster {
 
 
     public Ogre(int scaling) {
-        super(healthpoints, dmg, scaling ,xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight, new heroChaseWalk());
+        super(healthpoints, dmg, scaling ,xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight, new heroChaseWalk(), lootAmount);
     }
 
 

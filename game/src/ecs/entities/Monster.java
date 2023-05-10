@@ -42,7 +42,10 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
     private IIdleAI defaultIdle;
     private IFightAI defaultFight;
 
-    /** Entity with Components */
+    /** Entity with Components
+     * param lootAmount amount of loot that should be dropped on death.
+     *
+     */
     public Monster(
         int healthpoints,
         int dmg,
@@ -52,7 +55,8 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         String pathToIdleLeft,
         String pathToIdleRight,
         String pathToRunLeft,
-        String pathToRunRight)
+        String pathToRunRight,
+        long lootAmount)
     {
         super();
         setupVelocityComponent(xSpeed, ySpeed, pathToRunRight, pathToRunLeft  );
@@ -61,9 +65,11 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         setupPositionComponent();
         setupAIComponent();
         new HealthComponent(this, healthpoints * scaling, lf->{System.out.println("Mob died\n");}, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
+        setupXPComponent(lootAmount);
     }
 
-    /** Entity with Components with custom IdleAI*/
+    /** Entity with Components with custom IdleAI
+      */
     public Monster(
         int healthpoints,
         int dmg,

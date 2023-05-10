@@ -11,7 +11,8 @@ abstract public class RangedMonster extends Monster {
         String pathToIdleLeft,
         String pathToIdleRight,
         String pathToRunLeft,
-        String pathToRunRight)
+        String pathToRunRight,
+        long lootAmount)
     {
         super(
             healthpoints,
@@ -22,6 +23,7 @@ abstract public class RangedMonster extends Monster {
             pathToIdleLeft,
             pathToIdleRight,
             pathToRunLeft,
-            pathToRunRight);
+            pathToRunRight,
+            lootAmount);
     }
 }
