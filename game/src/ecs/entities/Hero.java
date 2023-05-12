@@ -76,7 +76,7 @@ public class Hero extends Entity implements ILevelUp{
     private void setupMindcontrollSkill(){
         firstSkill =
             new Skill(
-                new MindcontrollSkill(), 25, 5);
+                new MindcontrollSkill(), 25);
         this.pc.setSkillSlot1(firstSkill);
         skillComponent.addSkill(firstSkill);
     }

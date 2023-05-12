@@ -44,7 +44,6 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
 
     /** Entity with Components
      * param lootAmount amount of loot that should be dropped on death.
-     *
      */
     public Monster(
         int healthpoints,
@@ -135,7 +134,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
 
     private void setupXPComponent(long XPonDeath) {
         XPComponent xpcomponent = new XPComponent(this);
-        xpcomponent.setLootXP(50000);
+        xpcomponent.setLootXP(XPonDeath);
     }
 
 }

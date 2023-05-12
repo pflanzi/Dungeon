@@ -41,10 +41,5 @@ public class MindcontrollSkill extends TimeBasedSkill {
      * Kills the mindcontrolled Monster, called some seconds after activation
      */
     public void deactivate(){
-        //@Todo Delete after presentation of functionality
-        usedOn.getComponent(HealthComponent.class)
-            .ifPresent(hc -> {
-                ((HealthComponent)hc).receiveHit(new Damage(500, DamageType.PHYSICAL, Game.getHero().get()));
-            });
     }
 }
