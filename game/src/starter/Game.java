@@ -27,6 +27,7 @@ import ecs.systems.*;
 import graphic.Animation;
 import graphic.DungeonCamera;
 import graphic.Painter;
+import graphic.hud.GameOverScreen;
 import graphic.hud.PauseMenu;
 import graphic.textures.TextureHandler;
 import java.io.IOException;
@@ -84,6 +85,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     public static ILevel currentLevel;
     private static PauseMenu<Actor> pauseMenu;
+    private static GameOverScreen<Actor> gameOverScreen;
     private static Entity hero;
     private Logger gameLogger;
     private int levelCount;
@@ -150,12 +152,25 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         controller.add(systems);
         pauseMenu = new PauseMenu<>();
         controller.add(pauseMenu);
+        gameOverScreen = new GameOverScreen<>();
+        controller.add(gameOverScreen);
         hero = new Hero();
         levelAPI = new LevelAPI(batch, painter, new WallGenerator(new RandomWalkGenerator()), this);
         levelAPI.loadLevel(LEVELSIZE);
         createSystems();
         //monster = new Monster();
 
+    }
+
+    public void reset() {
+        hideGameOverScreen();
+
+        entities.clear();
+        entitiesToAdd.clear();
+        entitiesToRemove.clear();
+        systems.clear();
+
+        // TODO: reload game / level
     }
 
     /** Called at the beginning of each frame. Before the controllers call <code>update</code>. */
@@ -307,6 +322,12 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
             else pauseMenu.hideMenu();
         }
     }
+
+    public static void showGameOverScreen() {
+        gameOverScreen.showMenu();
+    }
+
+    public static void hideGameOverScreen() { gameOverScreen.hideMenu();}
 
     /**
      * Given entity will be added to the game in the next frame
