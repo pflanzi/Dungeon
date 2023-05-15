@@ -15,6 +15,7 @@ import ecs.components.ai.transition.ITransition;
 import ecs.components.ai.transition.RangeTransition;
 import ecs.components.ai.transition.SelfDefendTransition;
 import ecs.components.skill.*;
+import ecs.components.xp.XPComponent;
 import graphic.Animation;
 
 import java.util.Collections;
@@ -36,28 +37,14 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
     private final String pathToRunLeft = "monster/demon/runLeft";
     private final String pathToRunRight = "monster/demon/runRight";
 
-    /** Entity with Components */
-    public Monster(
-        int healthpoints,
-        int dmg,
-        int scaling,
-        float xSpeed,
-        float ySpeed,
-        String pathToIdleLeft,
-        String pathToIdleRight,
-        String pathToRunLeft,
-        String pathToRunRight)
-    {
-        super();
-        setupVelocityComponent(xSpeed, ySpeed, pathToRunRight, pathToRunLeft  );
-        setupAnimationComponent(pathToIdleRight,pathToRunLeft);
-        setupHitboxComponent();
-        setupPositionComponent();
-        setupAIComponent();
-        new HealthComponent(this, healthpoints * scaling, null, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
-    }
+    private AIComponent aiComponent;
 
-    /** Entity with Components with custom IdleAI*/
+    private IIdleAI defaultIdle;
+    private IFightAI defaultFight;
+
+    /** Entity with Components
+     * param lootAmount amount of loot that should be dropped on death.
+     */
     public Monster(
         int healthpoints,
         int dmg,
@@ -68,7 +55,31 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         String pathToIdleRight,
         String pathToRunLeft,
         String pathToRunRight,
-        IIdleAI IdleAI)
+        long XPonDeath)
+    {
+        super();
+        setupVelocityComponent(xSpeed, ySpeed, pathToRunRight, pathToRunLeft  );
+        setupAnimationComponent(pathToIdleRight,pathToRunLeft);
+        setupHitboxComponent();
+        setupPositionComponent();
+        setupAIComponent();
+        new HealthComponent(this, healthpoints * scaling, lf->{System.out.println("Mob died\n");}, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
+        setupXPComponent(XPonDeath);
+    }
+
+    /** Entity with Components with custom IdleAI */
+    public Monster(
+        int healthpoints,
+        int dmg,
+        int scaling,
+        float xSpeed,
+        float ySpeed,
+        String pathToIdleLeft,
+        String pathToIdleRight,
+        String pathToRunLeft,
+        String pathToRunRight,
+        IIdleAI IdleAI,
+        long XPonDeath)
     {
         super();
         setupVelocityComponent(xSpeed, ySpeed, pathToRunRight, pathToRunLeft  );
@@ -76,7 +87,9 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         setupHitboxComponent();
         setupPositionComponent();
         setupAIComponent(IdleAI);
-        new HealthComponent(this, healthpoints * scaling, null, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
+        new HealthComponent(this, healthpoints * scaling, lf->{System.out.println("Mob died\n");}, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
+        setupXPComponent(XPonDeath);
+
     }
 
 
@@ -111,7 +124,17 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
     private void setupAIComponent(IIdleAI idleAI) {
         ITransition transitionAI = new RangeTransition(5f);
         IFightAI fightAI = new CollideAI(2f);
-        new AIComponent(this, fightAI, idleAI, transitionAI);
+        aiComponent = new AIComponent(this, fightAI, idleAI, transitionAI);
+    }
+
+    public void setStrategy(IIdleAI idle, IFightAI fight){
+        aiComponent.setIdleAI(idle);
+        aiComponent.setFightAI(fight);
+    }
+
+    private void setupXPComponent(long XPonDeath) {
+        XPComponent xpcomponent = new XPComponent(this);
+        xpcomponent.setLootXP(XPonDeath);
     }
 
 }
