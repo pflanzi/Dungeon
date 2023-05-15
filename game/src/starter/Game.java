@@ -92,6 +92,8 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     private Trap trap;
     private Lever lever;
 
+    private static Game game;
+
     public static void main(String[] args) {
         // start the game
         try {
@@ -99,7 +101,8 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        DesktopLauncher.run(new Game());
+        game = new Game();
+        DesktopLauncher.run(game);
     }
 
     /**
@@ -165,12 +168,11 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     public void reset() {
         hideGameOverScreen();
 
-        entities.clear();
-        entitiesToAdd.clear();
-        entitiesToRemove.clear();
-        systems.clear();
+        getGame().setup();
+    }
 
-        // TODO: reload game / level
+    public static Game getGame() {
+        return game;
     }
 
     /** Called at the beginning of each frame. Before the controllers call <code>update</code>. */
