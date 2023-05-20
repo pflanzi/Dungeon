@@ -10,6 +10,7 @@ import ecs.components.xp.ILevelUp;
 import ecs.components.xp.XPComponent;
 import graphic.Animation;
 import starter.Game;
+import tools.Direction;
 
 /**
  * The Hero is the player character. It's entity in the ECS. This class helps to setup the hero with
@@ -31,6 +32,8 @@ public class Hero extends Entity implements ILevelUp{
     private final String pathToHitRight = "knight/hit";
     private Skill firstSkill;
     private Skill secondSkill;
+    private Skill defaultAttack;
+    private Direction lastInputDirection;
 
     private  Animation hitRight;
     private PlayableComponent pc;
@@ -48,7 +51,9 @@ public class Hero extends Entity implements ILevelUp{
         this.pc = new PlayableComponent(this);
         this.skillComponent = new SkillComponent(this);
         setupFireballSkill();
+        setupDefaultAttack();
         setupXPComponent();
+        lastInputDirection=Direction.RIGHT;
     }
 
     private void setupVelocityComponent() {
@@ -89,6 +94,13 @@ public class Hero extends Entity implements ILevelUp{
         this.pc.setSkillSlot2(secondSkill);
         skillComponent.addSkill(secondSkill);
     }
+    private void setupDefaultAttack(){
+        defaultAttack =
+            new Skill(
+                new MeleeAttackSkill(dmg), 0.6f);
+            this.pc.setDefaultAttack(defaultAttack);
+            skillComponent.addSkill(defaultAttack);
+    }
 
     private void setupHitboxComponent() {
         new HitboxComponent(
@@ -127,6 +139,14 @@ public class Hero extends Entity implements ILevelUp{
             this.setupGodmodeSkill();
             System.out.println("Hero gained the skill Godmode, to use it, press r\n");
         }
+    }
+
+    public Direction getLastInputDirection() {
+        return lastInputDirection;
+    }
+
+    public void setLastInputDirection(Direction lastInputDirection) {
+        this.lastInputDirection = lastInputDirection;
     }
 }
 
