@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector3;
 import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
 import ecs.entities.Entity;
-import level.tools.Coordinate;
 import starter.Game;
 import tools.Point;
 
@@ -67,18 +66,25 @@ public class SkillTools {
     /**
      * Knocks back an Entity after recieving a hit
      *
-     * @param a Entity that performs the hit
-     * @param b Entity recieving the hit
+     * @param attacker Entity that performs the hit
+     * @param reciever Entity recieving the hit
      */
     public static void executeKnockback(Entity attacker, Entity reciever, float recoilMagnitude) {
         PositionComponent attPos, recPos;
         attPos = (PositionComponent) attacker.getComponent(PositionComponent.class).orElseThrow(() -> new MissingComponentException("PositionComponent"));
         recPos = (PositionComponent) reciever.getComponent(PositionComponent.class).orElseThrow(() -> new MissingComponentException("PositionComponent"));
         Point knockbackPos = calculateKnockback(attPos.getPosition(),recPos.getPosition(), recoilMagnitude);
-        if(isAccessble(knockbackPos))
+        if(isAccessible(knockbackPos))
             recPos.setPosition(knockbackPos);
     }
 
+    /**
+     * Calculates where to knock the entity after recieving a hit
+     * @param posA Position of entity attacking
+     * @param posB Position of entity recieving the hit
+     * @param recoilMagnitude How far to knock the entity back
+     * @return new Position of entity after knockback
+     */
     private static Point calculateKnockback(Point posA, Point posB, float recoilMagnitude){
         float attackerX = posA.x;
         float attackerY = posA.y;
@@ -103,7 +109,12 @@ public class SkillTools {
         return new Point(enemyX,enemyY);
     }
 
-    private static boolean isAccessble(Point p){
+    /**
+     * Checks if a tile is accessible
+     * @param p point of the tile
+     * @return true if the tile is accessible
+     */
+    private static boolean isAccessible(Point p){
         if(Game.currentLevel.getTileAt(p.toCoordinate()).isAccessible())
             return true;
         return false;

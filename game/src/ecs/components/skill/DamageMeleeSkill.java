@@ -37,19 +37,19 @@ public class DamageMeleeSkill implements ISkillFunction {
         this.recoilMagnitude = recoilMagnitude;
     }
 
+    /**
+     * Executes the melee skill, builds the entity and deals damage if it hits another entity
+     * @param entity which uses the skill
+     */
     @Override
     public void execute(Entity entity) {
+        //Create entity
         Entity hit = new Entity();
         PositionComponent epc =
             (PositionComponent)
                 entity.getComponent(PositionComponent.class)
                     .orElseThrow(
                         () -> new MissingComponentException("PositionComponent"));
-        AnimationComponent ac =
-            (AnimationComponent)
-                entity.getComponent(AnimationComponent.class)
-                    .orElseThrow(
-                        () -> new MissingComponentException("HealthComponent"));
 
         new PositionComponent(hit, epc.getPosition());
 
@@ -57,11 +57,8 @@ public class DamageMeleeSkill implements ISkillFunction {
         Animation animationL = AnimationBuilder.buildAnimation(pathToTexturesOfProjectileL);
         new AnimationComponent(hit, animationL, animationR);
         Point target = epc.getPosition();
-        VelocityComponent vcp =
-            (VelocityComponent)
-                entity.getComponent(VelocityComponent.class)
-                    .orElseThrow(
-                        () -> new MissingComponentException("VelocityComponent"));
+
+        //Set target point of projectile based on last walked direction
         switch (((Hero) entity).getLastInputDirection()) {
             case UP -> {
                 target.y += 0.5f;
