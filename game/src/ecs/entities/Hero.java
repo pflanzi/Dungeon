@@ -23,7 +23,7 @@ public class Hero extends Entity implements ILevelUp{
     private final float ySpeed = 0.3f;
 
     private int health = 20;
-    private int dmg = 1;
+    private int dmg = 6;
 
     private final String pathToIdleLeft = "knight/idleLeft";
     private final String pathToIdleRight = "knight/idleRight";

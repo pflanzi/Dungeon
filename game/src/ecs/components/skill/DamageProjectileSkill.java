@@ -2,6 +2,7 @@ package ecs.components.skill;
 
 import dslToGame.AnimationBuilder;
 import ecs.components.*;
+import ecs.components.ai.AITools;
 import ecs.components.collision.ICollide;
 import ecs.components.xp.XPComponent;
 import ecs.damage.Damage;
@@ -38,12 +39,6 @@ public abstract class DamageProjectileSkill implements ISkillFunction {
 
     @Override
     public void execute(Entity entity) {
-        //@Todo Delete after presentation of functionality
-        entity.getComponent(XPComponent.class)
-            .ifPresent(xpc -> {
-                ((XPComponent) xpc).addXP(((XPComponent) xpc).getXPToNextLevel());
-            });
-
         Entity projectile = new Entity();
         PositionComponent epc =
                 (PositionComponent)
@@ -59,6 +54,7 @@ public abstract class DamageProjectileSkill implements ISkillFunction {
         Point targetPoint =
                 SkillTools.calculateLastPositionInRange(
                         epc.getPosition(), aimedOn, projectileRange);
+        //Point targetPoint = AITools.closestMonstersPositionToEntity(projectile).getPosition();
         Point velocity =
                 SkillTools.calculateVelocity(epc.getPosition(), targetPoint, projectileSpeed);
         VelocityComponent vc =
