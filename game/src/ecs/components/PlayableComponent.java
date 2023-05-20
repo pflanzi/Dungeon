@@ -15,7 +15,7 @@ public class PlayableComponent extends Component {
 
     private boolean playable;
     private final Logger playableCompLogger = Logger.getLogger(this.getClass().getName());
-
+    private Skill defaultAttack;
     private Skill skillSlot1;
     private Skill skillSlot2;
 
@@ -29,6 +29,20 @@ public class PlayableComponent extends Component {
         playable = true;
         this.skillSlot1 = skillSlot1;
         this.skillSlot2 = skillSlot2;
+    }
+
+    /**
+     * @param entity associated entity
+     * @param skillSlot1 skill that will be on the first skillslot
+     * @param skillSlot2 skill that will be on the second skillslot
+     * @param defaultAttack default attack
+     */
+    public PlayableComponent(Entity entity, Skill skillSlot1, Skill skillSlot2, Skill defaultAttack) {
+        super(entity);
+        playable = true;
+        this.skillSlot1 = skillSlot1;
+        this.skillSlot2 = skillSlot2;
+        this.defaultAttack = defaultAttack;
     }
 
     /** {@inheritDoc} */
@@ -83,5 +97,17 @@ public class PlayableComponent extends Component {
      */
     public Optional<Skill> getSkillSlot2() {
         return Optional.ofNullable(skillSlot2);
+    }
+
+    /**
+     * @return default attack skill
+     */
+    public Optional<Skill> getDefaultAttack() {return Optional.ofNullable(defaultAttack);}
+
+    /**
+     * @param defaultAttack Skill that will be used as default attack
+     */
+    public void setDefaultAttack(Skill defaultAttack) {
+        this.defaultAttack = defaultAttack;
     }
 }
