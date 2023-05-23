@@ -33,6 +33,11 @@ public class AIComponent extends Component {
         this.transitionAI = transition;
     }
 
+    public AIComponent(Entity entity, IIdleAI idleAI) {
+        super(entity);
+        this.idleAI = idleAI;
+    }
+
     /**
      * @param entity associated entity
      */

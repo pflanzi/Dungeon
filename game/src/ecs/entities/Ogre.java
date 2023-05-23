@@ -16,12 +16,9 @@ public class Ogre extends MeleeMonster {
     private final static String pathToRunRight = "monster/ogre/runRight";
 
 
-
     public Ogre(int scaling) {
-        super(healthpoints, dmg, scaling ,xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight, new heroChaseWalk(), XPonDeath);
+        super(healthpoints, dmg, scaling, xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight, new heroChaseWalk(), XPonDeath);
     }
-
-
 
 
 }
