@@ -1,13 +1,15 @@
 package ecs.entities;
 
+import dslToGame.AnimationBuilder;
 import ecs.components.*;
+import graphic.Animation;
 
 import java.util.Random;
 
 public class Tombstone extends Entity implements IInteraction {
 
     private Ghost ghost;
-    private String texture = "";
+    private String texture = "character/ghost/Tombstone_17px.png";
     private int dmgAmount = 3;
     private int healAmount = 5;
     private float radius = 1.0f;
@@ -19,6 +21,7 @@ public class Tombstone extends Entity implements IInteraction {
         // TODO: fill this with functionality => AI and stuff
         new HitboxComponent(this, null, null);
         new InteractionComponent(this, radius, false, this);
+        new AnimationComponent(this, AnimationBuilder.buildAnimation(texture));
     }
 
     /**
@@ -34,7 +37,7 @@ public class Tombstone extends Entity implements IInteraction {
             case 0 -> reward(hero);
             case 1 -> punish(hero);
         }
-        // TODO: delete entity afterwards
+        // TODO: delete entities (ghost + tombstone) afterwards
     }
 
     /**

@@ -185,8 +185,6 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         levelAPI = new LevelAPI(batch, painter, new WallGenerator(new RandomWalkGenerator()), this);
         levelAPI.loadLevel(LEVELSIZE);
         createSystems();
-        //monster = new Monster();
-
     }
 
     public void reset() {
@@ -212,6 +210,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     @Override
     public void onLevelLoad() {
         levelCount++;
+        hasGhost = false;
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
 
@@ -219,9 +218,10 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         getHero().ifPresent(this::placeOnLevelStart);
         spawnTraps();
 
-        if (levelCount % 3 == 0) {
+        if (!hasGhost && (levelCount % 3) == 0) {
             System.out.println("Spawning ghost and tombstone ...");
             spawnGhostAndTombstone();
+            hasGhost = true;
         } else {
             System.out.println("No ghost and tombstone were spawned.");
         }
@@ -295,6 +295,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
      */
     public void spawnGhostAndTombstone() {
         // TODO: add functionality here
+        addEntity(new Ghost());
     }
 
     private void manageEntitiesSets() {

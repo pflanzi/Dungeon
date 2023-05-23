@@ -10,11 +10,6 @@ import java.util.Random;
 public class FollowHeroWalk implements IIdleAI {
 
     private float distanceToHero;
-    private GraphPath<Tile> path;
-
-    public FollowHeroWalk() {
-        // TODO: fill this
-    }
 
     @Override
     public void idle(Entity entity) {

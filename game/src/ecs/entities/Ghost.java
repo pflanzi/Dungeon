@@ -6,18 +6,23 @@ import ecs.components.HitboxComponent;
 import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
 import ecs.components.ai.AIComponent;
+import ecs.components.ai.fight.IFightAI;
 import ecs.components.ai.idle.FollowHeroWalk;
 import ecs.components.ai.idle.IIdleAI;
+import ecs.components.ai.transition.FriendlyTransition;
+import ecs.components.ai.transition.ITransition;
 import graphic.Animation;
+
+import java.util.Optional;
 
 public class Ghost extends Entity {
 
     private Tombstone tombstone;
-    private float speed = 0.2f;
+    private float speed = 0.08f;
 
     // Ghost textures source: https://dyru.itch.io/pixel-ghost-template
     private String pathToAnimationLeft = "character/ghost/animationLeft";
-    private String pathToAnimationRight = "character/ghost/animationRight/ghostIdleRight1.png";
+    private String pathToAnimationRight = "character/ghost/animationRight";
     private IIdleAI idleAI = new FollowHeroWalk();
 
 
@@ -75,7 +80,8 @@ public class Ghost extends Entity {
      * @param idleAI AI behaviour
      */
     private void setupAIComponent(IIdleAI idleAI) {
-        new AIComponent(this, idleAI);
+        ITransition transitionAI = new FriendlyTransition();
+        new AIComponent(this, null, idleAI, transitionAI);
     }
 
 }
