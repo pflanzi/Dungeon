@@ -2,7 +2,9 @@ package ecs.entities;
 
 import dslToGame.AnimationBuilder;
 import ecs.components.AnimationComponent;
+import ecs.components.HitboxComponent;
 import ecs.components.PositionComponent;
+import ecs.components.VelocityComponent;
 import ecs.components.ai.AIComponent;
 import ecs.components.ai.idle.FollowHeroWalk;
 import ecs.components.ai.idle.IIdleAI;
@@ -20,17 +22,22 @@ public class Ghost extends Entity {
 
 
     /**
-     * Creates a new Ghost and connects it with a corresponding tombstone
+     * Creates a new Ghost and connects it with a corresponding tombstone.
      */
     public Ghost() {
         super();
 
         tombstone = new Tombstone(this);
+
         setupPositionComponent();
         setupAnimationComponent();
-        setupVelocityComponent();
         setupHitboxComponent();
+        setupVelocityComponent();
         setupAIComponent(idleAI);
+    }
+
+    private void setupPositionComponent() {
+        new PositionComponent(this);
     }
 
     /**
@@ -43,14 +50,32 @@ public class Ghost extends Entity {
         new AnimationComponent(this, idleLeft, idleRight);
     }
 
+    /**
+     * Adds a hitbox to the ghost.
+     */
+    private void setupHitboxComponent() {
+        new HitboxComponent(this,
+            (you, other, direction) -> System.out.println("ghostCollisionEnter"),
+            (you, other, direction) -> System.out.println("ghostCollisionLeave"));
+    }
+
+    /**
+     * Adds a walking animation and speed to the ghost.
+     */
+    private void setupVelocityComponent() {
+        Animation moveLeft = AnimationBuilder.buildAnimation(pathToAnimationLeft);
+        Animation moveRight = AnimationBuilder.buildAnimation(pathToAnimationRight);
+
+        new VelocityComponent(this, speed, speed, moveLeft, moveRight);
+    }
+
+    /**
+     * Adds AI behaviour to the ghost.
+     * Follows the hero around while maintaining a small distance.
+     * @param idleAI AI behaviour
+     */
     private void setupAIComponent(IIdleAI idleAI) {
         new AIComponent(this, idleAI);
     }
-
-    private void setupPositionComponent() {}
-
-    private void setupVelocityComponent() {}
-
-    private void setupHitboxComponent() {}
 
 }
