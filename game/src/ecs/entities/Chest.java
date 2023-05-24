@@ -23,7 +23,7 @@ public class Chest extends Entity {
                     "objects/treasurechest/chest_full_open_anim_f2.png",
                     "objects/treasurechest/chest_empty_open_anim_f2.png");
 
-    public boolean isMonster;
+    private boolean isMonster;
 
     /**
      * small Generator which uses the Item#ITEM_REGISTER
@@ -71,15 +71,16 @@ public class Chest extends Entity {
         }
     }
 
+    /**
+     * Drops items of given entity next to the entity, spawnes Monsterchest instead if chest is a monster
+     * @param entity entity to drop items of
+     */
     public void dropItems(Entity entity) {
-
-        if (this.isMonster){
+        if (((Chest)entity).isMonster){
             new MonsterChest(this);
             Game.removeEntity(this);
-
         }
         else {
-
             InventoryComponent inventoryComponent =
                 entity.getComponent(InventoryComponent.class)
                     .map(InventoryComponent.class::cast)
@@ -141,10 +142,12 @@ public class Chest extends Entity {
                         + e.getClass().getName());
     }
 
+    public boolean isMonster() {
+        return isMonster;
+    }
 
-    //public dropItems(Entity entity) {
-
-
-    //}
+    public void setMonster(boolean monster) {
+        isMonster = monster;
+    }
 
 }
