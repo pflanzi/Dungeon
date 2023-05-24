@@ -42,8 +42,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
     private IIdleAI defaultIdle;
     private IFightAI defaultFight;
 
-    /**
-     * Entity with Components
+    /** Entity with Components
      * param lootAmount amount of loot that should be dropped on death.
      */
     public Monster(
@@ -56,22 +55,19 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         String pathToIdleRight,
         String pathToRunLeft,
         String pathToRunRight,
-        long XPonDeath) {
+        long XPonDeath)
+    {
         super();
-        setupVelocityComponent(xSpeed, ySpeed, pathToRunRight, pathToRunLeft);
-        setupAnimationComponent(pathToIdleRight, pathToRunLeft);
+        setupVelocityComponent(xSpeed, ySpeed, pathToRunRight, pathToRunLeft  );
+        setupAnimationComponent(pathToIdleRight,pathToRunLeft);
         setupHitboxComponent();
         setupPositionComponent();
         setupAIComponent();
-        new HealthComponent(this, healthpoints * scaling, lf -> {
-            System.out.println("Mob died\n");
-        }, new Animation(Collections.singleton(pathToIdleLeft), 1), new Animation(Collections.singleton(pathToIdleLeft), 1));
+        HealthComponent h = new HealthComponent(this, healthpoints * scaling, lf->{System.out.println("Mob died\n");}, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
         setupXPComponent(XPonDeath);
     }
 
-    /**
-     * Entity with Components with custom IdleAI
-     */
+    /** Entity with Components with custom IdleAI */
     public Monster(
         int healthpoints,
         int dmg,
@@ -83,16 +79,15 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         String pathToRunLeft,
         String pathToRunRight,
         IIdleAI IdleAI,
-        long XPonDeath) {
+        long XPonDeath)
+    {
         super();
-        setupVelocityComponent(xSpeed, ySpeed, pathToRunRight, pathToRunLeft);
-        setupAnimationComponent(pathToIdleRight, pathToRunLeft);
+        setupVelocityComponent(xSpeed, ySpeed, pathToRunRight, pathToRunLeft  );
+        setupAnimationComponent(pathToIdleRight,pathToRunLeft);
         setupHitboxComponent();
         setupPositionComponent();
         setupAIComponent(IdleAI);
-        new HealthComponent(this, healthpoints * scaling, lf -> {
-            System.out.println("Mob died\n");
-        }, new Animation(Collections.singleton(pathToIdleLeft), 1), new Animation(Collections.singleton(pathToIdleLeft), 1));
+        new HealthComponent(this, healthpoints * scaling, lf->{System.out.println("Mob died\n");}, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
         setupXPComponent(XPonDeath);
 
     }
@@ -119,6 +114,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
     }
 
     private void setupPositionComponent() {
+
         new PositionComponent(this);
     }
 
@@ -132,7 +128,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         aiComponent = new AIComponent(this, fightAI, idleAI, transitionAI);
     }
 
-    public void setStrategy(IIdleAI idle, IFightAI fight) {
+    public void setStrategy(IIdleAI idle, IFightAI fight){
         aiComponent.setIdleAI(idle);
         aiComponent.setFightAI(fight);
     }
