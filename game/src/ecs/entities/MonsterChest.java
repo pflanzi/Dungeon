@@ -10,7 +10,7 @@ import ecs.components.IOnDeathFunction;
 /**
  * class that creates Entity MonsterChest
  */
-public class MonsterChest extends MeleeMonster implements IOnDeathFunction {
+public class MonsterChest extends MeleeMonster {
 
     private final static int hp = 5;
     private final static int dmg = 1;
@@ -28,7 +28,7 @@ public class MonsterChest extends MeleeMonster implements IOnDeathFunction {
 
         setupPositionComponent(chest);
         setupInventoryComponent(chest);
-        setupHealthComponent();
+        setupHealthComponent(chest);
 
     }
 
@@ -66,10 +66,10 @@ public class MonsterChest extends MeleeMonster implements IOnDeathFunction {
                     () ->
                         new MissingComponentException("HealthComponent"));
 
-            healthComponent.setOnDeath(new IOnDeathFunction(chest) {
+            healthComponent.setOnDeath(new IOnDeathFunction() {
                 @Override
                 public void onDeath(Entity entity) {
-                    chest.dropItems(this);
+                    chest.dropItems(chest);
                 }
             });
 
@@ -77,10 +77,8 @@ public class MonsterChest extends MeleeMonster implements IOnDeathFunction {
     }
 
 
-    @Override
-    public void onDeath(Entity entity) {
-        entity.
-    }
+
+
 }
 
 
