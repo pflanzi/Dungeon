@@ -24,6 +24,7 @@ public class Ghost extends Entity {
     private String pathToAnimationLeft = "character/ghost/animationLeft";
     private String pathToAnimationRight = "character/ghost/animationRight";
     private IIdleAI idleAI = new FollowHeroWalk();
+    boolean isVisible;
 
 
     /**
@@ -33,6 +34,7 @@ public class Ghost extends Entity {
         super();
 
         tombstone = new Tombstone(this);
+        isVisible = true;
 
         setupPositionComponent();
         setupAnimationComponent();
@@ -82,6 +84,32 @@ public class Ghost extends Entity {
     private void setupAIComponent(IIdleAI idleAI) {
         ITransition transitionAI = new FriendlyTransition();
         new AIComponent(this, null, idleAI, transitionAI);
+    }
+
+    /**
+     * Makes the ghost visible or invisible by (re-)setting the Animation and VelocityComponent with a new empty/transparent texture.
+     */
+    public void checkVisibility() {
+        if (isVisible) {
+            toggleVisibility();
+            pathToAnimationLeft = "hud/empty.png";
+            pathToAnimationRight = "hud/empty.png";
+            setupAnimationComponent();
+            setupVelocityComponent();
+        } else {
+            toggleVisibility();
+            pathToAnimationLeft = "character/ghost/animationLeft";
+            pathToAnimationRight = "character/ghost/animationRight";
+            setupAnimationComponent();
+            setupVelocityComponent();
+        }
+    }
+
+    /**
+     * Toggles the ghost's visibility.
+     */
+    private void toggleVisibility() {
+        isVisible = !isVisible;
     }
 
 }

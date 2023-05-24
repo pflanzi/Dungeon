@@ -12,10 +12,7 @@ import configuration.Configuration;
 import configuration.KeyboardConfig;
 import controller.AbstractController;
 import controller.SystemController;
-import ecs.components.Component;
-import ecs.components.InventoryComponent;
-import ecs.components.MissingComponentException;
-import ecs.components.PositionComponent;
+import ecs.components.*;
 import ecs.entities.Chest;
 import ecs.entities.Entity;
 import ecs.entities.Hero;
@@ -34,6 +31,7 @@ import graphic.textures.TextureHandler;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import level.IOnLevelLoader;
 import level.LevelAPI;
@@ -112,8 +110,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     private Trap trap;
     private Lever lever;
     private boolean hasGhost;
-
-
+    private boolean ghostVisible;
     private static Game game;
 
     public static void main(String[] args) {
@@ -204,6 +201,20 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         setCameraFocus();
         manageEntitiesSets();
         getHero().ifPresent(this::loadNextLevelIfEntityIsOnEndTile);
+
+        // TODO: adjust this to be less frequent
+        int random = new Random().nextInt(10);
+
+        if (random == 3) {
+            List<Entity> ghosts = Game.getEntities().stream()
+                .filter(e -> e instanceof Ghost)
+                .toList();
+
+            for ( Entity ghost : ghosts ) {
+                ((Ghost) ghost).checkVisibility();
+            }
+        }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) togglePause();
     }
 
@@ -218,10 +229,12 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         getHero().ifPresent(this::placeOnLevelStart);
         spawnTraps();
 
+        // TODO: change the modulo value back to 3
         if (!hasGhost && (levelCount % 3) == 0) {
             System.out.println("Spawning ghost and tombstone ...");
             spawnGhostAndTombstone();
-            hasGhost = true;
+            hasGhost = true; // TODO: check if this is really necessary
+            ghostVisible = true;
         } else {
             System.out.println("No ghost and tombstone were spawned.");
         }
@@ -294,7 +307,6 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
      * Spawns the friendly NPC ghost and its tombstone.
      */
     public void spawnGhostAndTombstone() {
-        // TODO: add functionality here
         addEntity(new Ghost());
     }
 

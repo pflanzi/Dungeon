@@ -31,6 +31,7 @@ public class Tombstone extends Entity implements IInteraction {
      */
     @Override
     public void onInteraction(Entity hero) {
+        // TODO: fix this
         int choice = new Random().nextInt(2);
 
         switch (choice) {
