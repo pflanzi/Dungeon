@@ -215,9 +215,9 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
 
-//        spawnMonster();
+        spawnMonster();
         getHero().ifPresent(this::placeOnLevelStart);
-//        spawnTraps();
+        spawnTraps();
 
         if (!hasGhost && (levelCount % 3) == 0) {
             System.out.println("Spawning ghost and tombstone ...");
