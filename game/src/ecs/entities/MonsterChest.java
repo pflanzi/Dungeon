@@ -51,10 +51,6 @@ public class MonsterChest extends MeleeMonster {
 
     }
 
-    /**
-     * Sets up healthcomponent also drops items ondeath
-     * @param chest
-     */
     private void setupHealthComponent(Chest chest) {
 
         HealthComponent healthComponent =
