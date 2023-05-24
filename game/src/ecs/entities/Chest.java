@@ -61,6 +61,8 @@ public class Chest extends Entity {
                         new Animation(DEFAULT_CLOSED_ANIMATION_FRAMES, 100, false),
                         new Animation(DEFAULT_OPENING_ANIMATION_FRAMES, 100, false));
 
+        /** set isMonster true or false  */
+
         if (Math.random() > 0.5) {
             isMonster = true;
         }
@@ -69,10 +71,12 @@ public class Chest extends Entity {
         }
     }
 
-    private void dropItems(Entity entity) {
+    public void dropItems(Entity entity) {
 
         if (this.isMonster){
             new MonsterChest(this);
+            Game.removeEntity(this);
+
         }
         else {
 

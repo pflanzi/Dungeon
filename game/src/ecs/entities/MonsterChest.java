@@ -1,9 +1,16 @@
 package ecs.entities;
 
+import ecs.components.HealthComponent;
 import ecs.components.InventoryComponent;
+import ecs.components.MissingComponentException;
+import ecs.components.PositionComponent;
 import ecs.components.ai.idle.heroChaseWalk;
+import ecs.components.IOnDeathFunction;
 
-public class MonsterChest extends MeleeMonster {
+/**
+ * class that creates Entity MonsterChest
+ */
+public class MonsterChest extends MeleeMonster implements IOnDeathFunction {
 
     private final static int hp = 5;
     private final static int dmg = 1;
@@ -18,14 +25,62 @@ public class MonsterChest extends MeleeMonster {
     public MonsterChest (Chest chest) {
 
         super(hp, dmg, 1 ,xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight, new heroChaseWalk(), 10);
-        chest.getComponent(InventoryComponent.class);
 
+        setupPositionComponent(chest);
+        setupInventoryComponent(chest);
+        setupHealthComponent();
+
+    }
+
+    private void setupPositionComponent (Chest chest) {
+
+        PositionComponent epc =
+            (PositionComponent)
+                chest.getComponent(PositionComponent.class)
+                    .orElseThrow(
+                        () -> new MissingComponentException("PositionComponent"));
+        new PositionComponent(this, epc.getPosition());
 
 
     }
 
-    public static void setupInventoryComponent (InventoryComponent inventoryComponent) {
+    private void setupInventoryComponent (Chest chest) {
+
+        InventoryComponent inventoryComponent =
+            chest.getComponent(InventoryComponent.class)
+                .map(InventoryComponent.class::cast)
+                .orElseThrow(
+                    () ->
+                        new MissingComponentException("InventoryComponent"));
+        new InventoryComponent(this, inventoryComponent.getMaxSize());
+
 
     }
 
+    private void setupHealthComponent(Chest chest) {
+
+            HealthComponent healthComponent =
+            this.getComponent(HealthComponent.class)
+                .map(HealthComponent.class::cast)
+                .orElseThrow(
+                    () ->
+                        new MissingComponentException("HealthComponent"));
+
+            healthComponent.setOnDeath(new IOnDeathFunction(chest) {
+                @Override
+                public void onDeath(Entity entity) {
+                    chest.dropItems(this);
+                }
+            });
+
+
+    }
+
+
+    @Override
+    public void onDeath(Entity entity) {
+        entity.
+    }
 }
+
+

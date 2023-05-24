@@ -63,7 +63,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
         setupHitboxComponent();
         setupPositionComponent();
         setupAIComponent();
-        new HealthComponent(this, healthpoints * scaling, lf->{System.out.println("Mob died\n");}, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
+        HealthComponent h = new HealthComponent(this, healthpoints * scaling, lf->{System.out.println("Mob died\n");}, new Animation(Collections.singleton(pathToIdleLeft),1), new Animation(Collections.singleton(pathToIdleLeft),1));
         setupXPComponent(XPonDeath);
     }
 
@@ -114,6 +114,7 @@ abstract public class Monster extends Entity { //abstract =  bauanleitungsklasse
     }
 
     private void setupPositionComponent() {
+
         new PositionComponent(this);
     }
 
