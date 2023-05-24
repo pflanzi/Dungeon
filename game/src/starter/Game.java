@@ -200,19 +200,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         setCameraFocus();
         manageEntitiesSets();
         getHero().ifPresent(this::loadNextLevelIfEntityIsOnEndTile);
-
-        // TODO: adjust this to be less frequent
-        int random = new Random().nextInt(10);
-
-        if (random == 3) {
-            List<Entity> ghosts = Game.getEntities().stream()
-                .filter(e -> e instanceof Ghost)
-                .toList();
-
-            for ( Entity ghost : ghosts ) {
-                ((Ghost) ghost).changeVisibility();
-            }
-        }
+        toggleGhostVisibility();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) togglePause();
     }
@@ -306,6 +294,23 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
      */
     public void spawnGhostAndTombstone() {
         addEntity(new Ghost());
+    }
+
+    /**
+     * Determines whether the ghost should be invisible or not.
+     */
+    public void toggleGhostVisibility() {
+        int random = new Random().nextInt(200) + 1;
+
+        if (random == 3) {
+            List<Entity> ghosts = Game.getEntities().stream()
+                .filter(e -> e instanceof Ghost)
+                .toList();
+
+            for ( Entity ghost : ghosts ) {
+                ((Ghost) ghost).changeVisibility();
+            }
+        }
     }
 
     private void manageEntitiesSets() {

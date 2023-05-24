@@ -12,14 +12,17 @@ public class Tombstone extends Entity {
     private String texture = "character/ghost/Tombstone_17px.png";
     private final int dmgAmount = 3;
     private final int healAmount = 5;
+    private final int interactionRadius = InteractionComponent.DEFAULT_RADIUS;
 
     public Tombstone(Ghost ghost) {
         this.ghost = ghost;
         tombstoneInteraction = new TombstoneInteraction();
 
         new PositionComponent(this);
-        new HitboxComponent(this, null, null);
-        new InteractionComponent(this, InteractionComponent.DEFAULT_RADIUS, false, tombstoneInteraction);
+        new HitboxComponent(this,
+            (you, other, direction) -> System.out.printf("tombstoneCollisionEnter:\t%s\n", other.getClass().getSimpleName()),
+            (you, other, direction) -> System.out.printf("tombstoneCollisionExit:\t%s\n", other.getClass().getSimpleName()));
+        new InteractionComponent(this, interactionRadius, false, tombstoneInteraction);
         new AnimationComponent(this, AnimationBuilder.buildAnimation(texture));
     }
 
@@ -62,4 +65,6 @@ public class Tombstone extends Entity {
     public Ghost getGhost() {
         return ghost;
     }
+
+    public int getInteractionRadius() { return interactionRadius; }
 }
