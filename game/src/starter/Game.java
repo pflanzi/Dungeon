@@ -31,7 +31,6 @@ import graphic.textures.TextureHandler;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import level.IOnLevelLoader;
 import level.LevelAPI;
@@ -211,7 +210,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
                 .toList();
 
             for ( Entity ghost : ghosts ) {
-                ((Ghost) ghost).checkVisibility();
+                ((Ghost) ghost).changeVisibility();
             }
         }
 

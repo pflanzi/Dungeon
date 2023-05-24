@@ -6,14 +6,11 @@ import ecs.components.HitboxComponent;
 import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
 import ecs.components.ai.AIComponent;
-import ecs.components.ai.fight.IFightAI;
 import ecs.components.ai.idle.FollowHeroWalk;
 import ecs.components.ai.idle.IIdleAI;
 import ecs.components.ai.transition.FriendlyTransition;
 import ecs.components.ai.transition.ITransition;
 import graphic.Animation;
-
-import java.util.Optional;
 
 public class Ghost extends Entity {
 
@@ -89,7 +86,7 @@ public class Ghost extends Entity {
     /**
      * Makes the ghost visible or invisible by (re-)setting the Animation and VelocityComponent with a new empty/transparent texture.
      */
-    public void checkVisibility() {
+    public void changeVisibility() {
 
         if (isVisible) {
             pathToAnimationLeft = "hud/empty.png";
