@@ -23,12 +23,15 @@ public class Chest extends Entity {
                     "objects/treasurechest/chest_full_open_anim_f2.png",
                     "objects/treasurechest/chest_empty_open_anim_f2.png");
 
+    public boolean isMonster;
+
     /**
      * small Generator which uses the Item#ITEM_REGISTER
      *
      * @return a configured Chest
      */
     public static Chest createNewChest() {
+
         Random random = new Random();
         ItemDataGenerator itemDataGenerator = new ItemDataGenerator();
 
@@ -57,37 +60,51 @@ public class Chest extends Entity {
                         this,
                         new Animation(DEFAULT_CLOSED_ANIMATION_FRAMES, 100, false),
                         new Animation(DEFAULT_OPENING_ANIMATION_FRAMES, 100, false));
+
+        if (Math.random() > 0.5) {
+            isMonster = true;
+        }
+        else{
+            isMonster = false;
+        }
     }
 
     private void dropItems(Entity entity) {
-        InventoryComponent inventoryComponent =
-                entity.getComponent(InventoryComponent.class)
-                        .map(InventoryComponent.class::cast)
-                        .orElseThrow(
-                                () ->
-                                        createMissingComponentException(
-                                                InventoryComponent.class.getName(), entity));
-        PositionComponent positionComponent =
-                entity.getComponent(PositionComponent.class)
-                        .map(PositionComponent.class::cast)
-                        .orElseThrow(
-                                () ->
-                                        createMissingComponentException(
-                                                PositionComponent.class.getName(), entity));
-        List<ItemData> itemData = inventoryComponent.getItems();
-        double count = itemData.size();
 
-        IntStream.range(0, itemData.size())
+        if (this.isMonster){
+            new MonsterChest(this);
+        }
+        else {
+
+            InventoryComponent inventoryComponent =
+                entity.getComponent(InventoryComponent.class)
+                    .map(InventoryComponent.class::cast)
+                    .orElseThrow(
+                        () ->
+                            createMissingComponentException(
+                                InventoryComponent.class.getName(), entity));
+            PositionComponent positionComponent =
+                entity.getComponent(PositionComponent.class)
+                    .map(PositionComponent.class::cast)
+                    .orElseThrow(
+                        () ->
+                            createMissingComponentException(
+                                PositionComponent.class.getName(), entity));
+            List<ItemData> itemData = inventoryComponent.getItems();
+            double count = itemData.size();
+
+            IntStream.range(0, itemData.size())
                 .forEach(
-                        index ->
-                                itemData.get(index)
-                                        .triggerDrop(
-                                                entity,
-                                                calculateDropPosition(
-                                                        positionComponent, index / count)));
-        entity.getComponent(AnimationComponent.class)
+                    index ->
+                        itemData.get(index)
+                            .triggerDrop(
+                                entity,
+                                calculateDropPosition(
+                                    positionComponent, index / count)));
+            entity.getComponent(AnimationComponent.class)
                 .map(AnimationComponent.class::cast)
                 .ifPresent(x -> x.setCurrentAnimation(x.getIdleRight()));
+        }
     }
 
     /**
@@ -119,4 +136,11 @@ public class Chest extends Entity {
                         + " in Entity "
                         + e.getClass().getName());
     }
+
+
+    //public dropItems(Entity entity) {
+
+
+    //}
+
 }
