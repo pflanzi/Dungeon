@@ -110,6 +110,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     private Lever lever;
     private boolean hasGhost;
     private boolean ghostVisible;
+    private int counter;
     private static Game game;
 
     public static void main(String[] args) {
@@ -208,13 +209,15 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     @Override
     public void onLevelLoad() {
         levelCount++;
+        counter = 0;
         hasGhost = false;
+        ghostVisible = false;
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
 
-        spawnMonster();
+//        spawnMonster();
         getHero().ifPresent(this::placeOnLevelStart);
-        spawnTraps();
+//        spawnTraps();
 
         if (!hasGhost && (levelCount % 3) == 0) {
             System.out.println("Spawning ghost and tombstone ...");
@@ -300,15 +303,24 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
      * Determines whether the ghost should be invisible or not.
      */
     public void toggleGhostVisibility() {
-        int random = new Random().nextInt(200) + 1;
+        List<Entity> ghosts = Game.getEntities().stream()
+            .filter(e -> e instanceof Ghost)
+            .toList();
 
-        if (random == 3) {
-            List<Entity> ghosts = Game.getEntities().stream()
-                .filter(e -> e instanceof Ghost)
-                .toList();
+        for (Entity ghost : ghosts) {
+            if (!ghostVisible) {
+                counter++;
 
-            for ( Entity ghost : ghosts ) {
-                ((Ghost) ghost).changeVisibility();
+                if (counter % 100 == 0) {
+                    ((Ghost) ghost).changeVisibility();
+                    ghostVisible = true;
+                }
+            } else {
+                if (new Random().nextInt(101) % 75 == 0) {
+                    counter = 0;
+                    ((Ghost) ghost).changeVisibility();
+                    ghostVisible = false;
+                }
             }
         }
     }

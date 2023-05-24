@@ -22,7 +22,7 @@ public class Tombstone extends Entity {
         new HitboxComponent(this,
             (you, other, direction) -> System.out.printf("tombstoneCollisionEnter:\t%s\n", other.getClass().getSimpleName()),
             (you, other, direction) -> System.out.printf("tombstoneCollisionExit:\t%s\n", other.getClass().getSimpleName()));
-        new InteractionComponent(this, interactionRadius, false, tombstoneInteraction);
+        new InteractionComponent(this, interactionRadius, true, tombstoneInteraction);
         new AnimationComponent(this, AnimationBuilder.buildAnimation(texture));
     }
 

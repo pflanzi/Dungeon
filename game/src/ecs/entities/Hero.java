@@ -113,7 +113,7 @@ public class Hero extends Entity implements ILevelUp {
     }
 
     /**
-     * Determins what to do on levelup
+     * Determines what to do on levelup
      *
      * @param nexLevel is the new level of the entity
      */

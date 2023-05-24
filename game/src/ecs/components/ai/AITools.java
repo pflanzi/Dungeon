@@ -193,54 +193,6 @@ public class AITools {
     }
 
     /**
-     * Calculates the path to the hero but keeps a small distance from them.
-     * @param entity the entity that the path is being calculated from, path origin
-     * @return a path to the hero or to a random tile in a given range
-     */
-    public static GraphPath<Tile> calculateFriendlyPathToHero(Entity entity) {
-        Optional<Entity> hero = Game.getHero();
-
-        if (hero.isPresent()) return calculateFriendlyPath(entity, hero.get());
-        else return calculateToRandomOrEntity(entity, entity);
-    }
-
-    /**
-     * Calculates a path from one entity to another
-     * @param from the entity that the path is being calculated from, path origin
-     * @param to the entity that the path is being calculated to, path target
-     * @return a path
-     */
-    private static GraphPath<Tile> calculateFriendlyPath(Entity from, Entity to) {
-        PositionComponent fromPositionComponent =
-            (PositionComponent)
-                from.getComponent(PositionComponent.class)
-                    .orElseThrow(
-                        () -> new MissingComponentException("PositionComponent"));
-
-        PositionComponent positionComponent =
-            (PositionComponent)
-                to.getComponent(PositionComponent.class)
-                    .orElseThrow(
-                        () -> new MissingComponentException("PositionComponent"));
-
-        if (!(inRange(fromPositionComponent.getPosition(), positionComponent.getPosition(), 3.0f))) {
-            return calculateToRandomOrEntity(from, to);
-        } else return calculateToRandomOrEntity(from, from);
-    }
-
-    /**
-     * Calculates a path to a random tile or a given entity
-     * @param from the entity that the path is being calculated from, path origin
-     * @param to the entity that the path is being calculated to, path target
-     * @return a path
-     */
-    private static GraphPath<Tile> calculateToRandomOrEntity(Entity from, Entity to)    {
-        // TODO: adjust the random path to last longer so the animation is more "fluid"
-        if ((random.nextInt(5) % 2) == 0) return calculatePathToRandomTileInRange(from, 10.0f);
-        else return calculatePath(from, to); // if the entity is in range of the hero
-    }
-
-    /**
      * @param p1    Point A
      * @param p2    Point B
      * @param range Radius
