@@ -90,19 +90,18 @@ public class Ghost extends Entity {
      * Makes the ghost visible or invisible by (re-)setting the Animation and VelocityComponent with a new empty/transparent texture.
      */
     public void checkVisibility() {
+
         if (isVisible) {
-            toggleVisibility();
             pathToAnimationLeft = "hud/empty.png";
             pathToAnimationRight = "hud/empty.png";
-            setupAnimationComponent();
-            setupVelocityComponent();
         } else {
-            toggleVisibility();
             pathToAnimationLeft = "character/ghost/animationLeft";
             pathToAnimationRight = "character/ghost/animationRight";
-            setupAnimationComponent();
-            setupVelocityComponent();
         }
+
+        toggleVisibility();
+        setupAnimationComponent();
+        setupVelocityComponent();
     }
 
     /**
