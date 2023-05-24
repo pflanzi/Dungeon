@@ -229,14 +229,13 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         getHero().ifPresent(this::placeOnLevelStart);
         spawnTraps();
 
-        // TODO: change the modulo value back to 3
         if (!hasGhost && (levelCount % 3) == 0) {
             System.out.println("Spawning ghost and tombstone ...");
             spawnGhostAndTombstone();
-            hasGhost = true; // TODO: check if this is really necessary
+            hasGhost = true;
             ghostVisible = true;
         } else {
-            System.out.println("No ghost and tombstone were spawned.");
+            System.out.println("No ghost and tombstone present.");
         }
 
         /** Quickfix for chests to spawn a chest to demonstrate items and inventory mechanics */

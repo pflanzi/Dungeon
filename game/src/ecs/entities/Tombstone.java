@@ -2,71 +2,64 @@ package ecs.entities;
 
 import dslToGame.AnimationBuilder;
 import ecs.components.*;
-import graphic.Animation;
+import ecs.components.interactions.TombstoneInteraction;
+import starter.Game;
 
-import java.util.Random;
-
-public class Tombstone extends Entity implements IInteraction {
+public class Tombstone extends Entity {
 
     private Ghost ghost;
+    IInteraction tombstoneInteraction;
     private String texture = "character/ghost/Tombstone_17px.png";
-    private int dmgAmount = 3;
-    private int healAmount = 5;
-    private float radius = 1.0f;
+    private final int dmgAmount = 3;
+    private final int healAmount = 5;
 
     public Tombstone(Ghost ghost) {
         this.ghost = ghost;
+        tombstoneInteraction = new TombstoneInteraction();
 
         new PositionComponent(this);
-        // TODO: fill this with functionality => AI and stuff
         new HitboxComponent(this, null, null);
-        new InteractionComponent(this, radius, false, this);
+        new InteractionComponent(this, InteractionComponent.DEFAULT_RADIUS, false, tombstoneInteraction);
         new AnimationComponent(this, AnimationBuilder.buildAnimation(texture));
     }
 
     /**
-     * Randomly decides what happens if the hero interacts with a tombstone.
-     *
-     * @param hero Entity that interacts with the tombstone which typically is the hero.
-     */
-    @Override
-    public void onInteraction(Entity hero) {
-        // TODO: fix this
-        int choice = new Random().nextInt(2);
-
-        switch (choice) {
-            case 0 -> reward(hero);
-            case 1 -> punish(hero);
-        }
-        // TODO: delete entities (ghost + tombstone) afterwards
-    }
-
-    /**
      * Adds 5 HP to the entity's current max HP.
-     * @param entity Entity that interacts with the tombstone which typically is the hero.
      */
-    private void reward(Entity entity) {
-        entity.getComponent(HealthComponent.class)
+    public void reward() {
+        Game.getHero()
+            .flatMap(h -> h.getComponent(HealthComponent.class))
             .ifPresent(hc -> {
+                System.out.printf("The hero has been rewarded with %d additional HP!\n", healAmount);
+                System.out.printf("Previous Max HP:\t%d\n", ((HealthComponent) hc).getMaximalHealthpoints());
+
                 ((HealthComponent) hc)
                     .setMaximalHealthpoints(
-                        ((HealthComponent) hc).getMaximalHealthpoints() + healAmount
-                    );
+                        ((HealthComponent) hc).getMaximalHealthpoints() + healAmount);
+
+                System.out.printf("New Max HP:\t%d\n", ((HealthComponent) hc).getMaximalHealthpoints());;
             });
     }
 
     /**
      * Removes 3 HP from the entity's current HP.
-     * @param entity Entity that interacts with the tombstone which typically is the hero.
      */
-    private void punish(Entity entity) {
-        entity.getComponent(HealthComponent.class)
+    public void punish() {
+        Game.getHero()
+            .flatMap(h -> h.getComponent(HealthComponent.class))
             .ifPresent(hc -> {
+                System.out.printf("The hero has been punished with %d damage to their current health!\n", dmgAmount);
+                System.out.printf("Previous Current HP:\t%d\n", ((HealthComponent) hc).getCurrentHealthpoints());
+
                 ((HealthComponent) hc)
-                    .setCurrentHealthpoints(
-                        ((HealthComponent) hc).getCurrentHealthpoints() - dmgAmount
-                    );
+                    .setMaximalHealthpoints(
+                        ((HealthComponent) hc).getCurrentHealthpoints() - dmgAmount);
+
+                System.out.printf("New Current HP:\t%d\n", ((HealthComponent) hc).getCurrentHealthpoints());;
             });
     }
 
+    public Ghost getGhost() {
+        return ghost;
+    }
 }
