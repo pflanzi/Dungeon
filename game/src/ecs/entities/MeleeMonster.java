@@ -14,8 +14,7 @@ abstract public class MeleeMonster extends Monster {
         String pathToIdleRight,
         String pathToRunLeft,
         String pathToRunRight,
-        long XPonDeath)
-    {
+        long XPonDeath) {
         super(
             healthpoints,
             dmg,
@@ -40,9 +39,7 @@ abstract public class MeleeMonster extends Monster {
         String pathToRunLeft,
         String pathToRunRight,
         IIdleAI IdleAI,
-        long XPonDeath)
-
-    {
+        long XPonDeath) {
         super(healthpoints,
             dmg,
             scaling,

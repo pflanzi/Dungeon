@@ -3,16 +3,14 @@ package ecs.components.interactions;
 import ecs.components.IInteraction;
 import ecs.entities.Entity;
 import ecs.entities.Lever;
-import ecs.entities.Trap;
 
 
-public class leverInteraction implements IInteraction {
+public class LeverInteraction implements IInteraction {
 
-
-    @Override
     /**
-     * Deactives the trap associated with the lever
+     * Deactivates the trap associated with the lever
      */
+    @Override
     public void onInteraction(Entity entity) {
         ((Lever) entity).getTrap().deactivate();
     }

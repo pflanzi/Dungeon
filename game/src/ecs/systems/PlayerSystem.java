@@ -12,6 +12,7 @@ import ecs.items.ItemType;
 import ecs.items.WorldItemBuilder;
 import ecs.tools.interaction.InteractionTool;
 import starter.Game;
+import tools.Direction;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -41,14 +42,30 @@ public class PlayerSystem extends ECS_System {
 
     private void checkKeystroke(KSData ksd) {
         if (!inventoryOpen) {
-            if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_UP.get()))
+            if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_UP.get())) {
                 ksd.vc.setCurrentYVelocity(1 * ksd.vc.getYVelocity());
-            else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_DOWN.get()))
+                Game.getHero().ifPresent(H -> {
+                    ((Hero) H).setLastInputDirection(Direction.UP);
+                });
+            }
+            else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_DOWN.get())){
                 ksd.vc.setCurrentYVelocity(-1 * ksd.vc.getYVelocity());
-            else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_RIGHT.get()))
+                Game.getHero().ifPresent(H -> {
+                    ((Hero) H).setLastInputDirection(Direction.DOWN);
+                });
+            }
+            else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_RIGHT.get())){
                 ksd.vc.setCurrentXVelocity(1 * ksd.vc.getXVelocity());
-            else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_LEFT.get()))
+                Game.getHero().ifPresent(H -> {
+                    ((Hero) H).setLastInputDirection(Direction.RIGHT);
+                });
+            }
+            else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_LEFT.get())){
                 ksd.vc.setCurrentXVelocity(-1 * ksd.vc.getXVelocity());
+                Game.getHero().ifPresent(H -> {
+                    ((Hero) H).setLastInputDirection(Direction.LEFT);
+                });
+            }
 
             if (Gdx.input.isKeyPressed(KeyboardConfig.INTERACT_WORLD.get()))
                 InteractionTool.interactWithClosestInteractable(ksd.e);
@@ -58,6 +75,8 @@ public class PlayerSystem extends ECS_System {
                 accessInventoryPrintInventory(ksd.e);
             }
             // check skills
+            else if (Gdx.input.isKeyJustPressed(KeyboardConfig.DEFAULT_ATTACK.get()))
+                ksd.pc.getDefaultAttack().ifPresent(skill -> skill.execute(ksd.e));
             else if (Gdx.input.isKeyPressed(KeyboardConfig.FIRST_SKILL.get()))
                 ksd.pc.getSkillSlot1().ifPresent(skill -> skill.execute(ksd.e));
             else if (Gdx.input.isKeyPressed(KeyboardConfig.SECOND_SKILL.get()))

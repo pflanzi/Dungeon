@@ -12,10 +12,7 @@ import configuration.Configuration;
 import configuration.KeyboardConfig;
 import controller.AbstractController;
 import controller.SystemController;
-import ecs.components.Component;
-import ecs.components.InventoryComponent;
-import ecs.components.MissingComponentException;
-import ecs.components.PositionComponent;
+import ecs.components.*;
 import ecs.entities.Chest;
 import ecs.entities.Entity;
 import ecs.entities.Hero;
@@ -30,9 +27,11 @@ import graphic.Painter;
 import graphic.hud.GameOverScreen;
 import graphic.hud.PauseMenu;
 import graphic.textures.TextureHandler;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
+
 import level.IOnLevelLoader;
 import level.LevelAPI;
 import level.elements.ILevel;
@@ -45,7 +44,9 @@ import tools.Constants;
 import tools.Point;
 
 
-/** The heart of the framework. From here all strings are pulled. */
+/**
+ * The heart of the framework. From here all strings are pulled.
+ */
 public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     private final LevelSize LEVELSIZE = LevelSize.SMALL;
@@ -56,31 +57,47 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
      */
     protected SpriteBatch batch;
 
-    /** Contains all Controller of the Dungeon */
+    /**
+     * Contains all Controller of the Dungeon
+     */
     protected List<AbstractController<?>> controller;
 
     public static DungeonCamera camera;
-    /** Draws objects */
+    /**
+     * Draws objects
+     */
     protected Painter painter;
 
     protected LevelAPI levelAPI;
-    /** Generates the level */
+    /**
+     * Generates the level
+     */
     protected IGenerator generator;
 
     private boolean doSetup = true;
     private static boolean paused = false;
 
-    /** A handler for managing asset paths */
+    /**
+     * A handler for managing asset paths
+     */
     private static TextureHandler handler;
 
-    /** All entities that are currently active in the dungeon */
+    /**
+     * All entities that are currently active in the dungeon
+     */
     private static final Set<Entity> entities = new HashSet<>();
-    /** All entities to be removed from the dungeon in the next frame */
+    /**
+     * All entities to be removed from the dungeon in the next frame
+     */
     private static final Set<Entity> entitiesToRemove = new HashSet<>();
-    /** All entities to be added from the dungeon in the next frame */
+    /**
+     * All entities to be added from the dungeon in the next frame
+     */
     private static final Set<Entity> entitiesToAdd = new HashSet<>();
 
-    /** List of all Systems in the ECS */
+    /**
+     * List of all Systems in the ECS
+     */
     public static SystemController systems;
 
     public static ILevel currentLevel;
@@ -91,7 +108,9 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     private int levelCount;
     private Trap trap;
     private Lever lever;
-
+    private boolean hasGhost;
+    private boolean ghostVisible;
+    private int counter;
     private static Game game;
 
     public static void main(String[] args) {
@@ -122,7 +141,9 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         camera.update();
     }
 
-    /** Called once at the beginning of the game. */
+    /**
+     * Called once at the beginning of the game.
+     */
     protected void setup() {
         levelCount = 0;
         doSetup = false;
@@ -161,8 +182,6 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         levelAPI = new LevelAPI(batch, painter, new WallGenerator(new RandomWalkGenerator()), this);
         levelAPI.loadLevel(LEVELSIZE);
         createSystems();
-        //monster = new Monster();
-
     }
 
     public void reset() {
@@ -175,39 +194,55 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         return game;
     }
 
-    /** Called at the beginning of each frame. Before the controllers call <code>update</code>. */
+    /**
+     * Called at the beginning of each frame. Before the controllers call <code>update</code>.
+     */
     protected void frame() {
         setCameraFocus();
         manageEntitiesSets();
         getHero().ifPresent(this::loadNextLevelIfEntityIsOnEndTile);
+        toggleGhostVisibility();
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) togglePause();
     }
 
     @Override
     public void onLevelLoad() {
         levelCount++;
+        counter = 0;
+        hasGhost = false;
+        ghostVisible = false;
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
 
         spawnMonster();
-
         getHero().ifPresent(this::placeOnLevelStart);
         spawnTraps();
 
-        /**Quickfix for chests to spawn a chest to demonstrate items and inventory mechanics*/
+        if (!hasGhost && (levelCount % 3) == 0) {
+            System.out.println("Spawning ghost and tombstone ...");
+            spawnGhostAndTombstone();
+            hasGhost = true;
+            ghostVisible = true;
+        } else {
+            System.out.println("No ghost and tombstone present.");
+        }
+
+        /** Quickfix for chests to spawn a chest to demonstrate items and inventory mechanics */
         Chest newChest = Chest.createNewChest();
         Optional<Component> ic = newChest.getComponent(InventoryComponent.class);
         ((InventoryComponent) ic.get()).getItems().forEach(inventoryComponent -> inventoryComponent.setOnCollect((WorldItemEntity, whoCollides) -> {
             hero.getComponent(InventoryComponent.class)
-                .ifPresent(ice->{
+                .ifPresent(ice -> {
                     ((InventoryComponent) ice).addItem(inventoryComponent);
                 });
 
         }));
+
         entities.add(newChest);
 
         hero.getComponent(InventoryComponent.class)
-            .ifPresent(icb->{
+            .ifPresent(icb -> {
                 ((InventoryComponent) icb).addItem(new ItemData(
                     ItemType.Basic,
                     ItemCategory.BAG,
@@ -221,35 +256,70 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     }
 
     public int calculateMonstersToSpawn(int level) {
-        return (int) ((Math.random()*level)+1);
+        return (int) ((Math.random() * level) + 1);
     }
 
-    private void spawnMonster(){
-        int monsters=calculateMonstersToSpawn(levelCount);
-        for (int i = 0;i<monsters;i++){
-            switch ((i*2)%3){
+    private void spawnMonster() {
+        int monsters = calculateMonstersToSpawn(levelCount);
+        for (int i = 0; i < monsters; i++) {
+            switch ((i * 2) % 3) {
                 case 0:
-                    addEntity(new Ogre(levelCount+1));
+                    addEntity(new Ogre(levelCount + 1));
                     break;
                 case 1:
-                    addEntity(new Demon(levelCount+1));
+                    addEntity(new Demon(levelCount + 1));
                     break;
                 case 2:
-                    addEntity(new Necromancer(levelCount+1));
+                    addEntity(new Necromancer(levelCount + 1));
                     break;
             }
         }
     }
 
-    /**Spawns traps based on the levelCount, if a trap is deactivatable it will spawn a lever and connect it to the trap*/
+    /**
+     * Spawns traps based on the levelCount, if a trap is deactivatable it will spawn a lever and connect it to the trap
+     */
     public void spawnTraps() {
-        for(int i = 0; i < levelCount*2; i++){
-            if(Math.random()<0.3){
+        for (int i = 0; i < levelCount * 2; i++) {
+            if (Math.random() < 0.3) {
                 trap = new Trap(levelCount);
                 entities.add(trap);
-                if(trap.isDeactivatable()){
+                if (trap.isDeactivatable()) {
                     lever = new Lever(trap);
                     entities.add(lever);
+                }
+            }
+        }
+    }
+
+    /**
+     * Spawns the friendly NPC ghost and its tombstone.
+     */
+    public void spawnGhostAndTombstone() {
+        addEntity(new Ghost());
+    }
+
+    /**
+     * Determines whether the ghost should be invisible or not.
+     */
+    public void toggleGhostVisibility() {
+        List<Entity> ghosts = Game.getEntities().stream()
+            .filter(e -> e instanceof Ghost)
+            .toList();
+
+        for (Entity ghost : ghosts) {
+            if (!ghostVisible) {
+                counter++;
+
+                if (counter % 100 == 0) {
+                    ((Ghost) ghost).changeVisibility();
+                    ghostVisible = true;
+                }
+            } else {
+                if (new Random().nextInt(101) % 75 == 0) {
+                    counter = 0;
+                    ((Ghost) ghost).changeVisibility();
+                    ghostVisible = false;
                 }
             }
         }
@@ -271,14 +341,14 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     private void setCameraFocus() {
         if (getHero().isPresent()) {
             PositionComponent pc =
-                    (PositionComponent)
-                            getHero()
-                                    .get()
-                                    .getComponent(PositionComponent.class)
-                                    .orElseThrow(
-                                            () ->
-                                                    new MissingComponentException(
-                                                            "PositionComponent"));
+                (PositionComponent)
+                    getHero()
+                        .get()
+                        .getComponent(PositionComponent.class)
+                        .orElseThrow(
+                            () ->
+                                new MissingComponentException(
+                                    "PositionComponent"));
             camera.setFocusPoint(pc.getPosition());
 
         } else camera.setFocusPoint(new Point(0, 0));
@@ -290,10 +360,10 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     private boolean isOnEndTile(Entity entity) {
         PositionComponent pc =
-                (PositionComponent)
-                        entity.getComponent(PositionComponent.class)
-                                .orElseThrow(
-                                        () -> new MissingComponentException("PositionComponent"));
+            (PositionComponent)
+                entity.getComponent(PositionComponent.class)
+                    .orElseThrow(
+                        () -> new MissingComponentException("PositionComponent"));
         Tile currentTile = currentLevel.getTileAt(pc.getPosition().toCoordinate());
         return currentTile.equals(currentLevel.getEndTile());
     }
@@ -302,10 +372,10 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         levelCount++;
         entities.add(hero);
         PositionComponent pc =
-                (PositionComponent)
-                        hero.getComponent(PositionComponent.class)
-                                .orElseThrow(
-                                        () -> new MissingComponentException("PositionComponent"));
+            (PositionComponent)
+                hero.getComponent(PositionComponent.class)
+                    .orElseThrow(
+                        () -> new MissingComponentException("PositionComponent"));
         pc.setPosition(currentLevel.getStartTile().getCoordinate().toPoint());
     }
 
@@ -313,7 +383,9 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         return handler;
     }
 
-    /** Toggle between pause and run */
+    /**
+     * Toggle between pause and run
+     */
     public static void togglePause() {
         paused = !paused;
         if (systems != null) {
@@ -329,7 +401,9 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         gameOverScreen.showMenu();
     }
 
-    public static void hideGameOverScreen() { gameOverScreen.hideMenu();}
+    public static void hideGameOverScreen() {
+        gameOverScreen.hideMenu();
+    }
 
     /**
      * Given entity will be added to the game in the next frame
