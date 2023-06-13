@@ -20,10 +20,7 @@ public class Ghost extends Entity {
     private IIdleAI idleAI = new FollowHeroWalk();
     boolean isVisible;
 
-
-    /**
-     * Creates a new Ghost and connects it with a corresponding tombstone.
-     */
+    /** Creates a new Ghost and connects it with a corresponding tombstone. */
     public Ghost() {
         super();
 
@@ -49,9 +46,10 @@ public class Ghost extends Entity {
     }
 
     private void setupHitboxComponent() {
-        new HitboxComponent(this,
-            (you, other, direction) -> System.out.println("ghostCollisionEnter"),
-            (you, other, direction) -> System.out.println("ghostCollisionLeave"));
+        new HitboxComponent(
+                this,
+                (you, other, direction) -> System.out.println("ghostCollisionEnter"),
+                (you, other, direction) -> System.out.println("ghostCollisionLeave"));
     }
 
     private void setupVelocityComponent() {
@@ -67,7 +65,8 @@ public class Ghost extends Entity {
     }
 
     /**
-     * Makes the ghost visible or invisible by (re-)setting the Animation and VelocityComponent with a new empty/transparent texture.
+     * Makes the ghost visible or invisible by (re-)setting the Animation and VelocityComponent with
+     * a new empty/transparent texture.
      */
     public void changeVisibility() {
         if (isVisible) {
@@ -86,5 +85,4 @@ public class Ghost extends Entity {
     private void toggleVisibility() {
         isVisible = !isVisible;
     }
-
 }

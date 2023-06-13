@@ -1,7 +1,6 @@
 package ecs.items;
 
 public enum ItemCategory {
-
     POTION,
     WEAPON,
     BAG,
@@ -15,5 +14,4 @@ public enum ItemCategory {
             case OTHER -> "Weitere";
         };
     }
-
 }

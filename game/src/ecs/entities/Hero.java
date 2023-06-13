@@ -39,9 +39,7 @@ public class Hero extends Entity implements ILevelUp {
     private PlayableComponent pc;
     private SkillComponent skillComponent;
 
-    /**
-     * Entity with Components
-     */
+    /** Entity with Components */
     public Hero() {
         super();
         new PositionComponent(this);
@@ -55,7 +53,7 @@ public class Hero extends Entity implements ILevelUp {
         setupFireballSkill();
         setupDefaultAttack();
         setupXPComponent();
-        lastInputDirection=Direction.RIGHT;
+        lastInputDirection = Direction.RIGHT;
     }
 
     private void setupVelocityComponent() {
@@ -75,38 +73,33 @@ public class Hero extends Entity implements ILevelUp {
 
     private void setupFireballSkill() {
         firstSkill =
-            new Skill(
-                new FireballSkill(this.dmg, SkillTools::getCursorPositionAsPoint), fireballCoolDown);
+                new Skill(
+                        new FireballSkill(this.dmg, SkillTools::getCursorPositionAsPoint),
+                        fireballCoolDown);
         this.pc.setSkillSlot1(firstSkill);
         this.skillComponent.addSkill(firstSkill);
     }
 
     private void setupMindcontrollSkill() {
-        firstSkill =
-            new Skill(
-                new MindcontrollSkill(), 25);
+        firstSkill = new Skill(new MindcontrollSkill(), 25);
         this.pc.setSkillSlot1(firstSkill);
         skillComponent.addSkill(firstSkill);
     }
 
     private void setupGodmodeSkill() {
-        secondSkill =
-            new Skill(
-                new GodmodeSkill(), 15, 10);
+        secondSkill = new Skill(new GodmodeSkill(), 15, 10);
         this.pc.setSkillSlot2(secondSkill);
         skillComponent.addSkill(secondSkill);
     }
-    private void setupDefaultAttack(){
-        defaultAttack =
-            new Skill(
-                new MeleeAttackSkill(dmg), 0.6f);
-            this.pc.setDefaultAttack(defaultAttack);
-            skillComponent.addSkill(defaultAttack);
+
+    private void setupDefaultAttack() {
+        defaultAttack = new Skill(new MeleeAttackSkill(dmg), 0.6f);
+        this.pc.setDefaultAttack(defaultAttack);
+        skillComponent.addSkill(defaultAttack);
     }
 
     private void setupHitboxComponent() {
-        new HitboxComponent(
-            this, null, null);
+        new HitboxComponent(this, null, null);
     }
 
     private void setupXPComponent() {
@@ -114,14 +107,18 @@ public class Hero extends Entity implements ILevelUp {
         xpcomponent.setCurrentLevel(1);
     }
 
-
     private void setupHealthComponent() {
-        new HealthComponent(this, health, new IOnDeathFunction() {
-            @Override
-            public void onDeath(Entity entity) {
-                Game.showGameOverScreen();
-            }
-        }, hitRight, hitRight);
+        new HealthComponent(
+                this,
+                health,
+                new IOnDeathFunction() {
+                    @Override
+                    public void onDeath(Entity entity) {
+                        Game.showGameOverScreen();
+                    }
+                },
+                hitRight,
+                hitRight);
     }
 
     /**
@@ -152,4 +149,3 @@ public class Hero extends Entity implements ILevelUp {
         this.lastInputDirection = lastInputDirection;
     }
 }
-

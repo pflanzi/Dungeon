@@ -2,13 +2,10 @@ package ecs.components.ai.idle;
 
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import ecs.components.InteractionComponent;
-import ecs.components.MissingComponentException;
-import ecs.components.PositionComponent;
 import ecs.components.ai.AITools;
 import ecs.entities.Entity;
-import level.elements.tile.Tile;
-
 import java.util.Random;
+import level.elements.tile.Tile;
 
 public class FollowHeroWalk implements IIdleAI {
 
@@ -16,10 +13,9 @@ public class FollowHeroWalk implements IIdleAI {
     private boolean moveToRandom;
     private GraphPath<Tile> currentPath;
 
-
     /**
-     * Movement behaviour for a friendly NPC.
-     * Sometimes moves towards the hero, sometimes moves to a random tile in the level
+     * Movement behaviour for a friendly NPC. Sometimes moves towards the hero, sometimes moves to a
+     * random tile in the level
      *
      * @param entity associated entity
      */
@@ -40,7 +36,6 @@ public class FollowHeroWalk implements IIdleAI {
 
             } else if (AITools.pathFinished(entity, currentPath) && moveToRandom) {
                 currentPath = AITools.calculatePathToRandomTileInRange(entity, 5.0f);
-
             }
         }
 

@@ -61,54 +61,53 @@ public class Chest extends Entity {
                         new Animation(DEFAULT_CLOSED_ANIMATION_FRAMES, 100, false),
                         new Animation(DEFAULT_OPENING_ANIMATION_FRAMES, 100, false));
 
-        /** set isMonster true or false  */
-
+        /** set isMonster true or false */
         if (Math.random() > 0.5) {
             isMonster = true;
-        }
-        else{
+        } else {
             isMonster = false;
         }
     }
 
     /**
-     * Drops items of given entity next to the entity, spawnes Monsterchest instead if chest is a monster
+     * Drops items of given entity next to the entity, spawnes Monsterchest instead if chest is a
+     * monster
+     *
      * @param entity entity to drop items of
      */
     public void dropItems(Entity entity) {
-        if (((Chest)entity).isMonster){
+        if (((Chest) entity).isMonster) {
             new MonsterChest(this);
             Game.removeEntity(this);
-        }
-        else {
+        } else {
             InventoryComponent inventoryComponent =
-                entity.getComponent(InventoryComponent.class)
-                    .map(InventoryComponent.class::cast)
-                    .orElseThrow(
-                        () ->
-                            createMissingComponentException(
-                                InventoryComponent.class.getName(), entity));
+                    entity.getComponent(InventoryComponent.class)
+                            .map(InventoryComponent.class::cast)
+                            .orElseThrow(
+                                    () ->
+                                            createMissingComponentException(
+                                                    InventoryComponent.class.getName(), entity));
             PositionComponent positionComponent =
-                entity.getComponent(PositionComponent.class)
-                    .map(PositionComponent.class::cast)
-                    .orElseThrow(
-                        () ->
-                            createMissingComponentException(
-                                PositionComponent.class.getName(), entity));
+                    entity.getComponent(PositionComponent.class)
+                            .map(PositionComponent.class::cast)
+                            .orElseThrow(
+                                    () ->
+                                            createMissingComponentException(
+                                                    PositionComponent.class.getName(), entity));
             List<ItemData> itemData = inventoryComponent.getItems();
             double count = itemData.size();
 
             IntStream.range(0, itemData.size())
-                .forEach(
-                    index ->
-                        itemData.get(index)
-                            .triggerDrop(
-                                entity,
-                                calculateDropPosition(
-                                    positionComponent, index / count)));
+                    .forEach(
+                            index ->
+                                    itemData.get(index)
+                                            .triggerDrop(
+                                                    entity,
+                                                    calculateDropPosition(
+                                                            positionComponent, index / count)));
             entity.getComponent(AnimationComponent.class)
-                .map(AnimationComponent.class::cast)
-                .ifPresent(x -> x.setCurrentAnimation(x.getIdleRight()));
+                    .map(AnimationComponent.class::cast)
+                    .ifPresent(x -> x.setCurrentAnimation(x.getIdleRight()));
         }
     }
 
@@ -149,5 +148,4 @@ public class Chest extends Entity {
     public void setMonster(boolean monster) {
         isMonster = monster;
     }
-
 }

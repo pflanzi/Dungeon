@@ -2,7 +2,6 @@ package ecs.components.ai.idle;
 
 import ecs.components.ai.AITools;
 import ecs.entities.Entity;
-
 import java.util.Random;
 
 public class heroChaseWalk implements IIdleAI {

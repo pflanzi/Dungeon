@@ -9,15 +9,11 @@ import ecs.components.PositionComponent;
 import ecs.components.stats.DamageModifier;
 import ecs.entities.Entity;
 import graphic.Animation;
-
 import java.util.List;
-
 import starter.Game;
 import tools.Point;
 
-/**
- * A Class which contains the Information of a specific Item.
- */
+/** A Class which contains the Information of a specific Item. */
 public class ItemData {
     private ItemType itemType;
     private ItemCategory itemCategory;
@@ -34,10 +30,10 @@ public class ItemData {
     // passive
     private DamageModifier damageModifier;
 
-    /**Size of the inventory, initialized at 0 so only Bags get an inventory*/
+    /** Size of the inventory, initialized at 0 so only Bags get an inventory */
     private int inventorySize = 0;
 
-    /**Slot of the bag in bagInventory, initialized at -1 to signal it hasn't been picked up yet*/
+    /** Slot of the bag in bagInventory, initialized at -1 to signal it hasn't been picked up yet */
     private int inventorySlot = -1;
 
     /**
@@ -54,15 +50,15 @@ public class ItemData {
      * @param damageModifier
      */
     public ItemData(
-        ItemType itemType,
-        Animation inventoryTexture,
-        Animation worldTexture,
-        String itemName,
-        String description,
-        IOnCollect onCollect,
-        IOnDrop onDrop,
-        IOnUse onUse,
-        DamageModifier damageModifier) {
+            ItemType itemType,
+            Animation inventoryTexture,
+            Animation worldTexture,
+            String itemName,
+            String description,
+            IOnCollect onCollect,
+            IOnDrop onDrop,
+            IOnUse onUse,
+            DamageModifier damageModifier) {
         this.itemType = itemType;
         this.inventoryTexture = inventoryTexture;
         this.worldTexture = worldTexture;
@@ -84,30 +80,30 @@ public class ItemData {
      * @param description
      */
     public ItemData(
-        ItemType itemType,
-        Animation inventoryTexture,
-        Animation worldTexture,
-        String itemName,
-        String description) {
+            ItemType itemType,
+            Animation inventoryTexture,
+            Animation worldTexture,
+            String itemName,
+            String description) {
         this(
-            itemType,
-            inventoryTexture,
-            worldTexture,
-            itemName,
-            description,
-            ItemData::defaultCollect,
-            ItemData::defaultDrop,
-            ItemData::defaultUseCallback,
-            new DamageModifier());
+                itemType,
+                inventoryTexture,
+                worldTexture,
+                itemName,
+                description,
+                ItemData::defaultCollect,
+                ItemData::defaultDrop,
+                ItemData::defaultUseCallback,
+                new DamageModifier());
     }
 
     public ItemData() {
         this(
-            ItemConfig.TYPE.get(),
-            new Animation(List.of(ItemConfig.TEXTURE.get()), 1),
-            new Animation(List.of(ItemConfig.TEXTURE.get()), 1),
-            ItemConfig.NAME.get(),
-            ItemConfig.DESCRIPTION.get());
+                ItemConfig.TYPE.get(),
+                new Animation(List.of(ItemConfig.TEXTURE.get()), 1),
+                new Animation(List.of(ItemConfig.TEXTURE.get()), 1),
+                ItemConfig.NAME.get(),
+                ItemConfig.DESCRIPTION.get());
     }
 
     /**
@@ -121,13 +117,13 @@ public class ItemData {
      * @param onUse
      */
     public ItemData(
-        ItemType itemType,
-        ItemCategory itemCategory,
-        Animation inventoryTexture,
-        Animation worldTexture,
-        String itemName,
-        String description,
-        IOnUse onUse) {
+            ItemType itemType,
+            ItemCategory itemCategory,
+            Animation inventoryTexture,
+            Animation worldTexture,
+            String itemName,
+            String description,
+            IOnUse onUse) {
         this.itemType = itemType;
         this.itemCategory = itemCategory;
         this.inventoryTexture = inventoryTexture;
@@ -150,14 +146,14 @@ public class ItemData {
      * @param onUse
      */
     public ItemData(
-        ItemType itemType,
-        ItemCategory itemCategory,
-        Animation inventoryTexture,
-        Animation worldTexture,
-        String itemName,
-        String description,
-        IOnUse onUse,
-        int invSize) {
+            ItemType itemType,
+            ItemCategory itemCategory,
+            Animation inventoryTexture,
+            Animation worldTexture,
+            String itemName,
+            String description,
+            IOnUse onUse,
+            int invSize) {
         this.itemType = itemType;
         this.itemCategory = itemCategory;
         this.inventoryTexture = inventoryTexture;
@@ -171,12 +167,12 @@ public class ItemData {
     }
 
     public ItemData(
-        ItemType itemType,
-        ItemCategory itemCategory,
-        Animation inventoryTexture,
-        Animation worldTexture,
-        String itemName,
-        String description) {
+            ItemType itemType,
+            ItemCategory itemCategory,
+            Animation inventoryTexture,
+            Animation worldTexture,
+            String itemName,
+            String description) {
         this.itemType = itemType;
         this.itemCategory = itemCategory;
         this.inventoryTexture = inventoryTexture;
@@ -189,13 +185,13 @@ public class ItemData {
     }
 
     public ItemData(
-        ItemType itemType,
-        ItemCategory itemCategory,
-        Animation inventoryTexture,
-        Animation worldTexture,
-        String itemName,
-        String description,
-        DamageModifier damageModifier) {
+            ItemType itemType,
+            ItemCategory itemCategory,
+            Animation inventoryTexture,
+            Animation worldTexture,
+            String itemName,
+            String description,
+            DamageModifier damageModifier) {
         this.itemType = itemType;
         this.itemCategory = itemCategory;
         this.inventoryTexture = inventoryTexture;
@@ -209,13 +205,13 @@ public class ItemData {
     }
 
     public ItemData(
-        ItemType itemType,
-        ItemCategory itemCategory,
-        Animation inventoryTexture,
-        Animation worldTexture,
-        String itemName,
-        String description,
-        int inventorySize) {
+            ItemType itemType,
+            ItemCategory itemCategory,
+            Animation inventoryTexture,
+            Animation worldTexture,
+            String itemName,
+            String description,
+            int inventorySize) {
         this.itemType = itemType;
         this.itemCategory = itemCategory;
         this.inventoryTexture = inventoryTexture;
@@ -255,11 +251,11 @@ public class ItemData {
         if (getOnUse() == null) return;
         getOnUse().onUse(entity, this);
         entity.getComponent(InventoryComponent.class)
-            .ifPresent(
-                component -> {
-                    InventoryComponent invComp = (InventoryComponent) component;
-                    invComp.removeItem(this);
-                });
+                .ifPresent(
+                        component -> {
+                            InventoryComponent invComp = (InventoryComponent) component;
+                            invComp.removeItem(this);
+                        });
     }
 
     public ItemType getItemType() {
@@ -282,7 +278,9 @@ public class ItemData {
         return itemName;
     }
 
-    public void setDescription(String description){ this.description=description;}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getDescription() {
         return description;
@@ -292,16 +290,16 @@ public class ItemData {
      * Default callback for item use. Prints a message to the console and removes the item from the
      * inventory.
      *
-     * @param e    Entity that uses the item
+     * @param e Entity that uses the item
      * @param item Item that is used
      */
     private static void defaultUseCallback(Entity e, ItemData item) {
         e.getComponent(InventoryComponent.class)
-            .ifPresent(
-                component -> {
-                    InventoryComponent invComp = (InventoryComponent) component;
-                    invComp.removeItem(item);
-                });
+                .ifPresent(
+                        component -> {
+                            InventoryComponent invComp = (InventoryComponent) component;
+                            invComp.removeItem(item);
+                        });
         System.out.printf("Item \"%s\" used by entity %d\n", item.getItemName(), e.id);
     }
 
@@ -315,29 +313,29 @@ public class ItemData {
 
     private static void defaultCollect(Entity worldItem, Entity whoCollected) {
         Game.getHero()
-            .ifPresent(
-                hero -> {
-                    if (whoCollected.equals(hero)) {
-                        hero.getComponent(InventoryComponent.class)
-                            .ifPresent(
-                                (x) -> {
-                                    if (((InventoryComponent) x)
-                                        .addItem(
-                                            worldItem
-                                                .getComponent(
-                                                    ItemComponent
-                                                        .class)
-                                                .map(
-                                                    ItemComponent
-                                                        .class
-                                                        ::cast)
-                                                .get()
-                                                .getItemData()))
-                                        //Todo Doesn't do anything
-                                        Game.removeEntity(worldItem);
-                                });
-                    }
-                });
+                .ifPresent(
+                        hero -> {
+                            if (whoCollected.equals(hero)) {
+                                hero.getComponent(InventoryComponent.class)
+                                        .ifPresent(
+                                                (x) -> {
+                                                    if (((InventoryComponent) x)
+                                                            .addItem(
+                                                                    worldItem
+                                                                            .getComponent(
+                                                                                    ItemComponent
+                                                                                            .class)
+                                                                            .map(
+                                                                                    ItemComponent
+                                                                                                    .class
+                                                                                            ::cast)
+                                                                            .get()
+                                                                            .getItemData()))
+                                                        // Todo Doesn't do anything
+                                                        Game.removeEntity(worldItem);
+                                                });
+                            }
+                        });
     }
 
     public IOnCollect getOnCollect() {

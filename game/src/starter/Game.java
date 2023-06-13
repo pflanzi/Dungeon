@@ -13,13 +13,13 @@ import configuration.KeyboardConfig;
 import controller.AbstractController;
 import controller.SystemController;
 import ecs.components.*;
+import ecs.entities.*;
 import ecs.entities.Chest;
 import ecs.entities.Entity;
 import ecs.entities.Hero;
-import ecs.entities.Trap;
 import ecs.entities.Lever;
+import ecs.entities.Trap;
 import ecs.items.*;
-import ecs.entities.*;
 import ecs.systems.*;
 import graphic.Animation;
 import graphic.DungeonCamera;
@@ -27,11 +27,9 @@ import graphic.Painter;
 import graphic.hud.GameOverScreen;
 import graphic.hud.PauseMenu;
 import graphic.textures.TextureHandler;
-
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
-
 import level.IOnLevelLoader;
 import level.LevelAPI;
 import level.elements.ILevel;
@@ -43,10 +41,7 @@ import level.tools.LevelSize;
 import tools.Constants;
 import tools.Point;
 
-
-/**
- * The heart of the framework. From here all strings are pulled.
- */
+/** The heart of the framework. From here all strings are pulled. */
 public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     private final LevelSize LEVELSIZE = LevelSize.SMALL;
@@ -57,47 +52,31 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
      */
     protected SpriteBatch batch;
 
-    /**
-     * Contains all Controller of the Dungeon
-     */
+    /** Contains all Controller of the Dungeon */
     protected List<AbstractController<?>> controller;
 
     public static DungeonCamera camera;
-    /**
-     * Draws objects
-     */
+    /** Draws objects */
     protected Painter painter;
 
     protected LevelAPI levelAPI;
-    /**
-     * Generates the level
-     */
+    /** Generates the level */
     protected IGenerator generator;
 
     private boolean doSetup = true;
     private static boolean paused = false;
 
-    /**
-     * A handler for managing asset paths
-     */
+    /** A handler for managing asset paths */
     private static TextureHandler handler;
 
-    /**
-     * All entities that are currently active in the dungeon
-     */
+    /** All entities that are currently active in the dungeon */
     private static final Set<Entity> entities = new HashSet<>();
-    /**
-     * All entities to be removed from the dungeon in the next frame
-     */
+    /** All entities to be removed from the dungeon in the next frame */
     private static final Set<Entity> entitiesToRemove = new HashSet<>();
-    /**
-     * All entities to be added from the dungeon in the next frame
-     */
+    /** All entities to be added from the dungeon in the next frame */
     private static final Set<Entity> entitiesToAdd = new HashSet<>();
 
-    /**
-     * List of all Systems in the ECS
-     */
+    /** List of all Systems in the ECS */
     public static SystemController systems;
 
     public static ILevel currentLevel;
@@ -141,9 +120,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         camera.update();
     }
 
-    /**
-     * Called once at the beginning of the game.
-     */
+    /** Called once at the beginning of the game. */
     protected void setup() {
         levelCount = 0;
         doSetup = false;
@@ -194,9 +171,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         return game;
     }
 
-    /**
-     * Called at the beginning of each frame. Before the controllers call <code>update</code>.
-     */
+    /** Called at the beginning of each frame. Before the controllers call <code>update</code>. */
     protected void frame() {
         setCameraFocus();
         manageEntitiesSets();
@@ -231,28 +206,43 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         /** Quickfix for chests to spawn a chest to demonstrate items and inventory mechanics */
         Chest newChest = Chest.createNewChest();
         Optional<Component> ic = newChest.getComponent(InventoryComponent.class);
-        ((InventoryComponent) ic.get()).getItems().forEach(inventoryComponent -> inventoryComponent.setOnCollect((WorldItemEntity, whoCollides) -> {
-            hero.getComponent(InventoryComponent.class)
-                .ifPresent(ice -> {
-                    ((InventoryComponent) ice).addItem(inventoryComponent);
-                });
-
-        }));
+        ((InventoryComponent) ic.get())
+                .getItems()
+                .forEach(
+                        inventoryComponent ->
+                                inventoryComponent.setOnCollect(
+                                        (WorldItemEntity, whoCollides) -> {
+                                            hero.getComponent(InventoryComponent.class)
+                                                    .ifPresent(
+                                                            ice -> {
+                                                                ((InventoryComponent) ice)
+                                                                        .addItem(
+                                                                                inventoryComponent);
+                                                            });
+                                        }));
 
         entities.add(newChest);
 
         hero.getComponent(InventoryComponent.class)
-            .ifPresent(icb -> {
-                ((InventoryComponent) icb).addItem(new ItemData(
-                    ItemType.Basic,
-                    ItemCategory.BAG,
-                    new Animation(Collections.singleton("items/other/bag_small.png"), 1),
-                    new Animation(Collections.singleton("items/other/bag_small.png"), 1),
-                    "kleine Tasche",
-                    "Eine kleine Tasche, in der bis zu 5 Gegenstände einer Kategorie aufbewahrt werden können",
-                    5
-                ));
-            });
+                .ifPresent(
+                        icb -> {
+                            ((InventoryComponent) icb)
+                                    .addItem(
+                                            new ItemData(
+                                                    ItemType.Basic,
+                                                    ItemCategory.BAG,
+                                                    new Animation(
+                                                            Collections.singleton(
+                                                                    "items/other/bag_small.png"),
+                                                            1),
+                                                    new Animation(
+                                                            Collections.singleton(
+                                                                    "items/other/bag_small.png"),
+                                                            1),
+                                                    "kleine Tasche",
+                                                    "Eine kleine Tasche, in der bis zu 5 Gegenstände einer Kategorie aufbewahrt werden können",
+                                                    5));
+                        });
     }
 
     public int calculateMonstersToSpawn(int level) {
@@ -277,7 +267,8 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     }
 
     /**
-     * Spawns traps based on the levelCount, if a trap is deactivatable it will spawn a lever and connect it to the trap
+     * Spawns traps based on the levelCount, if a trap is deactivatable it will spawn a lever and
+     * connect it to the trap
      */
     public void spawnTraps() {
         for (int i = 0; i < levelCount * 2; i++) {
@@ -292,20 +283,14 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         }
     }
 
-    /**
-     * Spawns the friendly NPC ghost and its tombstone.
-     */
+    /** Spawns the friendly NPC ghost and its tombstone. */
     public void spawnGhostAndTombstone() {
         addEntity(new Ghost());
     }
 
-    /**
-     * Determines whether the ghost should be invisible or not.
-     */
+    /** Determines whether the ghost should be invisible or not. */
     public void toggleGhostVisibility() {
-        List<Entity> ghosts = Game.getEntities().stream()
-            .filter(e -> e instanceof Ghost)
-            .toList();
+        List<Entity> ghosts = Game.getEntities().stream().filter(e -> e instanceof Ghost).toList();
 
         for (Entity ghost : ghosts) {
             if (!ghostVisible) {
@@ -341,14 +326,14 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     private void setCameraFocus() {
         if (getHero().isPresent()) {
             PositionComponent pc =
-                (PositionComponent)
-                    getHero()
-                        .get()
-                        .getComponent(PositionComponent.class)
-                        .orElseThrow(
-                            () ->
-                                new MissingComponentException(
-                                    "PositionComponent"));
+                    (PositionComponent)
+                            getHero()
+                                    .get()
+                                    .getComponent(PositionComponent.class)
+                                    .orElseThrow(
+                                            () ->
+                                                    new MissingComponentException(
+                                                            "PositionComponent"));
             camera.setFocusPoint(pc.getPosition());
 
         } else camera.setFocusPoint(new Point(0, 0));
@@ -360,10 +345,10 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     private boolean isOnEndTile(Entity entity) {
         PositionComponent pc =
-            (PositionComponent)
-                entity.getComponent(PositionComponent.class)
-                    .orElseThrow(
-                        () -> new MissingComponentException("PositionComponent"));
+                (PositionComponent)
+                        entity.getComponent(PositionComponent.class)
+                                .orElseThrow(
+                                        () -> new MissingComponentException("PositionComponent"));
         Tile currentTile = currentLevel.getTileAt(pc.getPosition().toCoordinate());
         return currentTile.equals(currentLevel.getEndTile());
     }
@@ -372,10 +357,10 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         levelCount++;
         entities.add(hero);
         PositionComponent pc =
-            (PositionComponent)
-                hero.getComponent(PositionComponent.class)
-                    .orElseThrow(
-                        () -> new MissingComponentException("PositionComponent"));
+                (PositionComponent)
+                        hero.getComponent(PositionComponent.class)
+                                .orElseThrow(
+                                        () -> new MissingComponentException("PositionComponent"));
         pc.setPosition(currentLevel.getStartTile().getCoordinate().toPoint());
     }
 
@@ -383,9 +368,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         return handler;
     }
 
-    /**
-     * Toggle between pause and run
-     */
+    /** Toggle between pause and run */
     public static void togglePause() {
         paused = !paused;
         if (systems != null) {

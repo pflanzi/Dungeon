@@ -24,6 +24,7 @@ public class KeyboardConfig {
             new ConfigKey<>(new String[] {"skill", "first"}, new ConfigIntValue(Input.Keys.Q));
     public static final ConfigKey<Integer> SECOND_SKILL =
             new ConfigKey<>(new String[] {"skill", "second"}, new ConfigIntValue(Input.Keys.R));
-    public  static final  ConfigKey<Integer> DEFAULT_ATTACK =
-            new ConfigKey<>(new String[] {"default", "attack"}, new ConfigIntValue(Input.Keys.SPACE));
+    public static final ConfigKey<Integer> DEFAULT_ATTACK =
+            new ConfigKey<>(
+                    new String[] {"default", "attack"}, new ConfigIntValue(Input.Keys.SPACE));
 }

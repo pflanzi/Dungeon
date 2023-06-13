@@ -74,10 +74,10 @@ public class HealthComponent extends Component {
      * @param damage Damage that should be inflicted
      */
     public void receiveHit(Damage damage) {
-        if(!isImmortal){
+        if (!isImmortal) {
             damageToGet.add(damage);
             this.lastCause = damage.cause() != null ? damage.cause() : this.lastCause;
-        }else{
+        } else {
             System.out.println("Immortal\n");
         }
     }

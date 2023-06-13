@@ -11,9 +11,11 @@ import starter.Game;
 import tools.Constants;
 import tools.Point;
 
-public class GameOverScreen <T extends Actor> extends ScreenController<T>  {
+public class GameOverScreen<T extends Actor> extends ScreenController<T> {
 
-    public GameOverScreen() { this(new SpriteBatch(), new Game()); }
+    public GameOverScreen() {
+        this(new SpriteBatch(), new Game());
+    }
 
     /**
      * Creates a Screencontroller with a ScalingViewport which stretches the ScreenElements on
@@ -25,58 +27,53 @@ public class GameOverScreen <T extends Actor> extends ScreenController<T>  {
         super(batch);
 
         ScreenText screenText =
-            new ScreenText(
-                "You Died",
-                new Point(0,0), // TODO: fix positioning
-                3,
-                new LabelStyleBuilder((FontBuilder.DEFAULT_FONT))
-                    .setFontcolor(Color.RED)
-                    .build());
+                new ScreenText(
+                        "You Died",
+                        new Point(0, 0), // TODO: fix positioning
+                        3,
+                        new LabelStyleBuilder((FontBuilder.DEFAULT_FONT))
+                                .setFontcolor(Color.RED)
+                                .build());
 
         screenText.setFontScale(3);
         screenText.setPosition(
-            (Constants.WINDOW_WIDTH) / 2f - screenText.getWidth(),
-            (Constants.WINDOW_HEIGHT) / 1.5f + screenText.getHeight(),
-            Align.center | Align.bottom
-        );
+                (Constants.WINDOW_WIDTH) / 2f - screenText.getWidth(),
+                (Constants.WINDOW_HEIGHT) / 1.5f + screenText.getHeight(),
+                Align.center | Align.bottom);
 
         ScreenButton restartButton =
-            new ScreenButton(
-                "Restart",
-                new Point(0, 0),
-                new TextButtonListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        game.reset();
-                    }
-                }
-            );
+                new ScreenButton(
+                        "Restart",
+                        new Point(0, 0),
+                        new TextButtonListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+                                game.reset();
+                            }
+                        });
 
         restartButton.setPosition(
-            (Constants.WINDOW_WIDTH) / 3.0f,
-            (Constants.WINDOW_HEIGHT) / 2.0f + screenText.getHeight(),
-            Align.left | Align.bottom
-        );
+                (Constants.WINDOW_WIDTH) / 3.0f,
+                (Constants.WINDOW_HEIGHT) / 2.0f + screenText.getHeight(),
+                Align.left | Align.bottom);
 
         restartButton.getLabel().setFontScale(1.25f);
 
         ScreenButton quitButton =
-            new ScreenButton(
-                "Quit",
-                new Point(0, 0),
-                new TextButtonListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        Gdx.app.exit();
-                    }
-                }
-            );
+                new ScreenButton(
+                        "Quit",
+                        new Point(0, 0),
+                        new TextButtonListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+                                Gdx.app.exit();
+                            }
+                        });
 
         quitButton.setPosition(
-            (Constants.WINDOW_WIDTH) - ((Constants.WINDOW_WIDTH) / 3.0f),
-            (Constants.WINDOW_HEIGHT) / 2.0f + screenText.getHeight(),
-            Align.right | Align.bottom
-        );
+                (Constants.WINDOW_WIDTH) - ((Constants.WINDOW_WIDTH) / 3.0f),
+                (Constants.WINDOW_HEIGHT) / 2.0f + screenText.getHeight(),
+                Align.right | Align.bottom);
 
         quitButton.getLabel().setFontScale(1.25f);
 
@@ -85,7 +82,6 @@ public class GameOverScreen <T extends Actor> extends ScreenController<T>  {
         add((T) quitButton);
 
         hideMenu();
-
     }
 
     /** shows the Menu */

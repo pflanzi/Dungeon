@@ -28,7 +28,6 @@ public class Lever extends Entity {
         new InteractionComponent(this, InteractionComponent.DEFAULT_RADIUS, false, interact);
         Animation idleAnimation = AnimationBuilder.buildAnimation(idlePath);
         animationComponent = new AnimationComponent(this, idleAnimation, idleAnimation);
-
     }
 
     public void setTrap(Trap t) {
@@ -38,5 +37,4 @@ public class Lever extends Entity {
     public Trap getTrap() {
         return this.trap;
     }
-
 }

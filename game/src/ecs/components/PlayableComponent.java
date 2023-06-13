@@ -37,7 +37,8 @@ public class PlayableComponent extends Component {
      * @param skillSlot2 skill that will be on the second skillslot
      * @param defaultAttack default attack
      */
-    public PlayableComponent(Entity entity, Skill skillSlot1, Skill skillSlot2, Skill defaultAttack) {
+    public PlayableComponent(
+            Entity entity, Skill skillSlot1, Skill skillSlot2, Skill defaultAttack) {
         super(entity);
         playable = true;
         this.skillSlot1 = skillSlot1;
@@ -102,7 +103,9 @@ public class PlayableComponent extends Component {
     /**
      * @return default attack skill
      */
-    public Optional<Skill> getDefaultAttack() {return Optional.ofNullable(defaultAttack);}
+    public Optional<Skill> getDefaultAttack() {
+        return Optional.ofNullable(defaultAttack);
+    }
 
     /**
      * @param defaultAttack Skill that will be used as default attack
