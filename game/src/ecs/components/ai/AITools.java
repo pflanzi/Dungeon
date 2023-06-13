@@ -5,7 +5,7 @@ import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
 import ecs.entities.Entity;
-import ecs.entities.Monster;
+import ecs.entities.monster.Monster;
 import java.util.*;
 import level.elements.ILevel;
 import level.elements.tile.Tile;

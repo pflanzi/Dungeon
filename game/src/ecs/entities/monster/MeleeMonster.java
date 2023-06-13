@@ -1,4 +1,4 @@
-package ecs.entities;
+package ecs.entities.monster;
 
 import ecs.components.ai.idle.IIdleAI;
 

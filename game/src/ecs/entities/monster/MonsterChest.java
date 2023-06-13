@@ -1,8 +1,10 @@
-package ecs.entities;
+package ecs.entities.monster;
 
 import dslToGame.AnimationBuilder;
 import ecs.components.*;
 import ecs.components.ai.idle.heroChaseWalk;
+import ecs.entities.Chest;
+import ecs.entities.Entity;
 
 /** class that creates Entity MonsterChest */
 public class MonsterChest extends MeleeMonster {

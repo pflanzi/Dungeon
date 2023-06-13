@@ -1,4 +1,4 @@
-package ecs.entities;
+package ecs.entities.monster;
 
 public abstract class RangedMonster extends Monster {
 

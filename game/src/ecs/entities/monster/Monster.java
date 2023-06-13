@@ -1,4 +1,4 @@
-package ecs.entities;
+package ecs.entities.monster;
 
 import dslToGame.AnimationBuilder;
 import ecs.components.*;
@@ -13,6 +13,7 @@ import ecs.components.ai.transition.ITransition;
 import ecs.components.ai.transition.RangeTransition;
 import ecs.components.skill.*;
 import ecs.components.xp.XPComponent;
+import ecs.entities.Entity;
 import graphic.Animation;
 import java.util.Collections;
 
