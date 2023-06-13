@@ -74,14 +74,31 @@ public class AITools {
      * @return List of tiles in the given radius arround the center point
      */
     public static List<Tile> getTilesInRange(Point center, float radius) {
-        List<Tile> tiles = new ArrayList<>();
-        ILevel level = Game.currentLevel;
-        for (float x = center.x - radius; x <= center.x + radius; x++) {
-            for (float y = center.y - radius; y <= center.y + radius; y++) {
-                tiles.add(level.getTileAt(new Point(x, y).toCoordinate()));
-            }
-        }
-        tiles.removeIf(Objects::isNull);
+        //        ILevel level = Game.currentLevel;
+        //        for (float x = center.x - radius; x <= center.x + radius; x++) {
+        //            for (float y = center.y - radius; y <= center.y + radius; y++) {
+        //                tiles.add(level.getTileAt(new Point(x, y).toCoordinate()));
+        //            }
+        //        }
+        //        tiles.removeIf(Objects::isNull);
+        List<Tile> tiles;
+
+        List<Tile> allTiles = new ArrayList<>();
+        allTiles.addAll(Game.currentLevel.getFloorTiles());
+        allTiles.addAll(Game.currentLevel.getDoorTiles());
+        allTiles.addAll(Game.currentLevel.getExitTiles());
+        allTiles.addAll(Game.currentLevel.getWallTiles());
+        allTiles.addAll(Game.currentLevel.getHoleTiles());
+        allTiles.addAll(Game.currentLevel.getSkipTiles());
+
+        tiles =
+                allTiles.stream()
+                        .filter(
+                                tile ->
+                                        AITools.inRange(
+                                                center, tile.getCoordinateAsPoint(), radius))
+                        .toList();
+
         return tiles;
     }
 
