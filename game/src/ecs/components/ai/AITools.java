@@ -97,13 +97,21 @@ public class AITools {
         //            }
         //        }
 
+        /* second version */
+        //        Arrays.stream(allTiles)
+        //                .flatMap(Arrays::stream)
+        //                .forEach(
+        //                        tile -> {
+        //                            if (inRange(center, tile.getCoordinateAsPoint(), radius))
+        //                                tiles.add(tile);
+        //                        });
+
+        // TODO: add Null check
         Arrays.stream(allTiles)
                 .flatMap(Arrays::stream)
-                .forEach(
-                        tile -> {
-                            if (inRange(center, tile.getCoordinateAsPoint(), radius))
-                                tiles.add(tile);
-                        });
+                .parallel()
+                .filter(tile -> inRange(center, tile.getCoordinateAsPoint(), radius))
+                .forEach(tiles::add);
 
         return tiles;
     }
