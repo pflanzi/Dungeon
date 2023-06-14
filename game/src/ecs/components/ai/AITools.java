@@ -74,30 +74,36 @@ public class AITools {
      * @return List of tiles in the given radius arround the center point
      */
     public static List<Tile> getTilesInRange(Point center, float radius) {
-        //        ILevel level = Game.currentLevel;
+        List<Tile> tiles = new ArrayList<>();
+        ILevel level = Game.currentLevel;
+
+        /* old version */
         //        for (float x = center.x - radius; x <= center.x + radius; x++) {
         //            for (float y = center.y - radius; y <= center.y + radius; y++) {
         //                tiles.add(level.getTileAt(new Point(x, y).toCoordinate()));
         //            }
         //        }
+        //
         //        tiles.removeIf(Objects::isNull);
-        List<Tile> tiles;
 
-        List<Tile> allTiles = new ArrayList<>();
-        allTiles.addAll(Game.currentLevel.getFloorTiles());
-        allTiles.addAll(Game.currentLevel.getDoorTiles());
-        allTiles.addAll(Game.currentLevel.getExitTiles());
-        allTiles.addAll(Game.currentLevel.getWallTiles());
-        allTiles.addAll(Game.currentLevel.getHoleTiles());
-        allTiles.addAll(Game.currentLevel.getSkipTiles());
+        Tile[][] allTiles = level.getLayout();
 
-        tiles =
-                allTiles.stream()
-                        .filter(
-                                tile ->
-                                        AITools.inRange(
-                                                center, tile.getCoordinateAsPoint(), radius))
-                        .toList();
+        /* initial version */
+        //        for (Tile[] row : allTiles) {
+        //            for (Tile tile : row) {
+        //                if (inRange(center, tile.getCoordinateAsPoint(), radius)) {
+        //                    tiles.add(tile);
+        //                }
+        //            }
+        //        }
+
+        Arrays.stream(allTiles)
+                .flatMap(Arrays::stream)
+                .forEach(
+                        tile -> {
+                            if (inRange(center, tile.getCoordinateAsPoint(), radius))
+                                tiles.add(tile);
+                        });
 
         return tiles;
     }
