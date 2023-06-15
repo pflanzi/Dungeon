@@ -21,14 +21,7 @@ import java.util.Collections;
  * The Hero is the player character. It's entity in the ECS. This class helps to setup the hero with
  * all its components and attributes .
  */
-public abstract class Monster
-        extends Entity { // abstract =  bauanleitungsklasse, davon soll kein objekt erstellt werden
-    // können
-
-    /*private final String pathToIdleLeft = "monster/chort/idleLeft";
-    private final String pathToIdleRight = "monster/chort/idleRight";
-    private final String pathToRunLeft = "monster/chort/runLeft";
-    private final String pathToRunRight = "monster/chort/runRight";*/
+public abstract class Monster extends Entity {
 
     private final String pathToIdleLeft = "monster/demon/idleLeft";
     private final String pathToIdleRight = "monster/demon/idleRight";
