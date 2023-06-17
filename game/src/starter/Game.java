@@ -29,6 +29,7 @@ import graphic.DungeonCamera;
 import graphic.Painter;
 import graphic.hud.GameOverScreen;
 import graphic.hud.PauseMenu;
+import graphic.hud.menus.Menu;
 import graphic.textures.TextureHandler;
 import java.io.IOException;
 import java.util.*;
@@ -83,6 +84,9 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     public static SystemController systems;
 
     public static ILevel currentLevel;
+
+    private static Menu<Actor> mainMenu;
+    private static Menu<Actor> optionsMenu;
     private static PauseMenu<Actor> pauseMenu;
     private static GameOverScreen<Actor> gameOverScreen;
     private static Entity hero;
