@@ -162,15 +162,54 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         controller.add(pauseMenu);
         gameOverScreen = new GameOverScreen<>();
         controller.add(gameOverScreen);
+        mainMenu = new Menu<>("DUNGEON", Menu.generateMainMenu());
         hero = new Hero();
         levelAPI = new LevelAPI(batch, painter, new WallGenerator(new RandomWalkGenerator()), this);
         levelAPI.loadLevel(LEVELSIZE);
         createSystems();
+        toggleMainMenu();
+        toggleSystems();
     }
 
+    /** Makes the main menu visible */
+    public void toggleMainMenu() {
+        if (!mainMenu.isVisible()) {
+            controller.remove(optionsMenu);
+            controller.add(mainMenu);
+
+            mainMenu.setVisible(true);
+            mainMenu.showMenu();
+        } else {
+            mainMenu.setVisible(false);
+            mainMenu.hideMenu();
+
+            optionsMenu = new Menu<>("OPTIONS", Menu.generateOptionsMenu());
+
+            controller.remove(mainMenu);
+            controller.add(optionsMenu);
+        }
+    }
+
+    /** Makes the options menu visible */
+    public void toggleOptions() {
+        if (!optionsMenu.isVisible()) {
+            controller.remove(mainMenu);
+            controller.add(optionsMenu);
+
+            optionsMenu.setVisible(true);
+            optionsMenu.showMenu();
+        } else {
+            optionsMenu.hideMenu();
+            optionsMenu.setVisible(false);
+
+            controller.remove(optionsMenu);
+            controller.add(mainMenu);
+        }
+    }
+
+    /** Sets up a new game after the game over screen appears */
     public void reset() {
         hideGameOverScreen();
-
         getGame().setup();
     }
 
@@ -378,19 +417,26 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     /** Toggle between pause and run */
     public static void togglePause() {
         paused = !paused;
-        if (systems != null) {
-            systems.forEach(ECS_System::toggleRun);
-        }
+        toggleSystems();
         if (pauseMenu != null) {
             if (paused) pauseMenu.showMenu();
             else pauseMenu.hideMenu();
         }
     }
 
+    /** Toggles the running state of all systems */
+    public static void toggleSystems() {
+        if (systems != null) {
+            systems.forEach(ECS_System::toggleRun);
+        }
+    }
+
+    /** Shows the Game Over Screen */
     public static void showGameOverScreen() {
         gameOverScreen.showMenu();
     }
 
+    /** Hides the Game Over Screen */
     public static void hideGameOverScreen() {
         gameOverScreen.hideMenu();
     }

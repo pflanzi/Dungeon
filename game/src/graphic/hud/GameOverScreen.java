@@ -29,7 +29,7 @@ public class GameOverScreen<T extends Actor> extends ScreenController<T> {
         ScreenText screenText =
                 new ScreenText(
                         "You Died",
-                        new Point(0, 0), // TODO: fix positioning
+                        new Point(0, 0),
                         3,
                         new LabelStyleBuilder((FontBuilder.DEFAULT_FONT))
                                 .setFontcolor(Color.RED)
