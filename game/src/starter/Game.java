@@ -19,9 +19,7 @@ import ecs.entities.Entity;
 import ecs.entities.Hero;
 import ecs.entities.Lever;
 import ecs.entities.Trap;
-import ecs.entities.monster.Demon;
-import ecs.entities.monster.Necromancer;
-import ecs.entities.monster.Ogre;
+import ecs.entities.monster.*;
 import ecs.items.*;
 import ecs.systems.*;
 import graphic.Animation;
@@ -94,6 +92,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     private boolean ghostVisible;
     private int counter;
     private static Game game;
+    private boolean hasBossMonster;
 
     public static void main(String[] args) {
         // start the game
@@ -206,6 +205,16 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
             System.out.println("No ghost and tombstone present.");
         }
 
+        /*if ( hasBossMonster && (levelCount % 3) == 0) {
+            System.out.println("Spawning BossMonster ...");
+            spawnBossMonster();
+            hasGhost = true;
+            ghostVisible = true;
+        } else {
+            System.out.println("No BossMonster present.");
+        }*/
+
+
         /** Quickfix for chests to spawn a chest to demonstrate items and inventory mechanics */
         Chest newChest = Chest.createNewChest();
         Optional<Component> ic = newChest.getComponent(InventoryComponent.class);
@@ -264,6 +273,8 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
                     break;
                 case 2:
                     addEntity(new Necromancer(levelCount + 1));
+                    addEntity(new BossMonsterP1(levelCount + 1));
+                    addEntity(new BossMonsterP2(levelCount + 1));
                     break;
             }
         }
@@ -285,6 +296,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
             }
         }
     }
+
 
     /** Spawns the friendly NPC ghost and its tombstone. */
     public void spawnGhostAndTombstone() {
