@@ -1,8 +1,16 @@
 package ecs.entities.monster;
 
+import dslToGame.AnimationBuilder;
+import ecs.components.HealthComponent;
+import ecs.components.IOnDeathFunction;
+import ecs.components.MissingComponentException;
+import ecs.components.PositionComponent;
+import ecs.entities.Chest;
+import ecs.entities.Entity;
+
 public class BossMonsterP1 extends BossMonster{
 
-    private static final int healthpoints = 10;
+    private static final int healthpoints = 5;
     private static final int dmg = 2;
     private static final float xSpeed = 0.025f;
     private static final float ySpeed = 0.025f;
@@ -16,5 +24,34 @@ public class BossMonsterP1 extends BossMonster{
 
     public BossMonsterP1(int scaling) {
         super(healthpoints, dmg, scaling, xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight, XPonDeath);
+        setupHealthComponent();
     }
+
+
+    private void setupHealthComponent() {
+        int i = 10;
+
+            PositionComponent epc =
+                (PositionComponent)
+                    this.getComponent(PositionComponent.class)
+                        .orElseThrow(
+                            () -> new MissingComponentException("PositionComponent"));
+
+        HealthComponent healthComponent =
+            this.getComponent(HealthComponent.class)
+                .map(HealthComponent.class::cast)
+                .orElseThrow(() -> new MissingComponentException("HealthComponent"));
+        new HealthComponent(
+            this,
+            healthpoints,
+            new IOnDeathFunction() {
+                @Override
+                public void onDeath(Entity entity) {
+                    new BossMonsterP2(epc.getPosition());
+                }
+            },
+            AnimationBuilder.buildAnimation(pathToRunLeft),
+            AnimationBuilder.buildAnimation(pathToIdleLeft));
+    }
+
 }

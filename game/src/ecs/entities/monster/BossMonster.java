@@ -25,8 +25,8 @@ public BossMonster(
             pathToRunLeft,
             pathToRunRight,
             XPonDeath);
-    }
 
+    }
 
 
 

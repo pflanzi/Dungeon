@@ -191,10 +191,12 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         ghostVisible = false;
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
+        System.out.println("Level: " + levelCount);
 
         spawnMonster();
         getHero().ifPresent(this::placeOnLevelStart);
         spawnTraps();
+        spawnBossMonster();
 
         if (!hasGhost && (levelCount % 3) == 0) {
             System.out.println("Spawning ghost and tombstone ...");
@@ -205,14 +207,6 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
             System.out.println("No ghost and tombstone present.");
         }
 
-        /*if ( hasBossMonster && (levelCount % 3) == 0) {
-            System.out.println("Spawning BossMonster ...");
-            spawnBossMonster();
-            hasGhost = true;
-            ghostVisible = true;
-        } else {
-            System.out.println("No BossMonster present.");
-        }*/
 
 
         /** Quickfix for chests to spawn a chest to demonstrate items and inventory mechanics */
@@ -261,6 +255,14 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         return (int) ((Math.random() * level) + 1);
     }
 
+    private void spawnBossMonster() {
+
+        if (levelCount % 5 == 0) {
+            addEntity(new BossMonsterP1(levelCount + 1));
+        }
+
+    }
+
     private void spawnMonster() {
         int monsters = calculateMonstersToSpawn(levelCount);
         for (int i = 0; i < monsters; i++) {
@@ -273,8 +275,6 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
                     break;
                 case 2:
                     addEntity(new Necromancer(levelCount + 1));
-                    addEntity(new BossMonsterP1(levelCount + 1));
-                    addEntity(new BossMonsterP2(levelCount + 1));
                     break;
             }
         }
@@ -369,7 +369,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     }
 
     private void placeOnLevelStart(Entity hero) {
-        levelCount++;
+        //levelCount++;
         entities.add(hero);
         PositionComponent pc =
                 (PositionComponent)
