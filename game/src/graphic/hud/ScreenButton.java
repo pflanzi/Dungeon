@@ -12,7 +12,7 @@ public class ScreenButton extends TextButton {
     static {
         DEFAULT_BUTTON_STYLE =
                 new TextButtonStyleBuilder(FontBuilder.DEFAULT_FONT)
-                        .setFontColor(Color.BLUE)
+                        .setFontColor(Color.GREEN)
                         .setDownFontColor(Color.YELLOW)
                         .build();
     }
