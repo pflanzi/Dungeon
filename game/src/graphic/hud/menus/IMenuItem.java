@@ -1,3 +1,8 @@
 package graphic.hud.menus;
 
-public interface IMenuItem {}
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
+public interface IMenuItem {
+
+    void executeAction(ClickListener clickListener);
+}

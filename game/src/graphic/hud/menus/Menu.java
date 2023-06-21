@@ -5,19 +5,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import controller.ScreenController;
 import graphic.hud.*;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.logging.Logger;
 import starter.Game;
-import tools.Constants;
 import tools.Point;
 
 public class Menu<T extends Actor> extends ScreenController<T> {
 
+    private Table container = new Table();
     private String headline;
-    private HashSet<IMenuItem> items;
+    private LinkedHashSet<IMenuItem> items;
     private boolean isVisible = false;
 
     private static final Logger menuLogger = Logger.getLogger(Menu.class.getName());
@@ -30,7 +30,7 @@ public class Menu<T extends Actor> extends ScreenController<T> {
      * @param title the menu headline
      * @param elements the set of elements that make up the menu screen
      */
-    public Menu(String title, HashSet<IMenuItem> elements) {
+    public Menu(String title, LinkedHashSet<IMenuItem> elements) {
         this(new SpriteBatch(), title, elements);
     }
 
@@ -43,17 +43,26 @@ public class Menu<T extends Actor> extends ScreenController<T> {
      * @param title the menu headline
      * @param elements the set of elements that make up the menu screen
      */
-    public Menu(SpriteBatch batch, String title, HashSet<IMenuItem> elements) {
+    public Menu(SpriteBatch batch, String title, LinkedHashSet<IMenuItem> elements) {
         super(batch);
 
         headline = title;
         items = elements;
 
-        add((T) setUpHeadline(headline));
+        container.setFillParent(true);
+        container.setRound(false);
+
+        container.add(setUpHeadline(headline)).spaceBottom(20.0f);
+        container.row();
 
         for (IMenuItem item : items) {
-            add((T) item);
+            container.add((T) item).spaceBottom(10.0f);
+            container.row();
         }
+
+        container.center();
+
+        add((T) container);
 
         hideMenu();
     }
@@ -69,10 +78,6 @@ public class Menu<T extends Actor> extends ScreenController<T> {
                                 .build());
 
         menuTitle.setFontScale(2.5f);
-        menuTitle.setPosition(
-                (Constants.WINDOW_WIDTH) / 2f - menuTitle.getWidth(),
-                (Constants.WINDOW_HEIGHT) / 1.5f + menuTitle.getHeight(),
-                Align.center | Align.bottom);
 
         return menuTitle;
     }
@@ -82,8 +87,8 @@ public class Menu<T extends Actor> extends ScreenController<T> {
      *
      * @return a set of elements that make up the main menu
      */
-    public static HashSet<IMenuItem> generateMainMenu() {
-        HashSet<IMenuItem> mainMenuItems = new HashSet<>();
+    public static LinkedHashSet<IMenuItem> generateMainMenu() {
+        LinkedHashSet<IMenuItem> mainMenuItems = new LinkedHashSet<>();
 
         MenuButton startGameButton =
                 new MenuButton(
@@ -91,19 +96,19 @@ public class Menu<T extends Actor> extends ScreenController<T> {
                         new Point(0.0f, 0.0f),
                         new TextButtonListener() {
                             @Override
-                            public void clicked(InputEvent event, float x, float y) {
-                                menuLogger.info("Starting game ...");
-                                Game.getGame().toggleMainMenu();
-                                Game.toggleSystems();
-                            }
+                            public void clicked(InputEvent event, float x, float y) {}
                         });
-        startGameButton.setPosition(
-                (Constants.WINDOW_WIDTH) / 2f - startGameButton.getWidth(),
-                (Constants.WINDOW_HEIGHT) / 1.5f - 2.0f * startGameButton.getHeight(),
-                Align.center | Align.bottom);
-        startGameButton.getLabel().setFontScale(1.5f);
 
-        mainMenuItems.add(startGameButton);
+        startGameButton.getLabel().setFontScale(1.5f);
+        startGameButton.executeAction(
+                new TextButtonListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        menuLogger.info("Starting game ...");
+                        Game.getGame().toggleMainMenu();
+                        Game.toggleSystems();
+                    }
+                });
 
         MenuButton optionsButton =
                 new MenuButton(
@@ -111,20 +116,19 @@ public class Menu<T extends Actor> extends ScreenController<T> {
                         new Point(0.0f, 0.0f),
                         new TextButtonListener() {
                             @Override
-                            public void clicked(InputEvent event, float x, float y) {
-                                menuLogger.info("Closing main menu and opening options ...");
-                                Game.getGame().toggleMainMenu();
-                                Game.getGame().toggleOptions();
-                            }
+                            public void clicked(InputEvent event, float x, float y) {}
                         });
 
-        optionsButton.setPosition(
-                (Constants.WINDOW_WIDTH) / 2f - startGameButton.getWidth(),
-                (Constants.WINDOW_HEIGHT) / 1.5f - 4.0f * startGameButton.getHeight(),
-                Align.center | Align.bottom);
         optionsButton.getLabel().setFontScale(1.5f);
-
-        mainMenuItems.add(optionsButton);
+        optionsButton.executeAction(
+                new TextButtonListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        menuLogger.info("Closing main menu and opening options ...");
+                        Game.getGame().toggleMainMenu();
+                        Game.getGame().toggleOptions();
+                    }
+                });
 
         MenuButton closeGameButton =
                 new MenuButton(
@@ -132,18 +136,21 @@ public class Menu<T extends Actor> extends ScreenController<T> {
                         new Point(0.0f, 0.0f),
                         new TextButtonListener() {
                             @Override
-                            public void clicked(InputEvent event, float x, float y) {
-                                menuLogger.info("Closing game ...");
-                                Gdx.app.exit();
-                            }
+                            public void clicked(InputEvent event, float x, float y) {}
                         });
 
-        closeGameButton.setPosition(
-                (Constants.WINDOW_WIDTH) / 2f - startGameButton.getWidth(),
-                (Constants.WINDOW_HEIGHT) / 1.5f - 6.0f * startGameButton.getHeight(),
-                Align.center | Align.bottom);
         closeGameButton.getLabel().setFontScale(1.5f);
+        closeGameButton.executeAction(
+                new TextButtonListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        menuLogger.info("Closing game ...");
+                        Gdx.app.exit();
+                    }
+                });
 
+        mainMenuItems.add(startGameButton);
+        mainMenuItems.add(optionsButton);
         mainMenuItems.add(closeGameButton);
 
         return mainMenuItems;
@@ -154,8 +161,8 @@ public class Menu<T extends Actor> extends ScreenController<T> {
      *
      * @return a set of elements that make up the options menu
      */
-    public static HashSet<IMenuItem> generateOptionsMenu() {
-        HashSet<IMenuItem> optionsMenuItems = new HashSet<>();
+    public static LinkedHashSet<IMenuItem> generateOptionsMenu() {
+        LinkedHashSet<IMenuItem> optionsMenuItems = new LinkedHashSet<>();
 
         MenuButton optionA =
                 new MenuButton(
@@ -163,18 +170,17 @@ public class Menu<T extends Actor> extends ScreenController<T> {
                         new Point(0.0f, 0.0f),
                         new TextButtonListener() {
                             @Override
-                            public void clicked(InputEvent event, float x, float y) {
-                                menuLogger.info("'Option A' button was clicked.");
-                            }
+                            public void clicked(InputEvent event, float x, float y) {}
                         });
 
-        optionA.setPosition(
-                (Constants.WINDOW_WIDTH) / 2f - optionA.getWidth(),
-                (Constants.WINDOW_HEIGHT) / 1.5f - 2.0f * optionA.getHeight(),
-                Align.center | Align.bottom);
-
         optionA.getLabel().setFontScale(1.5f);
-        optionsMenuItems.add(optionA);
+        optionA.executeAction(
+                new TextButtonListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        menuLogger.info("'Option A' button was clicked.");
+                    }
+                });
 
         MenuButton optionB =
                 new MenuButton(
@@ -182,18 +188,17 @@ public class Menu<T extends Actor> extends ScreenController<T> {
                         new Point(0.0f, 0.0f),
                         new TextButtonListener() {
                             @Override
-                            public void clicked(InputEvent event, float x, float y) {
-                                menuLogger.info("'Option B' button was clicked.");
-                            }
+                            public void clicked(InputEvent event, float x, float y) {}
                         });
 
-        optionB.setPosition(
-                (Constants.WINDOW_WIDTH) / 2f - optionA.getWidth(),
-                (Constants.WINDOW_HEIGHT) / 1.5f - 4.0f * optionA.getHeight(),
-                Align.center | Align.bottom);
-
         optionB.getLabel().setFontScale(1.5f);
-        optionsMenuItems.add(optionB);
+        optionB.executeAction(
+                new TextButtonListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        menuLogger.info("'Option B' button was clicked.");
+                    }
+                });
 
         MenuButton optionC =
                 new MenuButton(
@@ -201,18 +206,17 @@ public class Menu<T extends Actor> extends ScreenController<T> {
                         new Point(0.0f, 0.0f),
                         new TextButtonListener() {
                             @Override
-                            public void clicked(InputEvent event, float x, float y) {
-                                menuLogger.info("'Option C' button was clicked.");
-                            }
+                            public void clicked(InputEvent event, float x, float y) {}
                         });
 
-        optionC.setPosition(
-                (Constants.WINDOW_WIDTH) / 2f - optionA.getWidth(),
-                (Constants.WINDOW_HEIGHT) / 1.5f - 6.0f * optionA.getHeight(),
-                Align.center | Align.bottom);
         optionC.getLabel().setFontScale(1.5f);
-
-        optionsMenuItems.add(optionC);
+        optionC.executeAction(
+                new TextButtonListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        menuLogger.info("'Option C' button was clicked.");
+                    }
+                });
 
         MenuButton backButton =
                 new MenuButton(
@@ -220,20 +224,23 @@ public class Menu<T extends Actor> extends ScreenController<T> {
                         new Point(0.0f, 0.0f),
                         new TextButtonListener() {
                             @Override
-                            public void clicked(InputEvent event, float x, float y) {
-                                menuLogger.info(
-                                        "Closing the options and opening the main menu ...");
-                                Game.getGame().toggleOptions();
-                                Game.getGame().toggleMainMenu();
-                            }
+                            public void clicked(InputEvent event, float x, float y) {}
                         });
 
-        backButton.setPosition(
-                (Constants.WINDOW_WIDTH) / 2f - optionA.getWidth(),
-                (Constants.WINDOW_HEIGHT) / 1.5f - 8.0f * optionA.getHeight(),
-                Align.center | Align.bottom);
         backButton.getLabel().setFontScale(1.5f);
+        backButton.executeAction(
+                new TextButtonListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        menuLogger.info("Closing the options and opening the main menu ...");
+                        Game.getGame().toggleOptions();
+                        Game.getGame().toggleMainMenu();
+                    }
+                });
 
+        optionsMenuItems.add(optionA);
+        optionsMenuItems.add(optionB);
+        optionsMenuItems.add(optionC);
         optionsMenuItems.add(backButton);
 
         return optionsMenuItems;
@@ -249,19 +256,19 @@ public class Menu<T extends Actor> extends ScreenController<T> {
         this.forEach((Actor s) -> s.setVisible(false));
     }
 
-    private void addItem(IMenuItem item) {
-        items.add(item);
-    }
-
-    private void removeItem(IMenuItem item) {
-        items.remove(item);
-    }
-
     public boolean isVisible() {
         return isVisible;
     }
 
     public void setVisible(boolean visible) {
         isVisible = visible;
+    }
+
+    private void addItem(IMenuItem item) {
+        items.add(item);
+    }
+
+    private void removeItem(IMenuItem item) {
+        items.remove(item);
     }
 }

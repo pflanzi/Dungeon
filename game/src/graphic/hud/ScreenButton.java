@@ -2,7 +2,6 @@ package graphic.hud;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import tools.Constants;
 import tools.Point;
 
 /** This class is intended for the configuration of the button to be displayed. */
@@ -30,7 +29,7 @@ public class ScreenButton extends TextButton {
         super(text, style);
         this.setPosition(position.x, position.y);
         this.addListener(listener);
-        this.setScale(1 / Constants.DEFAULT_ZOOM_FACTOR);
+        this.setScale(1.0f);
     }
 
     /**
