@@ -39,4 +39,18 @@ public class MeleeAI implements IFightAI {
             AITools.move(entity, path);
         }
     }
+
+    public void fightBossMonster(Entity entity) {
+        if (AITools.playerInRange(entity, attackRange)) {
+            fightSkill.execute(entity);
+        } else {
+            if (timeSinceLastUpdate >= delay) {
+                path = AITools.calculatePathToHero(entity);
+                timeSinceLastUpdate = -1;
+            }
+            timeSinceLastUpdate++;
+            AITools.move(entity, path);
+        }
+    }
+
 }

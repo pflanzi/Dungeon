@@ -19,9 +19,7 @@ import ecs.entities.Entity;
 import ecs.entities.Hero;
 import ecs.entities.Lever;
 import ecs.entities.Trap;
-import ecs.entities.monster.Demon;
-import ecs.entities.monster.Necromancer;
-import ecs.entities.monster.Ogre;
+import ecs.entities.monster.*;
 import ecs.items.*;
 import ecs.systems.*;
 import graphic.Animation;
@@ -98,6 +96,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     private boolean ghostVisible;
     private int counter;
     private static Game game;
+    private boolean hasBossMonster;
 
     public static void main(String[] args) {
         // start the game
@@ -229,10 +228,12 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         ghostVisible = false;
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
+        System.out.println("Level: " + levelCount);
 
         spawnMonster();
         getHero().ifPresent(this::placeOnLevelStart);
         spawnTraps();
+        spawnBossMonster();
 
         if (!hasGhost && (levelCount % 3) == 0) {
             System.out.println("Spawning ghost and tombstone ...");
@@ -242,6 +243,8 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         } else {
             System.out.println("No ghost and tombstone present.");
         }
+
+
 
         /** Quickfix for chests to spawn a chest to demonstrate items and inventory mechanics */
         Chest newChest = Chest.createNewChest();
@@ -289,18 +292,26 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         return (int) ((Math.random() * level) + 1);
     }
 
+    private void spawnBossMonster() {
+
+        if (levelCount % 5 == 0) {
+            addEntity(new BossMonsterP1(levelCount + 1));
+        }
+
+    }
+
     private void spawnMonster() {
         int monsters = calculateMonstersToSpawn(levelCount);
         for (int i = 0; i < monsters; i++) {
             switch ((i * 2) % 3) {
                 case 0:
-                    addEntity(new Ogre(levelCount + 1));
+                    //addEntity(new Ogre(levelCount + 1));
                     break;
                 case 1:
-                    addEntity(new Demon(levelCount + 1));
+                    //addEntity(new Demon(levelCount + 1));
                     break;
                 case 2:
-                    addEntity(new Necromancer(levelCount + 1));
+                    //addEntity(new Necromancer(levelCount + 1));
                     break;
             }
         }
@@ -322,6 +333,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
             }
         }
     }
+
 
     /** Spawns the friendly NPC ghost and its tombstone. */
     public void spawnGhostAndTombstone() {
@@ -394,7 +406,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     }
 
     private void placeOnLevelStart(Entity hero) {
-        levelCount++;
+        //levelCount++;
         entities.add(hero);
         PositionComponent pc =
                 (PositionComponent)
