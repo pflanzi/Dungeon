@@ -92,7 +92,6 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     private boolean ghostVisible;
     private int counter;
     private static Game game;
-    private boolean hasBossMonster;
 
     public static void main(String[] args) {
         // start the game
@@ -255,6 +254,8 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         return (int) ((Math.random() * level) + 1);
     }
 
+    /** Spawns the BossMonster based on the levelCount after every 5 lvl */
+
     private void spawnBossMonster() {
 
         if (levelCount % 5 == 0) {
@@ -262,6 +263,8 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         }
 
     }
+
+
 
     private void spawnMonster() {
         int monsters = calculateMonstersToSpawn(levelCount);

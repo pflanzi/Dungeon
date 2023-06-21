@@ -1,5 +1,7 @@
 package ecs.entities.monster;
 
+/** class that creates Entity BossMonster */
+
 public abstract class BossMonster extends Monster {
 
 public BossMonster(

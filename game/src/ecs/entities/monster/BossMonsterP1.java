@@ -14,7 +14,7 @@ import ecs.entities.Entity;
 
 public class BossMonsterP1 extends BossMonster{
 
-    private static final int healthpoints = 5;
+    private static final int healthpoints = 10;
     private static final int dmg = 2;
     private static final float xSpeed = 0.025f;
     private static final float ySpeed = 0.025f;
@@ -25,24 +25,20 @@ public class BossMonsterP1 extends BossMonster{
     private static final String pathToRunLeft = "monster/BossMonster/runLeft";
     private static final String pathToRunRight = "monster/BossMonster/runRight";
 
-    //private SkillComponent skillComponent;
 
-    //private Skill firstSkill;
-    //private final int fireballCoolDown = 3;
-
-    //private AIComponent aiComponent;
-
-
+    /** Creates a new BossMonsterP1. */
 
     public BossMonsterP1(int scaling) {
         super(healthpoints, dmg, scaling, xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight, XPonDeath);
+
         setupHealthComponent();
 
-        //this.skillComponent = new SkillComponent(this);
-        //new AIComponent(this);
-        //PositionComponent positionComponent = this.getComponent(AIComponent.class);
-
     }
+
+    /**
+     * Asking for the health of BossMonsterP1
+     * If BossMonsterP1 ist dead, on the same Position spawn BossMonsterP2
+     */
 
 
     private void setupHealthComponent() {

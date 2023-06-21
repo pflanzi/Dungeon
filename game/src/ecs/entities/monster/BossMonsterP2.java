@@ -19,11 +19,15 @@ public class BossMonsterP2 extends BossMonster {
     private static final String pathToRunLeft = "monster/BossMonster2/runLeft";
     private static final String pathToRunRight = "monster/BossMonster2/runRight";
 
+    /** Creates a new BossMonsterP2. */
+
     public BossMonsterP2(Point point) {
         super(healthpoints, dmg, scaling, xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight, XPonDeath);
 
         setupPositionComponent(point);
     }
+
+    /** Set the Position of BossMonsterP2 */
 
     private void setupPositionComponent(Point point) {
 
