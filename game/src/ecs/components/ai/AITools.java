@@ -76,12 +76,43 @@ public class AITools {
     public static List<Tile> getTilesInRange(Point center, float radius) {
         List<Tile> tiles = new ArrayList<>();
         ILevel level = Game.currentLevel;
-        for (float x = center.x - radius; x <= center.x + radius; x++) {
-            for (float y = center.y - radius; y <= center.y + radius; y++) {
-                tiles.add(level.getTileAt(new Point(x, y).toCoordinate()));
-            }
-        }
-        tiles.removeIf(Objects::isNull);
+
+        /* old version */
+        //        for (float x = center.x - radius; x <= center.x + radius; x++) {
+        //            for (float y = center.y - radius; y <= center.y + radius; y++) {
+        //                tiles.add(level.getTileAt(new Point(x, y).toCoordinate()));
+        //            }
+        //        }
+        //
+        //        tiles.removeIf(Objects::isNull);
+
+        Tile[][] allTiles = level.getLayout();
+
+        /* initial version */
+        //        for (Tile[] row : allTiles) {
+        //            for (Tile tile : row) {
+        //                if (inRange(center, tile.getCoordinateAsPoint(), radius)) {
+        //                    tiles.add(tile);
+        //                }
+        //            }
+        //        }
+
+        /* second version */
+        //        Arrays.stream(allTiles)
+        //                .flatMap(Arrays::stream)
+        //                .forEach(
+        //                        tile -> {
+        //                            if (inRange(center, tile.getCoordinateAsPoint(), radius))
+        //                                tiles.add(tile);
+        //                        });
+
+        // TODO: add Null check
+        Arrays.stream(allTiles)
+                .flatMap(Arrays::stream)
+                .parallel()
+                .filter(tile -> inRange(center, tile.getCoordinateAsPoint(), radius))
+                .forEach(tiles::add);
+
         return tiles;
     }
 
