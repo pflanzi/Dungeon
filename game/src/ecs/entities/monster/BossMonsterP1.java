@@ -1,10 +1,14 @@
 package ecs.entities.monster;
 
 import dslToGame.AnimationBuilder;
-import ecs.components.HealthComponent;
-import ecs.components.IOnDeathFunction;
-import ecs.components.MissingComponentException;
-import ecs.components.PositionComponent;
+import ecs.components.*;
+import ecs.components.ai.AIComponent;
+import ecs.components.ai.fight.CollideAI;
+import ecs.components.ai.fight.IFightAI;
+import ecs.components.ai.idle.IIdleAI;
+import ecs.components.ai.transition.ITransition;
+import ecs.components.ai.transition.RangeTransition;
+import ecs.components.skill.*;
 import ecs.entities.Chest;
 import ecs.entities.Entity;
 
@@ -21,10 +25,23 @@ public class BossMonsterP1 extends BossMonster{
     private static final String pathToRunLeft = "monster/BossMonster/runLeft";
     private static final String pathToRunRight = "monster/BossMonster/runRight";
 
+    //private SkillComponent skillComponent;
+
+    //private Skill firstSkill;
+    //private final int fireballCoolDown = 3;
+
+    //private AIComponent aiComponent;
+
+
 
     public BossMonsterP1(int scaling) {
         super(healthpoints, dmg, scaling, xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight, XPonDeath);
         setupHealthComponent();
+
+        //this.skillComponent = new SkillComponent(this);
+        //new AIComponent(this);
+        //PositionComponent positionComponent = this.getComponent(AIComponent.class);
+
     }
 
 

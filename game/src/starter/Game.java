@@ -268,13 +268,13 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         for (int i = 0; i < monsters; i++) {
             switch ((i * 2) % 3) {
                 case 0:
-                    addEntity(new Ogre(levelCount + 1));
+                    //addEntity(new Ogre(levelCount + 1));
                     break;
                 case 1:
-                    addEntity(new Demon(levelCount + 1));
+                    //addEntity(new Demon(levelCount + 1));
                     break;
                 case 2:
-                    addEntity(new Necromancer(levelCount + 1));
+                    //addEntity(new Necromancer(levelCount + 1));
                     break;
             }
         }
