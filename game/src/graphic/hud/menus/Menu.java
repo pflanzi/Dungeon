@@ -94,7 +94,6 @@ public class Menu<T extends Actor> extends ScreenController<T> {
                             public void clicked(InputEvent event, float x, float y) {
                                 menuLogger.info("Starting game ...");
                                 Game.getGame().toggleMainMenu();
-                                Game.getGame().setStartLevel(true);
                                 Game.toggleSystems();
                             }
                         });
