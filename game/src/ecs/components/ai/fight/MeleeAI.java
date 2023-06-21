@@ -52,5 +52,4 @@ public class MeleeAI implements IFightAI {
             AITools.move(entity, path);
         }
     }
-
 }

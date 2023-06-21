@@ -2,17 +2,10 @@ package ecs.entities.monster;
 
 import dslToGame.AnimationBuilder;
 import ecs.components.*;
-import ecs.components.ai.AIComponent;
-import ecs.components.ai.fight.CollideAI;
-import ecs.components.ai.fight.IFightAI;
-import ecs.components.ai.idle.IIdleAI;
-import ecs.components.ai.transition.ITransition;
-import ecs.components.ai.transition.RangeTransition;
 import ecs.components.skill.*;
-import ecs.entities.Chest;
 import ecs.entities.Entity;
 
-public class BossMonsterP1 extends BossMonster{
+public class BossMonsterP1 extends BossMonster {
 
     private static final int healthpoints = 5;
     private static final int dmg = 2;
@@ -25,50 +18,56 @@ public class BossMonsterP1 extends BossMonster{
     private static final String pathToRunLeft = "monster/BossMonster/runLeft";
     private static final String pathToRunRight = "monster/BossMonster/runRight";
 
-    //private SkillComponent skillComponent;
+    // private SkillComponent skillComponent;
 
-    //private Skill firstSkill;
-    //private final int fireballCoolDown = 3;
+    // private Skill firstSkill;
+    // private final int fireballCoolDown = 3;
 
-    //private AIComponent aiComponent;
-
-
+    // private AIComponent aiComponent;
 
     public BossMonsterP1(int scaling) {
-        super(healthpoints, dmg, scaling, xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight, XPonDeath);
+        super(
+                healthpoints,
+                dmg,
+                scaling,
+                xSpeed,
+                ySpeed,
+                pathToIdleLeft,
+                pathToIdleRight,
+                pathToRunLeft,
+                pathToRunRight,
+                XPonDeath);
         setupHealthComponent();
 
-        //this.skillComponent = new SkillComponent(this);
-        //new AIComponent(this);
-        //PositionComponent positionComponent = this.getComponent(AIComponent.class);
+        // this.skillComponent = new SkillComponent(this);
+        // new AIComponent(this);
+        // PositionComponent positionComponent = this.getComponent(AIComponent.class);
 
     }
-
 
     private void setupHealthComponent() {
         int i = 10;
 
-            PositionComponent epc =
+        PositionComponent epc =
                 (PositionComponent)
-                    this.getComponent(PositionComponent.class)
-                        .orElseThrow(
-                            () -> new MissingComponentException("PositionComponent"));
+                        this.getComponent(PositionComponent.class)
+                                .orElseThrow(
+                                        () -> new MissingComponentException("PositionComponent"));
 
         HealthComponent healthComponent =
-            this.getComponent(HealthComponent.class)
-                .map(HealthComponent.class::cast)
-                .orElseThrow(() -> new MissingComponentException("HealthComponent"));
+                this.getComponent(HealthComponent.class)
+                        .map(HealthComponent.class::cast)
+                        .orElseThrow(() -> new MissingComponentException("HealthComponent"));
         new HealthComponent(
-            this,
-            healthpoints,
-            new IOnDeathFunction() {
-                @Override
-                public void onDeath(Entity entity) {
-                    new BossMonsterP2(epc.getPosition());
-                }
-            },
-            AnimationBuilder.buildAnimation(pathToRunLeft),
-            AnimationBuilder.buildAnimation(pathToIdleLeft));
+                this,
+                healthpoints,
+                new IOnDeathFunction() {
+                    @Override
+                    public void onDeath(Entity entity) {
+                        new BossMonsterP2(epc.getPosition());
+                    }
+                },
+                AnimationBuilder.buildAnimation(pathToRunLeft),
+                AnimationBuilder.buildAnimation(pathToIdleLeft));
     }
-
 }

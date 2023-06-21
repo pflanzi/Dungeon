@@ -42,7 +42,6 @@ public class MonsterChest extends MeleeMonster {
         setupHealthComponent(chest);
     }
 
-
     private void setupPositionComponent(Chest chest) {
 
         PositionComponent epc =
