@@ -1,8 +1,6 @@
 package ecs.entities.monster;
 
-import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
-import ecs.entities.Chest;
 import tools.Point;
 
 public class BossMonsterP2 extends BossMonster {
@@ -20,7 +18,17 @@ public class BossMonsterP2 extends BossMonster {
     private static final String pathToRunRight = "monster/BossMonster2/runRight";
 
     public BossMonsterP2(Point point) {
-        super(healthpoints, dmg, scaling, xSpeed, ySpeed, pathToIdleLeft, pathToIdleRight, pathToRunLeft, pathToRunRight, XPonDeath);
+        super(
+                healthpoints,
+                dmg,
+                scaling,
+                xSpeed,
+                ySpeed,
+                pathToIdleLeft,
+                pathToIdleRight,
+                pathToRunLeft,
+                pathToRunRight,
+                XPonDeath);
 
         setupPositionComponent(point);
     }
@@ -29,7 +37,4 @@ public class BossMonsterP2 extends BossMonster {
 
         new PositionComponent(this, point);
     }
-
-
-
 }
