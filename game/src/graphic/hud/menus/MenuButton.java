@@ -4,7 +4,7 @@ import graphic.hud.ScreenButton;
 import graphic.hud.TextButtonListener;
 import tools.Point;
 
-public class MenuButton extends ScreenButton implements IMenuItem {
+public class MenuButton extends ScreenButton {
 
     /**
      * Creates a ScreenButton which can be used with the ScreenController.

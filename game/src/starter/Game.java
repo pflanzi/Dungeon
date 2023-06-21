@@ -173,37 +173,36 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     /** Makes the main menu visible */
     public void toggleMainMenu() {
-        if (!mainMenu.isVisible()) {
+        if (mainMenu.isVisible()) {
+            mainMenu.setVisible(false);
+            mainMenu.hideMenu();
+
+            controller.remove(mainMenu);
+            optionsMenu = new Menu<>("OPTIONS", Menu.generateOptionsMenu());
+            controller.add(optionsMenu);
+        } else {
             controller.remove(optionsMenu);
             controller.add(mainMenu);
 
             mainMenu.setVisible(true);
             mainMenu.showMenu();
-        } else {
-            mainMenu.setVisible(false);
-            mainMenu.hideMenu();
-
-            optionsMenu = new Menu<>("OPTIONS", Menu.generateOptionsMenu());
-
-            controller.remove(mainMenu);
-            controller.add(optionsMenu);
         }
     }
 
     /** Makes the options menu visible */
     public void toggleOptions() {
-        if (!optionsMenu.isVisible()) {
-            controller.remove(mainMenu);
-            controller.add(optionsMenu);
-
-            optionsMenu.setVisible(true);
-            optionsMenu.showMenu();
-        } else {
+        if (optionsMenu.isVisible()) {
             optionsMenu.hideMenu();
             optionsMenu.setVisible(false);
 
             controller.remove(optionsMenu);
             controller.add(mainMenu);
+        } else {
+            controller.remove(mainMenu);
+            controller.add(optionsMenu);
+
+            optionsMenu.setVisible(true);
+            optionsMenu.showMenu();
         }
     }
 

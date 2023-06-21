@@ -17,7 +17,7 @@ import tools.Point;
 public class Menu<T extends Actor> extends ScreenController<T> {
 
     private String headline;
-    private HashSet<IMenuItem> items;
+    private HashSet<Actor> items;
     private boolean isVisible = false;
 
     private static final Logger menuLogger = Logger.getLogger(Menu.class.getName());
@@ -30,7 +30,7 @@ public class Menu<T extends Actor> extends ScreenController<T> {
      * @param title the menu headline
      * @param elements the set of elements that make up the menu screen
      */
-    public Menu(String title, HashSet<IMenuItem> elements) {
+    public Menu(String title, HashSet<Actor> elements) {
         this(new SpriteBatch(), title, elements);
     }
 
@@ -43,7 +43,7 @@ public class Menu<T extends Actor> extends ScreenController<T> {
      * @param title the menu headline
      * @param elements the set of elements that make up the menu screen
      */
-    public Menu(SpriteBatch batch, String title, HashSet<IMenuItem> elements) {
+    public Menu(SpriteBatch batch, String title, HashSet<Actor> elements) {
         super(batch);
 
         headline = title;
@@ -51,7 +51,7 @@ public class Menu<T extends Actor> extends ScreenController<T> {
 
         add((T) setUpHeadline(headline));
 
-        for (IMenuItem item : items) {
+        for (Actor item : items) {
             add((T) item);
         }
 
@@ -82,8 +82,8 @@ public class Menu<T extends Actor> extends ScreenController<T> {
      *
      * @return a set of elements that make up the main menu
      */
-    public static HashSet<IMenuItem> generateMainMenu() {
-        HashSet<IMenuItem> mainMenuItems = new HashSet<>();
+    public static HashSet<Actor> generateMainMenu() {
+        HashSet<Actor> mainMenuItems = new HashSet<>();
 
         MenuButton startGameButton =
                 new MenuButton(
@@ -94,6 +94,7 @@ public class Menu<T extends Actor> extends ScreenController<T> {
                             public void clicked(InputEvent event, float x, float y) {
                                 menuLogger.info("Starting game ...");
                                 Game.getGame().toggleMainMenu();
+                                Game.getGame().setStartLevel(true);
                                 Game.toggleSystems();
                             }
                         });
@@ -154,8 +155,8 @@ public class Menu<T extends Actor> extends ScreenController<T> {
      *
      * @return a set of elements that make up the options menu
      */
-    public static HashSet<IMenuItem> generateOptionsMenu() {
-        HashSet<IMenuItem> optionsMenuItems = new HashSet<>();
+    public static HashSet<Actor> generateOptionsMenu() {
+        HashSet<Actor> optionsMenuItems = new HashSet<>();
 
         MenuButton optionA =
                 new MenuButton(
@@ -249,11 +250,11 @@ public class Menu<T extends Actor> extends ScreenController<T> {
         this.forEach((Actor s) -> s.setVisible(false));
     }
 
-    private void addItem(IMenuItem item) {
+    private void addItem(Actor item) {
         items.add(item);
     }
 
-    private void removeItem(IMenuItem item) {
+    private void removeItem(Actor item) {
         items.remove(item);
     }
 
