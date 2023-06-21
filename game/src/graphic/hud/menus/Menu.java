@@ -13,6 +13,11 @@ import java.util.logging.Logger;
 import starter.Game;
 import tools.Point;
 
+/**
+ * Base class for the menus / container for the menu elements.
+ *
+ * @param <T> any class that extends or is an Actor
+ */
 public class Menu<T extends Actor> extends ScreenController<T> {
 
     private Table container = new Table();
@@ -65,21 +70,6 @@ public class Menu<T extends Actor> extends ScreenController<T> {
         add((T) container);
 
         hideMenu();
-    }
-
-    private ScreenText setUpHeadline(String title) {
-        ScreenText menuTitle =
-                new ScreenText(
-                        title,
-                        new Point(0.0f, 0.0f),
-                        3,
-                        new LabelStyleBuilder((FontBuilder.DEFAULT_FONT))
-                                .setFontcolor(Color.RED)
-                                .build());
-
-        menuTitle.setFontScale(2.5f);
-
-        return menuTitle;
     }
 
     /**
@@ -246,22 +236,49 @@ public class Menu<T extends Actor> extends ScreenController<T> {
         return optionsMenuItems;
     }
 
-    /** Makes the menu visible. */
+    /** Makes all elements inside of a and thus the menu itself visible. */
     public void showMenu() {
+        this.setVisible(true);
         this.forEach((Actor s) -> s.setVisible(true));
     }
 
-    /** Hides the menu. */
+    /** Makes all elements inside of a and thus the menu itself invisible. */
     public void hideMenu() {
+        this.setVisible(false);
         this.forEach((Actor s) -> s.setVisible(false));
     }
 
+    /**
+     * Returns if a menu is visible or not.
+     *
+     * @return visibility of the menu
+     */
     public boolean isVisible() {
         return isVisible;
     }
 
+    /**
+     * Sets a menu's visibility attribute.
+     *
+     * @param visible
+     */
     public void setVisible(boolean visible) {
         isVisible = visible;
+    }
+
+    private ScreenText setUpHeadline(String title) {
+        ScreenText menuTitle =
+                new ScreenText(
+                        title,
+                        new Point(0.0f, 0.0f),
+                        3,
+                        new LabelStyleBuilder((FontBuilder.DEFAULT_FONT))
+                                .setFontcolor(Color.RED)
+                                .build());
+
+        menuTitle.setFontScale(2.5f);
+
+        return menuTitle;
     }
 
     private void addItem(IMenuItem item) {

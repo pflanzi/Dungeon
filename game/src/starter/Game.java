@@ -168,23 +168,22 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         levelAPI.loadLevel(LEVELSIZE);
         createSystems();
         toggleMainMenu();
-        toggleSystems();
+        toggleSystems(); // disabling all systems, so the game can't be played while the main menu
+        // is shown
     }
 
     /** Makes the main menu visible */
     public void toggleMainMenu() {
         if (mainMenu.isVisible()) {
-            mainMenu.setVisible(false);
             mainMenu.hideMenu();
-
             controller.remove(mainMenu);
+
             optionsMenu = new Menu<>("OPTIONS", Menu.generateOptionsMenu());
+
             controller.add(optionsMenu);
         } else {
             controller.remove(optionsMenu);
             controller.add(mainMenu);
-
-            mainMenu.setVisible(true);
             mainMenu.showMenu();
         }
     }
@@ -193,15 +192,11 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     public void toggleOptions() {
         if (optionsMenu.isVisible()) {
             optionsMenu.hideMenu();
-            optionsMenu.setVisible(false);
-
             controller.remove(optionsMenu);
             controller.add(mainMenu);
         } else {
             controller.remove(mainMenu);
             controller.add(optionsMenu);
-
-            optionsMenu.setVisible(true);
             optionsMenu.showMenu();
         }
     }

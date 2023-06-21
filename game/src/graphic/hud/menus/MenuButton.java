@@ -8,6 +8,7 @@ import graphic.hud.TextButtonListener;
 import graphic.hud.TextButtonStyleBuilder;
 import tools.Point;
 
+/** Class for building menu buttons. */
 public class MenuButton extends ScreenButton implements IMenuItem {
 
     private static final TextButtonStyle MENU_BUTTON_STYLE;
@@ -59,6 +60,4 @@ public class MenuButton extends ScreenButton implements IMenuItem {
         this.clearListeners();
         this.addListener(listener);
     }
-
-    public void viewportUpdate(int width, int height) {}
 }
